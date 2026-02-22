@@ -813,6 +813,167 @@ sub{font-size:0.7em;vertical-align:sub;line-height:0;}
 }
 
 
+
+/* ─── CUSTOM DIALOG (replaces alert/confirm/prompt) ─── */
+#custom-dialog-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:2000;
+  display:none;align-items:center;justify-content:center;padding:20px;}
+#custom-dialog-overlay.show{display:flex;}
+#custom-dialog{background:var(--card);border:1px solid var(--border);border-radius:20px;
+  padding:28px 24px;width:100%;max-width:360px;text-align:center;
+  box-shadow:0 24px 64px rgba(0,0,0,0.6);animation:cdPop 0.3s cubic-bezier(0.34,1.56,0.64,1);}
+@keyframes cdPop{from{transform:scale(0.85);opacity:0}to{transform:scale(1);opacity:1}}
+.cd-icon{font-size:2.5rem;display:block;margin-bottom:12px;}
+.cd-title{font-size:1.1rem;font-weight:900;margin-bottom:8px;}
+.cd-msg{font-size:0.85rem;color:var(--muted);line-height:1.6;margin-bottom:20px;}
+.cd-input{width:100%;background:var(--card2);border:1.5px solid var(--border);color:var(--text);
+  font-family:'Nunito',sans-serif;font-size:0.95rem;padding:10px 14px;border-radius:12px;
+  outline:none;margin-bottom:16px;transition:border-color 0.2s;text-align:center;}
+.cd-input:focus{border-color:var(--accent);}
+.cd-btns{display:flex;gap:10px;}
+.cd-btn-primary{flex:1;background:linear-gradient(135deg,var(--accent),#ff9a3c);border:none;
+  color:white;font-family:'Nunito',sans-serif;font-size:0.92rem;font-weight:900;
+  padding:11px;border-radius:12px;cursor:pointer;transition:opacity 0.2s;}
+.cd-btn-primary:hover{opacity:0.88;}
+.cd-btn-secondary{flex:1;background:var(--card2);border:1px solid var(--border);color:var(--muted);
+  font-family:'Nunito',sans-serif;font-size:0.92rem;font-weight:700;
+  padding:11px;border-radius:12px;cursor:pointer;transition:all 0.2s;}
+.cd-btn-secondary:hover{background:var(--card3);color:var(--text);}
+.cd-btn-danger{flex:1;background:rgba(239,71,111,0.15);border:1px solid rgba(239,71,111,0.4);
+  color:var(--wrong);font-family:'Nunito',sans-serif;font-size:0.92rem;font-weight:900;
+  padding:11px;border-radius:12px;cursor:pointer;transition:all 0.2s;}
+.cd-btn-danger:hover{background:rgba(239,71,111,0.25);}
+
+/* ─── PRE-DUEL INTRO SCREEN ─── */
+#preduel-intro{position:fixed;inset:0;background:var(--bg);z-index:900;
+  display:none;align-items:center;justify-content:center;flex-direction:column;
+  gap:0;overflow:hidden;}
+#preduel-intro.show{display:flex;}
+.pdi-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(6,214,160,0.12) 0%,transparent 60%),
+  radial-gradient(ellipse at 70% 50%,rgba(247,37,133,0.12) 0%,transparent 60%);pointer-events:none;}
+.pdi-inner{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;
+  gap:24px;width:100%;max-width:560px;padding:24px;}
+.pdi-title{font-family:'Space Mono',monospace;font-size:0.72rem;letter-spacing:3px;
+  text-transform:uppercase;color:var(--muted);text-align:center;}
+.pdi-ranked-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 14px;
+  border-radius:99px;font-size:0.72rem;font-weight:700;letter-spacing:0.5px;}
+.pdi-ranked-badge.ranked{background:rgba(255,209,102,0.15);border:1px solid rgba(255,209,102,0.4);color:var(--a2);}
+.pdi-ranked-badge.unranked{background:rgba(76,201,240,0.12);border:1px solid rgba(76,201,240,0.3);color:#4cc9f0;}
+.pdi-players{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;width:100%;}
+.pdi-player{display:flex;flex-direction:column;align-items:center;gap:10px;animation:pdiSlideIn 0.6s cubic-bezier(0.34,1.2,0.64,1);}
+.pdi-player.them{animation:pdiSlideInRight 0.6s cubic-bezier(0.34,1.2,0.64,1);}
+@keyframes pdiSlideIn{from{transform:translateX(-60px);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes pdiSlideInRight{from{transform:translateX(60px);opacity:0}to{transform:translateX(0);opacity:1}}
+.pdi-avatar{width:96px;height:96px;border-radius:24px;display:flex;align-items:center;
+  justify-content:center;font-size:3rem;position:relative;
+  box-shadow:0 8px 32px rgba(0,0,0,0.4);}
+.pdi-avatar.me{background:linear-gradient(135deg,rgba(6,214,160,0.25),rgba(76,201,240,0.15));
+  border:2px solid rgba(6,214,160,0.4);}
+.pdi-avatar.them{background:linear-gradient(135deg,rgba(247,37,133,0.25),rgba(199,125,255,0.15));
+  border:2px solid rgba(247,37,133,0.4);}
+.pdi-player-name{font-size:0.92rem;font-weight:900;text-align:center;max-width:120px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.pdi-player-title{font-size:0.68rem;color:var(--muted);font-weight:700;text-align:center;
+  background:var(--card);border:1px solid var(--border);border-radius:99px;padding:2px 10px;}
+.pdi-player-record{font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--muted);}
+.pdi-vs{text-align:center;}
+.pdi-vs-text{font-family:'Space Mono',monospace;font-size:2.2rem;font-weight:700;
+  background:linear-gradient(135deg,var(--a6),var(--a5));-webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;background-clip:text;
+  animation:vsPulse 0.8s ease-in-out infinite alternate;}
+@keyframes vsPulse{from{filter:brightness(1)}to{filter:brightness(1.4)}}
+.pdi-topic-info{background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:12px 20px;text-align:center;width:100%;}
+.pdi-topic-label{font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.pdi-topic-name{font-size:1rem;font-weight:900;color:var(--a5);}
+.pdi-topic-rounds{font-size:0.75rem;color:var(--muted);margin-top:2px;}
+
+/* ─── RANKED MATCHMAKING QUEUE ─── */
+#matchmaking-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:850;
+  display:none;align-items:center;justify-content:center;padding:20px;}
+#matchmaking-overlay.show{display:flex;}
+#matchmaking-card{background:var(--card);border:1px solid var(--border);border-radius:24px;
+  padding:32px 24px;width:100%;max-width:380px;text-align:center;
+  box-shadow:0 24px 64px rgba(0,0,0,0.7);}
+.mm-radar{width:80px;height:80px;border-radius:50%;background:rgba(6,214,160,0.08);
+  border:2px solid rgba(6,214,160,0.3);margin:0 auto 20px;position:relative;
+  display:flex;align-items:center;justify-content:center;font-size:2rem;}
+.mm-radar::before{content:'';position:absolute;inset:-8px;border-radius:50%;
+  border:2px solid rgba(6,214,160,0.15);animation:radarPing 1.5s ease-out infinite;}
+.mm-radar::after{content:'';position:absolute;inset:-18px;border-radius:50%;
+  border:2px solid rgba(6,214,160,0.08);animation:radarPing 1.5s ease-out infinite 0.5s;}
+@keyframes radarPing{0%{transform:scale(0.8);opacity:0.8}100%{transform:scale(1.3);opacity:0}}
+.mm-title{font-size:1.1rem;font-weight:900;margin-bottom:6px;}
+.mm-status{font-size:0.82rem;color:var(--muted);margin-bottom:16px;line-height:1.5;}
+.mm-timer{font-family:'Space Mono',monospace;font-size:2rem;font-weight:700;
+  color:var(--a3);margin-bottom:8px;}
+.mm-expand-msg{background:rgba(255,209,102,0.1);border:1px solid rgba(255,209,102,0.3);
+  border-radius:10px;padding:10px 14px;font-size:0.8rem;color:var(--a2);
+  margin-bottom:14px;display:none;animation:fadeIn 0.3s;}
+.mm-type-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 14px;
+  border-radius:99px;font-size:0.78rem;font-weight:700;margin-bottom:16px;}
+.mm-type-badge.ranked{background:rgba(255,209,102,0.12);border:1px solid rgba(255,209,102,0.35);color:var(--a2);}
+.mm-type-badge.unranked{background:rgba(76,201,240,0.1);border:1px solid rgba(76,201,240,0.25);color:#4cc9f0;}
+.mm-cancel-btn{background:none;border:1px solid var(--border);color:var(--muted);
+  font-family:'Nunito',sans-serif;font-size:0.85rem;font-weight:700;padding:9px 22px;
+  border-radius:10px;cursor:pointer;transition:all 0.2s;margin-top:4px;}
+.mm-cancel-btn:hover{border-color:var(--wrong);color:var(--wrong);}
+.mm-topic-row{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:16px;}
+.mm-topic-chip{background:var(--card2);border:1.5px solid var(--border);border-radius:99px;
+  font-size:0.72rem;font-weight:700;padding:4px 10px;cursor:pointer;transition:all 0.2s;}
+.mm-topic-chip.selected{background:rgba(199,125,255,0.15);border-color:var(--a5);color:var(--a5);}
+
+/* ─── AVATAR IDENTITY CARD (in nav) ─── */
+#nav-avatar-display{display:flex;align-items:center;gap:7px;cursor:pointer;
+  padding:4px 10px;border-radius:12px;border:1px solid var(--border);
+  transition:all 0.2s;background:var(--card);}
+#nav-avatar-display:hover{border-color:var(--accent);background:var(--card2);}
+#nav-avatar-emoji{font-size:1.3rem;line-height:1;}
+#nav-avatar-info{display:flex;flex-direction:column;line-height:1.2;}
+#nav-avatar-name{font-size:0.72rem;font-weight:700;max-width:80px;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap;}
+#nav-avatar-title{font-size:0.58rem;color:var(--a5);font-weight:700;}
+
+/* ─── AVATAR RARITY ─── */
+.rarity-common .shop-icon::after{display:none;}
+.rarity-rare .shop-icon::after{content:'★';position:absolute;top:-2px;right:-2px;font-size:0.55rem;color:#4cc9f0;}
+.rarity-epic .shop-icon::after{content:'◆';position:absolute;top:-2px;right:-2px;font-size:0.55rem;color:#a855f7;}
+.rarity-legendary .shop-icon::after{content:'👑';position:absolute;top:-4px;right:-4px;font-size:0.65rem;}
+.rarity-badge{display:inline-block;font-size:0.6rem;font-weight:700;padding:1px 7px;
+  border-radius:99px;margin-top:3px;letter-spacing:0.5px;}
+.rarity-badge.common{background:rgba(167,169,190,0.2);color:var(--muted);}
+.rarity-badge.rare{background:rgba(76,201,240,0.15);color:#4cc9f0;}
+.rarity-badge.epic{background:rgba(168,85,247,0.15);color:#a855f7;}
+.rarity-badge.legendary{background:rgba(255,209,102,0.15);color:var(--a2);}
+
+/* ─── RANKED MATCHMAKING BUTTON on friends page ─── */
+.ranked-duel-section{background:linear-gradient(135deg,rgba(255,107,53,0.08),rgba(199,125,255,0.05));
+  border:1px solid rgba(255,107,53,0.2);border-radius:16px;padding:16px;margin-bottom:20px;}
+.ranked-duel-title{font-size:0.92rem;font-weight:900;margin-bottom:4px;}
+.ranked-duel-sub{font-size:0.78rem;color:var(--muted);margin-bottom:14px;line-height:1.5;}
+.ranked-mode-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.ranked-mode-btn{padding:12px 14px;border-radius:12px;border:none;cursor:pointer;
+  font-family:'Nunito',sans-serif;font-weight:900;font-size:0.88rem;
+  display:flex;flex-direction:column;align-items:center;gap:3px;transition:all 0.2s;}
+.ranked-mode-btn .rmb-icon{font-size:1.4rem;}
+.ranked-mode-btn .rmb-name{font-size:0.82rem;font-weight:900;}
+.ranked-mode-btn .rmb-sub{font-size:0.65rem;opacity:0.8;}
+.ranked-mode-btn.ranked-btn{background:linear-gradient(135deg,rgba(255,209,102,0.2),rgba(255,107,53,0.15));
+  border:1.5px solid rgba(255,209,102,0.4);color:var(--a2);}
+.ranked-mode-btn.ranked-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,209,102,0.2);}
+.ranked-mode-btn.casual-btn{background:linear-gradient(135deg,rgba(76,201,240,0.15),rgba(6,214,160,0.1));
+  border:1.5px solid rgba(76,201,240,0.3);color:#4cc9f0;}
+.ranked-mode-btn.casual-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(76,201,240,0.15);}
+
+/* ─── SOUND TOGGLE IN PANEL ─── */
+.sound-wave{display:inline-flex;align-items:flex-end;gap:2px;height:14px;margin-right:4px;}
+.sw-bar{width:3px;border-radius:99px;background:var(--a3);animation:swAnim 0.6s ease-in-out infinite alternate;}
+.sw-bar:nth-child(1){height:4px;animation-delay:0s;}
+.sw-bar:nth-child(2){height:8px;animation-delay:0.1s;}
+.sw-bar:nth-child(3){height:12px;animation-delay:0.2s;}
+.sw-bar:nth-child(4){height:8px;animation-delay:0.3s;}
+.sw-bar:nth-child(5){height:4px;animation-delay:0.4s;}
+@keyframes swAnim{from{transform:scaleY(0.5)}to{transform:scaleY(1)}}
+
 </style>
 </head>
 <body>
@@ -1127,7 +1288,14 @@ sub{font-size:0.7em;vertical-align:sub;line-height:0;}
     <button class="upgrade-btn" onclick="openProModal()">⭐ Upgrade</button>
     <span id="nav-streak">🔥0</span>
     <span id="nav-qstreak">⚡0</span>
-    <div id="nav-auth-bar" class="auth-user-bar" style="margin-bottom:0;padding:5px 10px;">
+    <div id="nav-avatar-display" onclick="openShop()" title="Your Avatar & Title">
+      <span id="nav-avatar-emoji">⭐</span>
+      <div id="nav-avatar-info">
+        <span id="nav-avatar-name">Player</span>
+        <span id="nav-avatar-title">Student</span>
+      </div>
+    </div>
+    <div id="nav-auth-bar" class="auth-user-bar" style="margin-bottom:0;padding:5px 10px;display:none;">
       <img id="nav-auth-avatar" class="auth-avatar" src="" alt="" style="width:24px;height:24px;"/>
       <span id="nav-auth-name" style="font-size:0.78rem;"></span>
       <button class="auth-signout" onclick="signOut()">Sign out</button>
@@ -1715,8 +1883,26 @@ sub{font-size:0.7em;vertical-align:sub;line-height:0;}
 ══════════════════════════════════════ -->
 <div id="page-friends" class="page">
 <div class="container">
-  <h2 style="font-size:1.3rem;font-weight:900;margin-bottom:4px;">👥 Friends</h2>
-  <p style="color:var(--muted);font-size:0.8rem;margin-bottom:16px;">Add friends and compete on the leaderboard.</p>
+  <h2 style="font-size:1.3rem;font-weight:900;margin-bottom:4px;">👥 Friends & Duels</h2>
+  <p style="color:var(--muted);font-size:0.8rem;margin-bottom:16px;">Challenge anyone, add friends, and compete.</p>
+  
+  <!-- Ranked Matchmaking Section -->
+  <div class="ranked-duel-section">
+    <div class="ranked-duel-title">⚔️ Quick Duel — Play Anyone</div>
+    <div class="ranked-duel-sub">Get matched with a real player online. No friend needed — just pick your mode and go. Email verification required.</div>
+    <div class="ranked-mode-btns">
+      <button class="ranked-mode-btn ranked-btn" onclick="startMatchmaking('ranked')">
+        <span class="rmb-icon">🏆</span>
+        <span class="rmb-name">Ranked</span>
+        <span class="rmb-sub">Affects your rank</span>
+      </button>
+      <button class="ranked-mode-btn casual-btn" onclick="startMatchmaking('casual')">
+        <span class="rmb-icon">🎮</span>
+        <span class="rmb-name">Casual</span>
+        <span class="rmb-sub">Just for fun</span>
+      </button>
+    </div>
+  </div>
 
   <!-- Guest warning -->
   <div id="friends-guest-msg" style="display:none;background:rgba(255,107,53,0.1);border:1px solid rgba(255,107,53,0.3);border-radius:12px;padding:14px 16px;margin-bottom:16px;">
@@ -1889,7 +2075,7 @@ let currentUser = null;
 function signInWithGoogle() {
   auth.signInWithPopup(googleProvider).catch(err => {
     console.error('Sign in error:', err);
-    alert('Sign in failed. Make sure popups are allowed and try again.');
+    uiAlert('Sign in failed. Make sure popups are allowed and try again.', '🔐', 'Sign In Failed');
   });
 }
 
@@ -1901,6 +2087,8 @@ function signOut() {
 }
 
 function updateAuthUI(user) {
+  // Always prioritize in-app avatar over Google photo
+  updateNavAvatar();
   const bar = document.getElementById('nav-auth-bar');
   if (user) {
     bar.classList.add('show');
@@ -1981,8 +2169,9 @@ auth.onAuthStateChanged(async user => {
     } else {
       showHomePage();
     }
-    // Start listening for incoming duel challenges
+    // Start listening for incoming duel challenges + matchmaking
     listenForIncomingDuels();
+    listenForMatchmaking();
   } else {
     updateAuthUI(null);
     showHomePage();
@@ -2065,7 +2254,20 @@ function onbFinish() {
   S.onboardingDone = true;
   S.currentTopic = _onbSelectedTopic;
   if (!S.shopEquipped) S.shopEquipped = {};
-  S.shopEquipped.avatar = _onbSelectedAvatar;
+  if (!S.shopOwned) S.shopOwned = [];
+  // Map onboarding emoji to a shop avatar id
+  const onbAvatarMap = {'🦁':'avatar_lion','🦊':'avatar_fox','🐯':'avatar_tiger','🐬':'avatar_dolphin',
+    '🦄':'avatar_unicorn','🐉':'avatar_dragon','🦋':'avatar_butterfly','🦅':'avatar_eagle',
+    '🐧':'avatar_penguin','🦈':'avatar_shark','🦓':'avatar_zebra','🐸':'avatar_frog',
+    '🐼':'avatar_panda','🦉':'avatar_owl','🦚':'avatar_peacock','🐺':'avatar_wolf',
+    '🦝':'avatar_raccoon','🐙':'avatar_octopus'};
+  const avatarId = onbAvatarMap[_onbSelectedAvatar] || 'avatar_star';
+  // Use icon directly if no mapping found — store as custom
+  S.shopEquipped.avatar = avatarId;
+  // Give them the free title
+  if (!S.shopEquipped.title) S.shopEquipped.title = 'title_student';
+  if (!S.shopOwned.includes(avatarId)) S.shopOwned.push(avatarId);
+  if (!S.shopOwned.includes('title_student')) S.shopOwned.push('title_student');
 
   // Hide onboarding
   document.getElementById('page-onboarding').classList.remove('active');
@@ -2919,6 +3121,8 @@ function defaultState() {
     shopSpent: 0,
     emailSignedUp: false,
     onboardingDone: false,
+    duelWins: 0,
+    duelLosses: 0,
     settings: { lightMode:false, sessionGoal:20, speedTimer:15, sound:true, confetti:true },
     // runtime only (not saved)
     currentTopic: 'quadratics',
@@ -3024,6 +3228,8 @@ function showPage(name) {
   if (name==='goals') refreshGoals();
   if (name==='settings') refreshSettings();
   if (name==='friends') refreshFriends();
+  if (name==='study') { setTimeout(() => { if(_musicEnabled) startAmbientMusic(); }, 500); }
+  else { stopAmbientMusic(); }
 }
 
 // ═══════════════════════════════════════════
@@ -3285,7 +3491,7 @@ function showTestSummary() {
   const correct = _testResults.filter(r=>r).length;
   const pct = Math.round(correct/total*100);
   const grade = pct>=90?'A+':pct>=80?'A':pct>=70?'B':pct>=60?'C':'Keep practicing';
-  alert(`📝 Test Results\n\n${correct}/${total} correct — ${pct}%\nGrade: ${grade}\n\n${pct>=80?'Great work! 🎉':'Review the explanations for the ones you missed.'}`);
+  uiAlert(`${correct}/${total} correct — ${pct}%\n\nGrade: ${grade}\n\n${pct>=80?'🎉 Great work!':'Review the explanations for the ones you missed.'}`, '📝', 'Test Results');
 }
 
 // ═══════════════════════════════════════════
@@ -3649,7 +3855,7 @@ function generateWorksheet() {
     });
   });
 
-  if (sections.length === 0) { alert('No questions match that difficulty for this topic.'); return; }
+  if (sections.length === 0) { uiAlert('No questions match that difficulty for this topic.', '🤔', 'No Matches'); return; }
 
   const questionsHTML = sections.map(sec => `
     <div class="section-header">${sec.label}</div>
@@ -3756,29 +3962,113 @@ ${properQHTML}
 // ═══════════════════════════════════════════
 //  XP SHOP
 // ═══════════════════════════════════════════
+
+// ═══════════════════════════════════════════
+//  CUSTOM DIALOG — replaces alert/confirm/prompt
+// ═══════════════════════════════════════════
+let _dialogResolve = null;
+
+function showDialog({icon='💬', title, msg, type='alert', inputPlaceholder='', inputDefault='', confirmLabel='OK', cancelLabel='Cancel', dangerLabel=null}) {
+  return new Promise(resolve => {
+    _dialogResolve = resolve;
+    document.getElementById('cd-icon').textContent = icon;
+    document.getElementById('cd-title').textContent = title;
+    document.getElementById('cd-msg').textContent = msg;
+    const inp = document.getElementById('cd-input');
+    const btns = document.getElementById('cd-btns');
+    inp.style.display = 'none';
+    btns.innerHTML = '';
+    if (type === 'prompt') {
+      inp.style.display = 'block';
+      inp.value = inputDefault;
+      inp.placeholder = inputPlaceholder;
+      setTimeout(() => inp.focus(), 80);
+      inp.onkeydown = e => { if(e.key==='Enter') dialogResolveWith(true); };
+      btns.innerHTML = `<button class="cd-btn-secondary" onclick="dialogResolveWith(false)">${cancelLabel}</button>
+        <button class="cd-btn-primary" onclick="dialogResolveWith(true)">${confirmLabel}</button>`;
+    } else if (type === 'confirm') {
+      btns.innerHTML = `<button class="cd-btn-secondary" onclick="dialogResolveWith(false)">${cancelLabel}</button>
+        <button class="${dangerLabel ? 'cd-btn-danger' : 'cd-btn-primary'}" onclick="dialogResolveWith(true)">${dangerLabel || confirmLabel}</button>`;
+    } else {
+      btns.innerHTML = `<button class="cd-btn-primary" onclick="dialogResolveWith(true)" style="flex:none;padding:11px 32px;">${confirmLabel}</button>`;
+    }
+    document.getElementById('custom-dialog-overlay').classList.add('show');
+  });
+}
+
+function dialogResolveWith(val) {
+  document.getElementById('custom-dialog-overlay').classList.remove('show');
+  if (_dialogResolve) {
+    if (document.getElementById('cd-input').style.display !== 'none' && val) {
+      _dialogResolve(document.getElementById('cd-input').value);
+    } else {
+      _dialogResolve(val);
+    }
+    _dialogResolve = null;
+  }
+}
+
+// ── Convenience wrappers ──
+function uiAlert(msg, icon='💬', title='Notice') {
+  return showDialog({icon, title, msg, type:'alert', confirmLabel:'Got it'});
+}
+function uiConfirm(msg, icon='⚠️', title='Are you sure?', dangerLabel=null) {
+  return showDialog({icon, title, msg, type:'confirm', dangerLabel});
+}
+function uiPrompt(msg, defaultVal='', placeholder='', icon='✏️', title='Enter value') {
+  return showDialog({icon, title, msg, type:'prompt', inputDefault:defaultVal, inputPlaceholder:placeholder});
+}
+
 const SHOP_ITEMS = [
-  // Themes
-  {id:'theme_ocean',  type:'theme',  icon:'🌊', name:'Ocean Night',   cost:150, desc:'Deep blue theme', vars:{'--bg':'#05070f','--card':'#091428','--a4':'#0ea5e9','--accent':'#0ea5e9'}},
-  {id:'theme_forest', type:'theme',  icon:'🌿', name:'Forest Mode',   cost:150, desc:'Calm green theme', vars:{'--accent':'#22c55e','--a3':'#16a34a'}},
-  {id:'theme_candy',  type:'theme',  icon:'🍬', name:'Candy Pop',     cost:200, desc:'Pink & sweet', vars:{'--accent':'#f472b6','--a2':'#fb7185','--a5':'#a855f7'}},
-  {id:'theme_gold',   type:'theme',  icon:'✨', name:'Gold Rush',     cost:300, desc:'Premium gold', vars:{'--accent':'#f59e0b','--a2':'#fbbf24','--a3':'#fcd34d'}},
-  {id:'theme_void',   type:'theme',  icon:'🌑', name:'Deep Void',     cost:400, desc:'Ultra dark', vars:{'--bg':'#000000','--bg2':'#050505','--card':'#0a0a0a','--card2':'#0f0f0f'}},
-  // Titles (shown on leaderboard)
-  {id:'title_grinder',  type:'title', icon:'💪', name:'"The Grinder"',  cost:100, desc:'For leaderboard'},
-  {id:'title_wizard',   type:'title', icon:'🧙', name:'"Math Wizard"',  cost:200, desc:'Earned by the best'},
-  {id:'title_speedy',   type:'title', icon:'⚡', name:'"Speed Demon"',  cost:150, desc:'Fast and correct'},
-  {id:'title_curious',  type:'title', icon:'🔍', name:'"The Curious"',  cost:100, desc:'For explorers'},
-  {id:'title_legend',   type:'title', icon:'👑', name:'"Legend"',       cost:500, desc:'For the elite only'},
-  // Avatars
-  {id:'avatar_fire',  type:'avatar', icon:'🔥', name:'Fire Avatar',    cost:75,  desc:'Ablaze'},
-  {id:'avatar_robot', type:'avatar', icon:'🤖', name:'Robot Avatar',   cost:75,  desc:'Beep boop'},
-  {id:'avatar_star',  type:'avatar', icon:'⭐', name:'Star Avatar',    cost:100, desc:'Shine bright'},
-  {id:'avatar_alien', type:'avatar', icon:'👾', name:'Alien Avatar',   cost:125, desc:'From another world'},
-  {id:'avatar_crown', type:'avatar', icon:'👑', name:'Crown Avatar',   cost:250, desc:'Royalty only'},
-  {id:'avatar_cube',  type:'avatar', icon:'🧊', name:'Cube Avatar',    cost:200, desc:'Official Numiqube'},
+  // ── Themes ──
+  {id:'theme_ocean',  type:'theme',  icon:'🌊', name:'Ocean Night',   cost:150, rarity:'common',    desc:'Deep blue vibes',      vars:{'--bg':'#05070f','--card':'#091428','--a4':'#0ea5e9','--accent':'#0ea5e9'}},
+  {id:'theme_forest', type:'theme',  icon:'🌿', name:'Forest Mode',   cost:150, rarity:'common',    desc:'Calm green energy',    vars:{'--accent':'#22c55e','--a3':'#16a34a'}},
+  {id:'theme_candy',  type:'theme',  icon:'🍬', name:'Candy Pop',     cost:200, rarity:'rare',      desc:'Pink & irresistible',  vars:{'--accent':'#f472b6','--a2':'#fb7185','--a5':'#a855f7'}},
+  {id:'theme_gold',   type:'theme',  icon:'✨', name:'Gold Rush',     cost:300, rarity:'epic',      desc:'Premium gold look',    vars:{'--accent':'#f59e0b','--a2':'#fbbf24','--a3':'#fcd34d'}},
+  {id:'theme_void',   type:'theme',  icon:'🌑', name:'Deep Void',     cost:400, rarity:'epic',      desc:'Ultra dark, ultra cool',vars:{'--bg':'#000000','--bg2':'#050505','--card':'#0a0a0a','--card2':'#0f0f0f'}},
+  {id:'theme_galaxy', type:'theme',  icon:'🌌', name:'Galaxy Brain',  cost:600, rarity:'legendary', desc:'You actually studied for this', vars:{'--bg':'#050012','--card':'#0d0a28','--accent':'#7c3aed','--a2':'#a78bfa','--a3':'#c4b5fd','--a5':'#f0abfc'}},
+  // ── Titles ──
+  {id:'title_student',   type:'title', icon:'📚', name:'"Student"',       cost:0,   rarity:'common',    desc:'The default — own it'},
+  {id:'title_grinder',   type:'title', icon:'💪', name:'"The Grinder"',   cost:100,  rarity:'common',    desc:'For the dedicated'},
+  {id:'title_curious',   type:'title', icon:'🔍', name:'"The Curious"',   cost:100,  rarity:'common',    desc:'For explorers'},
+  {id:'title_speedy',    type:'title', icon:'⚡', name:'"Speed Demon"',   cost:150,  rarity:'rare',      desc:'Fast and accurate'},
+  {id:'title_wizard',    type:'title', icon:'🧙', name:'"Math Wizard"',   cost:200,  rarity:'rare',      desc:'Earned by the best'},
+  {id:'title_duelist',   type:'title', icon:'⚔️', name:'"The Duelist"',   cost:250,  rarity:'epic',      desc:'5 duel wins required... or just buy it'},
+  {id:'title_undefeated',type:'title', icon:'🛡️', name:'"Undefeated"',    cost:350,  rarity:'epic',      desc:'Intimidate your opponents'},
+  {id:'title_legend',    type:'title', icon:'👑', name:'"Legend"',        cost:500,  rarity:'legendary', desc:'For the true elite'},
+  {id:'title_mathgod',   type:'title', icon:'🔱', name:'"Math God"',      cost:800,  rarity:'legendary', desc:'Unmistakable'},
+  // ── Avatars (free ones from onboarding are also here, cost 0) ──
+  {id:'avatar_lion',   type:'avatar', icon:'🦁', name:'Lion',         cost:0,   rarity:'common',    desc:'Free starter avatar'},
+  {id:'avatar_fox',    type:'avatar', icon:'🦊', name:'Fox',          cost:0,   rarity:'common',    desc:'Free starter avatar'},
+  {id:'avatar_tiger',  type:'avatar', icon:'🐯', name:'Tiger',        cost:0,   rarity:'common',    desc:'Free starter avatar'},
+  {id:'avatar_dolphin',type:'avatar', icon:'🐬', name:'Dolphin',      cost:0,   rarity:'common',    desc:'Free starter avatar'},
+  {id:'avatar_unicorn',type:'avatar', icon:'🦄', name:'Unicorn',      cost:0,   rarity:'common',    desc:'Free starter avatar'},
+  {id:'avatar_dragon', type:'avatar', icon:'🐉', name:'Dragon',       cost:0,   rarity:'common',    desc:'Free starter avatar'},
+  {id:'avatar_owl',    type:'avatar', icon:'🦉', name:'Owl',          cost:0,   rarity:'common',    desc:'Free starter avatar'},
+  {id:'avatar_wolf',   type:'avatar', icon:'🐺', name:'Wolf',         cost:0,   rarity:'common',    desc:'Free starter avatar'},
+  {id:'avatar_penguin',type:'avatar', icon:'🐧', name:'Penguin',      cost:0,   rarity:'common',    desc:'Free starter avatar'},
+  {id:'avatar_shark',  type:'avatar', icon:'🦈', name:'Shark',        cost:0,   rarity:'common',    desc:'Free starter avatar'},
+  {id:'avatar_panda',  type:'avatar', icon:'🐼', name:'Panda',        cost:0,   rarity:'common',    desc:'Free starter avatar'},
+  {id:'avatar_octopus',type:'avatar', icon:'🐙', name:'Octopus',      cost:0,   rarity:'common',    desc:'Free starter avatar'},
+  {id:'avatar_fire',   type:'avatar', icon:'🔥', name:'Fire',         cost:75,  rarity:'common',    desc:'Ablaze with knowledge'},
+  {id:'avatar_robot',  type:'avatar', icon:'🤖', name:'Robot',        cost:75,  rarity:'common',    desc:'Calculating...'},
+  {id:'avatar_star',   type:'avatar', icon:'⭐', name:'Star',         cost:100, rarity:'rare',      desc:'Shine bright'},
+  {id:'avatar_alien',  type:'avatar', icon:'👾', name:'Alien',        cost:125, rarity:'rare',      desc:'From another dimension'},
+  {id:'avatar_ninja',  type:'avatar', icon:'🥷', name:'Ninja',        cost:150, rarity:'rare',      desc:'Swift and silent'},
+  {id:'avatar_wizard2',type:'avatar', icon:'🧙', name:'Wizard',       cost:175, rarity:'rare',      desc:'Conjurer of equations'},
+  {id:'avatar_cube',   type:'avatar', icon:'🧊', name:'Ice Cube',     cost:200, rarity:'epic',      desc:'Official Numiqube avatar'},
+  {id:'avatar_crown',  type:'avatar', icon:'👑', name:'Crown',        cost:250, rarity:'epic',      desc:'Royalty only'},
+  {id:'avatar_gem',    type:'avatar', icon:'💎', name:'Diamond',      cost:350, rarity:'epic',      desc:'Rare and brilliant'},
+  {id:'avatar_comet',  type:'avatar', icon:'☄️',  name:'Comet',        cost:500, rarity:'legendary', desc:'Unstoppable force'},
+  {id:'avatar_nova',   type:'avatar', icon:'🌟', name:'Supernova',    cost:750, rarity:'legendary', desc:'You earned this'},
 ];
 
 function openShop() {
+  // Auto-own all free items
+  if (!S.shopOwned) S.shopOwned = [];
+  SHOP_ITEMS.filter(i => i.cost === 0).forEach(i => {
+    if (!S.shopOwned.includes(i.id)) S.shopOwned.push(i.id);
+  });
   document.getElementById('shop-xp-display').textContent = S.xp+' XP';
   const grid = document.getElementById('shop-items-grid');
   grid.innerHTML = '';
@@ -3796,13 +4086,16 @@ function openShop() {
       const equipped = S.shopEquipped && S.shopEquipped[item.type]===item.id;
       const canAfford = S.xp >= item.cost;
 
+      const rarity = item.rarity || 'common';
+      const isFree = item.cost === 0;
       const card = document.createElement('div');
-      card.className = 'shop-item'+(owned?' owned':'')+(equipped?' equipped':'')+((!owned&&!canAfford)?' locked':'');
+      card.className = 'shop-item'+(owned?' owned':'')+(equipped?' equipped':'')+((!owned&&!canAfford&&!isFree)?' locked':'');
       card.innerHTML = `
-        <span class="shop-icon">${item.icon}</span>
+        <span class="shop-icon" style="position:relative;">${item.icon}</span>
         <span class="shop-name">${item.name}</span>
-        <span class="shop-cost">${owned?'Owned':item.cost+' XP'}</span>
-        <div class="shop-status" style="color:${equipped?'var(--a5)':owned?'var(--a3)':canAfford?'var(--muted)':'var(--wrong)'}">${equipped?'✓ Equipped':owned?'Tap to equip':canAfford?'Tap to buy':'Need more XP'}</div>
+        <span class="rarity-badge ${rarity}">${rarity.charAt(0).toUpperCase()+rarity.slice(1)}</span>
+        <span class="shop-cost">${owned?'Owned':isFree?'FREE':item.cost+' XP'}</span>
+        <div class="shop-status" style="color:${equipped?'var(--a5)':owned?'var(--a3)':(canAfford||isFree)?'var(--muted)':'var(--wrong)'}">${equipped?'✓ Equipped':owned?'Tap to equip':(canAfford||isFree)?'Tap to equip/buy':'Need more XP'}</div>
       `;
       card.onclick = () => shopAction(item);
       grid.appendChild(card);
@@ -3819,7 +4112,7 @@ function shopAction(item) {
   const owned = S.shopOwned.includes(item.id);
 
   if (!owned) {
-    if (S.xp < item.cost) { spawnXP('Not enough XP!','var(--wrong)'); return; }
+    if (item.cost > 0 && S.xp < item.cost) { spawnXP('Not enough XP!','var(--wrong)'); return; }
     S.xp -= item.cost;
     if (!S.shopSpent) S.shopSpent=0;
     S.shopSpent += item.cost;
@@ -3862,8 +4155,23 @@ function restoreEquipped() {
     const item = SHOP_ITEMS.find(i=>i.id===id);
     if (!item) return;
     if (type==='theme') applyTheme(item);
-    if (type==='avatar') document.getElementById('nav-streak').textContent = item.icon+(S.dayStreak||0);
   });
+  updateNavAvatar();
+}
+
+function updateNavAvatar() {
+  const avatarId = S.shopEquipped && S.shopEquipped.avatar;
+  const titleId  = S.shopEquipped && S.shopEquipped.title;
+  const avatarItem = avatarId ? SHOP_ITEMS.find(i=>i.id===avatarId) : null;
+  const titleItem  = titleId  ? SHOP_ITEMS.find(i=>i.id===titleId)  : null;
+  const emoji = avatarItem ? avatarItem.icon : '⭐';
+  const titleText = titleItem ? titleItem.name : '"Student"';
+  const nameEl  = document.getElementById('nav-avatar-name');
+  const titleEl = document.getElementById('nav-avatar-title');
+  const emojiEl = document.getElementById('nav-avatar-emoji');
+  if (emojiEl) emojiEl.textContent = emoji;
+  if (nameEl)  nameEl.textContent  = (S.username||'Player').slice(0,14);
+  if (titleEl) titleEl.textContent = titleText;
 }
 
 
@@ -4455,6 +4763,7 @@ function updateScore(correct) {
 }
 
 function updateLevel() {
+  const oldLevel = S.level;
   const nl=Math.floor(S.xp/100)+1;
   if(nl>S.level){S.level=nl;spawnXP(`🎉 LEVEL ${S.level}!`,'#c77dff');}
   document.getElementById('nav-lvl').textContent=`LVL ${S.level}`;
@@ -4465,18 +4774,323 @@ function updateLevel() {
 //  SOUND (Web Audio API)
 // ═══════════════════════════════════════════
 let audioCtx = null;
-function playSound(correct) {
+// ═══════════════════════════════════════════
+//  SOUND ENGINE — Full procedural audio
+// ═══════════════════════════════════════════
+let _audioCtx = null;
+let _musicNodes = [];
+let _musicPlaying = false;
+let _musicEnabled = true;
+
+function getAudioCtx() {
+  if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (_audioCtx.state === 'suspended') _audioCtx.resume();
+  return _audioCtx;
+}
+
+// ── Master gain node helper ──
+function makeMaster(vol=0.3) {
+  const ctx = getAudioCtx();
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(vol, ctx.currentTime);
+  g.connect(ctx.destination);
+  return g;
+}
+
+// ── Correct answer: bright ascending chime ──
+function soundCorrect() {
+  if (!S.settings.sound) return;
   try {
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.connect(gain); gain.connect(audioCtx.destination);
-    if (correct) { osc.frequency.setValueAtTime(523,audioCtx.currentTime); osc.frequency.setValueAtTime(659,audioCtx.currentTime+0.1); }
-    else { osc.frequency.setValueAtTime(220,audioCtx.currentTime); }
-    gain.gain.setValueAtTime(0.15,audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.3);
-    osc.start(audioCtx.currentTime); osc.stop(audioCtx.currentTime+0.3);
-  } catch(e){}
+    const ctx = getAudioCtx();
+    const master = makeMaster(0.25);
+    const notes = [523.25, 659.25, 783.99, 1046.5]; // C5 E5 G5 C6
+    notes.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const env = ctx.createGain();
+      osc.connect(env); env.connect(master);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, ctx.currentTime);
+      const t = ctx.currentTime + i * 0.09;
+      env.gain.setValueAtTime(0, t);
+      env.gain.linearRampToValueAtTime(0.5, t + 0.03);
+      env.gain.exponentialRampToValueAtTime(0.001, t + 0.28);
+      osc.start(t); osc.stop(t + 0.3);
+    });
+    // Sparkle layer — high harmonics
+    const sparkle = ctx.createOscillator();
+    const sg = ctx.createGain();
+    sparkle.connect(sg); sg.connect(master);
+    sparkle.type = 'sine';
+    sparkle.frequency.setValueAtTime(2093, ctx.currentTime + 0.25);
+    sg.gain.setValueAtTime(0.2, ctx.currentTime + 0.25);
+    sg.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.55);
+    sparkle.start(ctx.currentTime + 0.25); sparkle.stop(ctx.currentTime + 0.6);
+  } catch(e) {}
+}
+
+// ── Wrong answer: soft thud + descending tone ──
+function soundWrong() {
+  if (!S.settings.sound) return;
+  try {
+    const ctx = getAudioCtx();
+    const master = makeMaster(0.2);
+    // Low thud
+    const buf = ctx.createBuffer(1, ctx.sampleRate * 0.15, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.04));
+    const src = ctx.createBufferSource();
+    src.buffer = buf; src.connect(master); src.start();
+    // Descending tone
+    const osc = ctx.createOscillator();
+    const env = ctx.createGain();
+    osc.connect(env); env.connect(master);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(330, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(180, ctx.currentTime + 0.35);
+    env.gain.setValueAtTime(0.3, ctx.currentTime);
+    env.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.4);
+  } catch(e) {}
+}
+
+// ── XP / achievement fanfare ──
+function soundAchievement() {
+  if (!S.settings.sound) return;
+  try {
+    const ctx = getAudioCtx();
+    const master = makeMaster(0.2);
+    const melody = [523,659,784,659,1047]; // C E G E C octave
+    const times  = [0, 0.12, 0.24, 0.36, 0.5];
+    melody.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const env = ctx.createGain();
+      osc.connect(env); env.connect(master);
+      osc.type = i === 4 ? 'sine' : 'triangle';
+      osc.frequency.setValueAtTime(freq, ctx.currentTime + times[i]);
+      const t = ctx.currentTime + times[i];
+      env.gain.setValueAtTime(0, t);
+      env.gain.linearRampToValueAtTime(0.4, t + 0.04);
+      env.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
+      osc.start(t); osc.stop(t + 0.25);
+    });
+  } catch(e) {}
+}
+
+// ── Level up: triumphant rising arpeggio ──
+function soundLevelUp() {
+  if (!S.settings.sound) return;
+  try {
+    const ctx = getAudioCtx();
+    const master = makeMaster(0.22);
+    const chord = [261.63, 329.63, 392, 523.25, 659.25, 783.99, 1046.5];
+    chord.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const env = ctx.createGain();
+      osc.connect(env); env.connect(master);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.07);
+      const t = ctx.currentTime + i * 0.07;
+      env.gain.setValueAtTime(0, t);
+      env.gain.linearRampToValueAtTime(0.35, t + 0.04);
+      env.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+      osc.start(t); osc.stop(t + 0.55);
+    });
+  } catch(e) {}
+}
+
+// ── Duel countdown beeps: tension builder ──
+function soundCountdownBeep(n) {
+  if (!S.settings.sound) return;
+  try {
+    const ctx = getAudioCtx();
+    const master = makeMaster(0.3);
+    const freq = n === 0 ? 880 : 440; // GO! is higher
+    const osc = ctx.createOscillator();
+    const env = ctx.createGain();
+    osc.connect(env); env.connect(master);
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(freq, ctx.currentTime);
+    if (n === 0) {
+      // GO! — rapid ascending
+      osc.frequency.linearRampToValueAtTime(1760, ctx.currentTime + 0.15);
+    }
+    env.gain.setValueAtTime(0.4, ctx.currentTime);
+    env.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (n === 0 ? 0.35 : 0.18));
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.4);
+  } catch(e) {}
+}
+
+// ── Duel win: victorious fanfare ──
+function soundDuelWin() {
+  if (!S.settings.sound) return;
+  try {
+    const ctx = getAudioCtx();
+    const master = makeMaster(0.22);
+    // Victory melody: G4 B4 D5 G5 D5 B4 G5 (triumphant)
+    const notes  = [392, 493.88, 587.33, 783.99, 587.33, 493.88, 783.99];
+    const beats  = [0, 0.15, 0.30, 0.48, 0.65, 0.80, 1.0];
+    const durs   = [0.25, 0.25, 0.25, 0.35, 0.25, 0.25, 0.6];
+    notes.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const env = ctx.createGain();
+      osc.connect(env); env.connect(master);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, ctx.currentTime + beats[i]);
+      const t = ctx.currentTime + beats[i];
+      env.gain.setValueAtTime(0, t);
+      env.gain.linearRampToValueAtTime(0.4, t + 0.03);
+      env.gain.exponentialRampToValueAtTime(0.001, t + durs[i]);
+      osc.start(t); osc.stop(t + durs[i] + 0.05);
+    });
+  } catch(e) {}
+}
+
+// ── Duel lose: sad descending ──
+function soundDuelLose() {
+  if (!S.settings.sound) return;
+  try {
+    const ctx = getAudioCtx();
+    const master = makeMaster(0.18);
+    const notes = [523.25, 392, 329.63, 261.63];
+    notes.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const env = ctx.createGain();
+      osc.connect(env); env.connect(master);
+      osc.type = 'sine';
+      const t = ctx.currentTime + i * 0.18;
+      osc.frequency.setValueAtTime(freq, t);
+      env.gain.setValueAtTime(0.35, t);
+      env.gain.exponentialRampToValueAtTime(0.001, t + 0.28);
+      osc.start(t); osc.stop(t + 0.3);
+    });
+  } catch(e) {}
+}
+
+// ── Duel score point: quick satisfying pop ──
+function soundDuelPoint() {
+  if (!S.settings.sound) return;
+  try {
+    const ctx = getAudioCtx();
+    const master = makeMaster(0.2);
+    const osc = ctx.createOscillator();
+    const env = ctx.createGain();
+    osc.connect(env); env.connect(master);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(783.99, ctx.currentTime);
+    osc.frequency.linearRampToValueAtTime(1046.5, ctx.currentTime + 0.08);
+    env.gain.setValueAtTime(0.4, ctx.currentTime);
+    env.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.22);
+  } catch(e) {}
+}
+
+// ── Streak milestone sound ──
+function soundStreak() {
+  if (!S.settings.sound) return;
+  try {
+    const ctx = getAudioCtx();
+    const master = makeMaster(0.2);
+    // Rising sparkle arpeggio
+    const freqs = [523, 659, 784, 1047, 1319];
+    freqs.forEach((f, i) => {
+      const osc = ctx.createOscillator();
+      const env = ctx.createGain();
+      osc.connect(env); env.connect(master);
+      osc.type = 'sine';
+      const t = ctx.currentTime + i * 0.06;
+      osc.frequency.setValueAtTime(f, t);
+      env.gain.setValueAtTime(0.3, t);
+      env.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+      osc.start(t); osc.stop(t + 0.22);
+    });
+  } catch(e) {}
+}
+
+// ── Background ambient music: lo-fi study mode ──
+let _ambientNodes = null;
+function startAmbientMusic() {
+  if (!S.settings.sound || !_musicEnabled || _ambientNodes) return;
+  try {
+    const ctx = getAudioCtx();
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(0, ctx.currentTime);
+    masterGain.gain.linearRampToValueAtTime(0.04, ctx.currentTime + 3);
+    masterGain.connect(ctx.destination);
+    _ambientNodes = { masterGain, oscs: [], playing: true };
+
+    // Lo-fi pad: stacked soft sine waves (Cmaj7 chord)
+    const chordFreqs = [65.41, 130.81, 164.81, 196, 246.94, 261.63]; // C2 C3 E3 G3 B3 C4
+    chordFreqs.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const env = ctx.createGain();
+      osc.connect(env); env.connect(masterGain);
+      osc.type = i < 2 ? 'sine' : 'triangle';
+      osc.frequency.setValueAtTime(freq, ctx.currentTime);
+      // Subtle detuning for warmth
+      osc.detune.setValueAtTime((Math.random() - 0.5) * 8, ctx.currentTime);
+      env.gain.setValueAtTime(0.15 / chordFreqs.length, ctx.currentTime);
+      osc.start(ctx.currentTime);
+      _ambientNodes.oscs.push(osc);
+    });
+
+    // Slow chord transitions every 8 bars (at ~80bpm ~24s)
+    _scheduleChordChanges(ctx, masterGain);
+  } catch(e) {}
+}
+
+function _scheduleChordChanges(ctx, masterGain) {
+  // Chord progression: Cmaj7 → Am7 → Fmaj7 → G7
+  const progressions = [
+    [65.41, 164.81, 196, 246.94],    // Cmaj7
+    [55, 146.83, 174.61, 220],        // Am7
+    [43.65, 130.81, 174.61, 207.65],  // Fmaj7
+    [49, 146.83, 196, 245.94],        // G7
+  ];
+  let idx = 0;
+  function changeChord() {
+    if (!_ambientNodes || !_ambientNodes.playing) return;
+    idx = (idx + 1) % progressions.length;
+    // Gentle chord swell
+    const newFreqs = progressions[idx];
+    if (_ambientNodes.oscs) {
+      _ambientNodes.oscs.slice(2).forEach((osc, i) => {
+        if (newFreqs[i]) osc.frequency.linearRampToValueAtTime(newFreqs[i], ctx.currentTime + 4);
+      });
+    }
+    setTimeout(changeChord, 24000);
+  }
+  setTimeout(changeChord, 24000);
+}
+
+function stopAmbientMusic() {
+  if (!_ambientNodes) return;
+  try {
+    _ambientNodes.playing = false;
+    _ambientNodes.masterGain.gain.linearRampToValueAtTime(0, getAudioCtx().currentTime + 2);
+    setTimeout(() => {
+      if (_ambientNodes) {
+        _ambientNodes.oscs.forEach(o => { try { o.stop(); } catch(e){} });
+        _ambientNodes = null;
+      }
+    }, 2100);
+  } catch(e) { _ambientNodes = null; }
+}
+
+function toggleMusic() {
+  _musicEnabled = !_musicEnabled;
+  const btn = document.getElementById('panel-music-btn');
+  if (_musicEnabled) {
+    if (btn) btn.innerHTML = '<span class="sound-wave"><span class="sw-bar"></span><span class="sw-bar"></span><span class="sw-bar"></span><span class="sw-bar"></span><span class="sw-bar"></span></span>Music: ON';
+    startAmbientMusic();
+  } else {
+    if (btn) btn.innerHTML = '🔇 Music: Off';
+    stopAmbientMusic();
+  }
+}
+
+// Compatibility wrapper (old code calls playSound)
+function playSound(correct) {
+  if (correct) soundCorrect(); else soundWrong();
 }
 
 // ═══════════════════════════════════════════
@@ -4496,6 +5110,7 @@ function checkAchievements() {
   for (const a of ACHIEVEMENTS) {
     if (!S.earned.has(a.id) && a.check(S)) {
       S.earned.add(a.id);
+      soundAchievement();
       document.getElementById('toast-name2').textContent=a.icon+' '+a.name;
       document.getElementById('toast-desc2').textContent=a.desc;
       const t=document.getElementById('ach-toast');
@@ -4589,7 +5204,7 @@ function openProModal() { document.getElementById('pro-modal').classList.add('sh
 function closeProModal() { document.getElementById('pro-modal').classList.remove('show'); }
 function showComingSoon() {
   closeProModal();
-  alert('💳 Payments are coming soon! Pro features are in development. Thank you for your interest!');
+  uiAlert('Payments are coming soon! Pro features are in development. Thank you for your interest!', '💳', 'Coming Soon');
 }
 
 // ═══════════════════════════════════════════
@@ -4785,7 +5400,7 @@ function addGoal() {
   const title=document.getElementById('goal-title-in').value.trim();
   const type=document.getElementById('goal-type-in').value;
   const target=parseInt(document.getElementById('goal-target-in').value);
-  if(!title||!target||target<1)return alert('Please fill in all fields!');
+  if(!title||!target||target<1){uiAlert('Please fill in all fields!','⚠️','Missing Info');return;}
   S.goals.push({id:Date.now(),title,type,target,done:false,created:new Date().toISOString()});
   document.getElementById('goal-title-in').value='';
   document.getElementById('goal-target-in').value='';
@@ -4887,11 +5502,11 @@ function saveSettings() {
   saveState();
 }
 
-function changeName() {
-  const n = prompt('Enter your new display name (max 20 characters):', S.username);
+async function changeName() {
+  const n = await uiPrompt('Enter your new display name:', S.username, 'New name...', '✏️', 'Change Name');
   if (n === null) return; // cancelled
   const trimmed = n.trim().slice(0,20);
-  if (!trimmed) { alert('Name cannot be empty!'); return; }
+  if (!trimmed) { uiAlert('Name cannot be empty!', '⚠️', 'Invalid Name'); return; }
   S.username = trimmed;
   document.getElementById('current-name-display').textContent = 'Currently: ' + S.username;
   refreshDashboard();
@@ -4905,8 +5520,8 @@ function exportData() {
   a.download='numiqube_progress.json'; a.click();
 }
 
-function resetData() {
-  if(confirm('Really delete ALL progress? This cannot be undone!')){
+async function resetData() {
+  if(await uiConfirm('Really delete ALL progress? This cannot be undone!', '🗑️', 'Reset All Data', 'Yes, delete everything')){
     localStorage.removeItem(STORAGE_KEY);
     location.reload();
   }
@@ -5167,7 +5782,7 @@ async function declineFriend(uid) {
 }
 
 async function removeFriend(uid) {
-  if (!currentUser || !confirm('Remove this friend?')) return;
+  if (!currentUser) return; if (!await uiConfirm('Remove this friend?', '👥', 'Remove Friend', 'Remove')) return;
   await db.collection('users').doc(currentUser.uid).update({ friends: firebase.firestore.FieldValue.arrayRemove(uid) });
   await db.collection('users').doc(uid).update({ friends: firebase.firestore.FieldValue.arrayRemove(currentUser.uid) });
   refreshFriends();
@@ -5271,6 +5886,7 @@ function showToast(msg, duration=3000) {
 //  ⚔️ DUEL SYSTEM
 // ═══════════════════════════════════════════
 let _duelId = null;
+let _isRankedDuel = false;
 let _duelListener = null;
 let _duelOpponentUid = null;
 let _duelOpponentName = 'Opponent';
@@ -5432,8 +6048,8 @@ function startDuelArena(duelId, data, isChallenger) {
   document.getElementById('da-topic-badge').textContent = TL[data.topic] || data.topic;
   updateDuelScoreboard();
 
-  // Show countdown then arena
-  showDuelCountdown(() => {
+  // Show pre-duel intro → countdown → arena
+  showPreDuelIntro(data, isChallenger, _isRankedDuel || false, () => {
     document.getElementById('duel-arena').classList.add('show');
     loadDuelQuestion();
 
@@ -5452,9 +6068,49 @@ function startDuelArena(duelId, data, isChallenger) {
       // Check if game over
       if (d.status === 'finished') {
         endDuel(d, isChallenger);
+      } else if (d.status === 'cancelled') {
+        cleanupDuelListener();
+        endDuelCancelled();
+      } else if (d.status === 'finished' && d.opponentForfeited && d.winnerId === currentUser.uid) {
+        // Opponent forfeited — we win
+        endDuel(d, isChallenger);
       }
     });
   });
+}
+
+// ── Pre-duel intro screen ──
+function showPreDuelIntro(duelData, isChallenger, isRanked, cb) {
+  const myAvatar = (S.shopEquipped && S.shopEquipped.avatar)
+    ? (SHOP_ITEMS.find(i => i.id === S.shopEquipped.avatar) || {icon:'⭐'}).icon
+    : '⭐';
+  const myTitle = (S.shopEquipped && S.shopEquipped.title)
+    ? (SHOP_ITEMS.find(i => i.id === S.shopEquipped.title) || {name:'"Student"'}).name
+    : '"Student"';
+  const oppName = isChallenger ? duelData.opponentName : duelData.challengerName;
+
+  // Populate
+  document.getElementById('pdi-my-avatar').textContent = myAvatar;
+  document.getElementById('pdi-my-name').textContent = S.username || 'You';
+  document.getElementById('pdi-my-title').textContent = myTitle;
+  document.getElementById('pdi-their-avatar').textContent = duelData.opponentAvatar || '🎯';
+  document.getElementById('pdi-their-name').textContent = oppName;
+  document.getElementById('pdi-their-title').textContent = duelData.opponentTitle || '"Challenger"';
+  document.getElementById('pdi-my-record').textContent = `${S.duelWins||0}W · ${S.duelLosses||0}L`;
+  document.getElementById('pdi-their-record').textContent = `${duelData.opponentWins||0}W · ${duelData.opponentLosses||0}L`;
+  document.getElementById('pdi-topic-name').textContent = TL[duelData.topic] || duelData.topic;
+  document.getElementById('pdi-rounds-info').textContent = 'First to 15 correct wins · Best of 1';
+  const badge = document.getElementById('pdi-mode-badge');
+  badge.className = 'pdi-ranked-badge ' + (isRanked ? 'ranked' : 'unranked');
+  badge.innerHTML = isRanked ? '🏆 Ranked Match' : '🎮 Casual Match';
+
+  document.getElementById('preduel-intro').classList.add('show');
+
+  // Dramatic tension — show for 2.8s then transition to countdown
+  setTimeout(() => {
+    document.getElementById('preduel-intro').classList.remove('show');
+    setTimeout(() => showDuelCountdown(cb), 200);
+  }, 2800);
 }
 
 // ── Countdown animation ──
@@ -5464,15 +6120,18 @@ function showDuelCountdown(cb) {
   overlay.classList.add('show');
   let count = 3;
   num.textContent = count;
+  soundCountdownBeep(count);
   const iv = setInterval(() => {
     count--;
     if (count <= 0) {
       clearInterval(iv);
       num.textContent = 'GO!';
+      soundCountdownBeep(0);
       setTimeout(() => { overlay.classList.remove('show'); cb(); }, 600);
     } else {
       num.style.animation = 'none'; num.offsetHeight; num.style.animation = 'dcPop 0.4s cubic-bezier(0.34,1.56,0.64,1)';
       num.textContent = count;
+      soundCountdownBeep(count);
     }
   }, 800);
 }
@@ -5535,6 +6194,7 @@ async function checkDuelAnswer(sel, q) {
   if (correct) {
     _duelMyScore++;
     updateDuelScoreboard();
+    soundDuelPoint();
     // Flash my score
     const el = document.getElementById('da-my-score');
     if (el) { el.style.transform='scale(1.4)'; setTimeout(()=>el.style.transform='',300); }
@@ -5579,6 +6239,9 @@ function endDuel(data, isChallenger) {
   const theirScore = isChallenger ? data.opponentScore : data.challengerScore;
   const opponentName = isChallenger ? data.opponentName : data.challengerName;
 
+  // Track W/L
+  if (iWon) { S.duelWins = (S.duelWins||0) + 1; }
+  else { S.duelLosses = (S.duelLosses||0) + 1; }
   // XP reward
   const xpReward = iWon ? 150 : 50;
   S.xp += xpReward; S.sessionXP += xpReward;
@@ -5602,6 +6265,7 @@ function endDuel(data, isChallenger) {
   if (iWon) { myBox.classList.add('winner'); theirBox.classList.add('loser'); }
   else { myBox.classList.add('loser'); theirBox.classList.add('winner'); }
 
+  if (iWon) soundDuelWin(); else soundDuelLose();
   if (S.settings.confetti && iWon) launchConfetti();
   document.getElementById('duel-result').classList.add('show');
 }
@@ -5612,18 +6276,57 @@ function closeDuelResult() {
   document.getElementById('dr-their-box').classList.remove('winner','loser');
 }
 
-function quitDuel() {
-  if (!confirm('Quit the duel? You\'ll lose this match.')) return;
+async function quitDuel() {
+  if (!await uiConfirm("Quit the duel? You'll lose this match.", '⚔️', 'Quit Duel?', 'Yes, forfeit')) return;
   cleanupDuelListener();
   document.getElementById('duel-arena').classList.remove('show');
-  // Mark as finished with opponent as winner
-  if (_duelId) {
-    db.collection('duels').doc(_duelId).update({
-      status: 'finished',
-      winnerId: _duelOpponentUid
-    }).catch(()=>{});
+  if (_duelId && currentUser) {
+    const duelRef = db.collection('duels').doc(_duelId);
+    // Mark this player as forfeited — use a timestamp so double-forfeit detection works
+    const myField = await (async () => {
+      try {
+        const snap = await duelRef.get();
+        const d = snap.data();
+        return d.challengerUid === currentUser.uid ? 'challengerForfeited' : 'opponentForfeited';
+      } catch(e) { return 'challengerForfeited'; }
+    })();
+    try {
+      const snap = await duelRef.get();
+      const d = snap.data();
+      const otherField = myField === 'challengerForfeited' ? 'opponentForfeited' : 'challengerForfeited';
+      if (d[otherField]) {
+        // Both forfeited — cancel match
+        await duelRef.update({ status: 'cancelled', [myField]: Date.now() });
+        showToast('⚡ Match cancelled — both players forfeited.');
+        endDuelCancelled();
+      } else {
+        // I forfeited — opponent wins
+        await duelRef.update({
+          status: 'finished',
+          winnerId: _duelOpponentUid,
+          [myField]: Date.now()
+        });
+        showToast('You forfeited. Opponent wins.');
+      }
+    } catch(e) { console.error('Forfeit error:', e); }
   }
   showToast('Duel ended.');
+}
+
+function endDuelCancelled() {
+  document.getElementById('duel-arena').classList.remove('show');
+  // Show a neutral result screen
+  document.getElementById('dr-crown').textContent = '⚡';
+  document.getElementById('dr-outcome').textContent = 'Match Cancelled';
+  document.getElementById('dr-sub').textContent = 'Both players forfeited. No result recorded.';
+  document.getElementById('dr-my-score').textContent = _duelMyScore;
+  document.getElementById('dr-my-name').textContent = S.username || 'You';
+  document.getElementById('dr-their-score').textContent = _duelTheirScore;
+  document.getElementById('dr-their-name').textContent = _duelOpponentName;
+  document.getElementById('dr-xp-reward').textContent = 'No XP — match was cancelled';
+  document.getElementById('dr-my-box').classList.remove('winner','loser');
+  document.getElementById('dr-their-box').classList.remove('winner','loser');
+  document.getElementById('duel-result').classList.add('show');
 }
 
 function cleanupDuelListener() {
@@ -5632,6 +6335,222 @@ function cleanupDuelListener() {
 
 // Start listening for incoming duels when user signs in
 // (called from auth state change handler)
+
+
+// ═══════════════════════════════════════════
+//  RANKED MATCHMAKING SYSTEM
+// ═══════════════════════════════════════════
+let _mmListener = null;
+let _mmTimer = null;
+let _mmElapsed = 0;
+let _mmExpanded = false;
+let _mmMode = 'ranked'; // 'ranked' or 'casual'
+let _mmTopics = [];
+let _mmDocId = null;
+
+async function startMatchmaking(mode) {
+  if (!currentUser) {
+    uiAlert('Sign in with Google to use matchmaking!', '🔐', 'Sign In Required');
+    return;
+  }
+  if (!currentUser.emailVerified) {
+    uiAlert('Please verify your email address to use matchmaking. Check your inbox for a verification link.', '📧', 'Verify Email First');
+    return;
+  }
+
+  _mmMode = mode;
+  _mmElapsed = 0;
+  _mmExpanded = false;
+  _mmTopics = _selectedTopics ? [..._selectedTopics] : Object.keys(QB);
+
+  // Show matchmaking UI
+  const badge = document.getElementById('mm-type-badge');
+  badge.className = 'mm-type-badge ' + (mode === 'ranked' ? 'ranked' : 'unranked');
+  badge.innerHTML = mode === 'ranked' ? '🏆 Ranked' : '🎮 Casual';
+  document.getElementById('mm-title').textContent = 'Finding an Opponent...';
+  document.getElementById('mm-status').textContent = mode === 'ranked'
+    ? 'Searching for players in your rank range...'
+    : 'Searching for anyone online...';
+  document.getElementById('mm-expand-msg').style.display = 'none';
+  document.getElementById('mm-timer').textContent = '0:45';
+
+  // Topic chips
+  const chips = document.getElementById('mm-topic-chips');
+  chips.innerHTML = _mmTopics.slice(0,6).map(t =>
+    `<div class="mm-topic-chip selected">${TL[t] || t}</div>`
+  ).join('') + (_mmTopics.length > 6 ? `<div class="mm-topic-chip">+${_mmTopics.length-6} more</div>` : '');
+
+  document.getElementById('matchmaking-overlay').classList.add('show');
+
+  // Post to Firestore queue
+  const myAvatar = (S.shopEquipped && S.shopEquipped.avatar)
+    ? (SHOP_ITEMS.find(i => i.id === S.shopEquipped.avatar) || {icon:'⭐'}).icon
+    : '⭐';
+  const myTitle = (S.shopEquipped && S.shopEquipped.title)
+    ? (SHOP_ITEMS.find(i => i.id === S.shopEquipped.title) || {name:'"Student"'}).name
+    : '"Student"';
+
+  const queueRef = db.collection('matchmaking_queue').doc(currentUser.uid);
+  await queueRef.set({
+    uid: currentUser.uid,
+    name: S.username || 'Player',
+    avatar: myAvatar,
+    title: myTitle,
+    xp: S.xp || 0,
+    level: S.level || 1,
+    duelWins: S.duelWins || 0,
+    duelLosses: S.duelLosses || 0,
+    mode,
+    topics: _mmTopics,
+    status: 'searching',
+    timestamp: Date.now(),
+    expanded: false,
+  });
+  _mmDocId = currentUser.uid;
+
+  // Listen to our own doc for a match
+  _mmListener = queueRef.onSnapshot(async snap => {
+    const d = snap.data();
+    if (!d) return;
+    if (d.status === 'matched' && d.matchedDuelId) {
+      clearInterval(_mmTimer);
+      clearTimeout(_mmExpandTimeout);
+      document.getElementById('matchmaking-overlay').classList.remove('show');
+      _mmListener && _mmListener();
+      _mmListener = null;
+
+      // Get duel data and start
+      const duelSnap = await db.collection('duels').doc(d.matchedDuelId).get();
+      _isRankedDuel = mode === 'ranked';
+      startDuelArena(d.matchedDuelId, duelSnap.data(), d.isChallenger);
+      // Clean up queue entry
+      queueRef.delete().catch(()=>{});
+    }
+  });
+
+  // Countdown timer
+  let remaining = 45;
+  _mmTimer = setInterval(() => {
+    remaining--;
+    _mmElapsed++;
+    const mins = Math.floor(remaining/60);
+    const secs = remaining % 60;
+    const timerEl = document.getElementById('mm-timer');
+    if (timerEl) timerEl.textContent = `${mins}:${secs.toString().padStart(2,'0')}`;
+    if (timerEl) timerEl.style.color = remaining <= 10 ? 'var(--wrong)' : 'var(--a3)';
+
+    if (remaining <= 0) {
+      clearInterval(_mmTimer);
+      cancelMatchmaking(true); // timeout
+    }
+  }, 1000);
+
+  // At 20s, show expand option (ranked only)
+  let _mmExpandTimeout;
+  if (mode === 'ranked') {
+    _mmExpandTimeout = setTimeout(() => {
+      if (document.getElementById('matchmaking-overlay').classList.contains('show')) {
+        document.getElementById('mm-expand-msg').style.display = 'block';
+        document.getElementById('mm-status').textContent = 'Still looking... try expanding your search?';
+      }
+    }, 20000);
+  }
+}
+
+async function expandMatchmaking() {
+  if (!_mmDocId) return;
+  _mmExpanded = true;
+  document.getElementById('mm-expand-msg').style.display = 'none';
+  document.getElementById('mm-status').textContent = 'Expanded to all ranks — finding a match...';
+  await db.collection('matchmaking_queue').doc(_mmDocId).update({ expanded: true });
+}
+
+async function cancelMatchmaking(timeout=false) {
+  clearInterval(_mmTimer);
+  if (_mmListener) { _mmListener(); _mmListener = null; }
+  if (_mmDocId) {
+    await db.collection('matchmaking_queue').doc(_mmDocId).delete().catch(()=>{});
+    _mmDocId = null;
+  }
+  document.getElementById('matchmaking-overlay').classList.remove('show');
+  if (timeout) {
+    showToast('No opponent found. Please try again!', 4000);
+  }
+}
+
+// ── Matchmaking engine: Cloud Function would be ideal but here's a client-side
+//    best-effort approach — listen for queue changes and attempt to pair ──
+function listenForMatchmaking() {
+  if (!currentUser) return;
+  // Listen for other people queuing — try to pair with them
+  db.collection('matchmaking_queue')
+    .where('status', '==', 'searching')
+    .onSnapshot(snap => {
+      if (!_mmDocId) return; // Not in queue ourselves
+      snap.docs.forEach(async doc => {
+        if (doc.id === currentUser.uid) return; // skip self
+        const other = doc.data();
+        // Check mode compatibility
+        if (other.mode !== _mmMode && !_mmExpanded && !other.expanded) return;
+        // Try to create a match (only one side does this — use UID comparison to prevent race)
+        if (currentUser.uid < doc.id) {
+          await attemptPairing(doc.id, other);
+        }
+      });
+    });
+}
+
+async function attemptPairing(opponentUid, opponentData) {
+  if (!_mmDocId) return;
+  // Use a Firestore transaction to claim both queue spots
+  const myRef = db.collection('matchmaking_queue').doc(currentUser.uid);
+  const theirRef = db.collection('matchmaking_queue').doc(opponentUid);
+
+  try {
+    await db.runTransaction(async tx => {
+      const mySnap = await tx.get(myRef);
+      const theirSnap = await tx.get(theirRef);
+      if (!mySnap.exists || !theirSnap.exists) throw new Error('already matched');
+      if (mySnap.data().status !== 'searching' || theirSnap.data().status !== 'searching') throw new Error('already matched');
+
+      // Pick shared topic
+      const myTopics = mySnap.data().topics || [];
+      const theirTopics = theirSnap.data().topics || [];
+      const shared = myTopics.filter(t => theirTopics.includes(t));
+      const topic = shared.length > 0
+        ? shared[Math.floor(Math.random() * shared.length)]
+        : myTopics[Math.floor(Math.random() * myTopics.length)];
+
+      // Create duel document
+      const duelRef = db.collection('duels').doc();
+      tx.set(duelRef, {
+        challengerUid: currentUser.uid,
+        challengerName: S.username || 'Player',
+        challengerAvatar: mySnap.data().avatar || '⭐',
+        challengerTitle: mySnap.data().title || '"Student"',
+        opponentUid,
+        opponentName: opponentData.name || 'Player',
+        opponentAvatar: opponentData.avatar || '🎯',
+        opponentTitle: opponentData.title || '"Challenger"',
+        opponentWins: opponentData.duelWins || 0,
+        opponentLosses: opponentData.duelLosses || 0,
+        topic,
+        status: 'accepted',
+        isRanked: _mmMode === 'ranked',
+        challengerScore: 0,
+        opponentScore: 0,
+        createdAt: Date.now(),
+      });
+
+      // Mark both as matched
+      tx.update(myRef, { status:'matched', matchedDuelId:duelRef.id, isChallenger:true });
+      tx.update(theirRef, { status:'matched', matchedDuelId:duelRef.id, isChallenger:false });
+    });
+  } catch(e) {
+    // Already matched or transaction failed — that's OK
+  }
+}
+
 
 // ═══════════════════════════════════════════
 //  BOOT
@@ -5724,6 +6643,73 @@ setTimeout(() => {
     </div>
     <div class="dr-xp-reward" id="dr-xp-reward">+150 XP for dueling!</div>
     <button class="btn-primary" style="width:100%;font-size:0.9rem;" onclick="closeDuelResult()">Back to Numiqube</button>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     CUSTOM DIALOG (replaces alert/confirm/prompt)
+══════════════════════════════════════ -->
+<div id="custom-dialog-overlay">
+  <div id="custom-dialog">
+    <span class="cd-icon" id="cd-icon">⚠️</span>
+    <div class="cd-title" id="cd-title">Title</div>
+    <div class="cd-msg" id="cd-msg">Message</div>
+    <input class="cd-input" id="cd-input" type="text" style="display:none;" placeholder=""/>
+    <div class="cd-btns" id="cd-btns"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PRE-DUEL INTRO SCREEN
+══════════════════════════════════════ -->
+<div id="preduel-intro">
+  <div class="pdi-bg"></div>
+  <div class="pdi-inner">
+    <div class="pdi-title">⚔️ GET READY TO DUEL</div>
+    <div id="pdi-mode-badge" class="pdi-ranked-badge ranked">🏆 Ranked Match</div>
+    <div class="pdi-players">
+      <div class="pdi-player">
+        <div class="pdi-avatar me" id="pdi-my-avatar">⭐</div>
+        <div class="pdi-player-name" id="pdi-my-name">You</div>
+        <div class="pdi-player-title" id="pdi-my-title">Student</div>
+        <div class="pdi-player-record" id="pdi-my-record">0W · 0L</div>
+      </div>
+      <div class="pdi-vs">
+        <div class="pdi-vs-text">VS</div>
+      </div>
+      <div class="pdi-player them">
+        <div class="pdi-avatar them" id="pdi-their-avatar">🎯</div>
+        <div class="pdi-player-name" id="pdi-their-name">Opponent</div>
+        <div class="pdi-player-title" id="pdi-their-title">Challenger</div>
+        <div class="pdi-player-record" id="pdi-their-record">0W · 0L</div>
+      </div>
+    </div>
+    <div class="pdi-topic-info">
+      <div class="pdi-topic-label">Topic</div>
+      <div class="pdi-topic-name" id="pdi-topic-name">Quadratics</div>
+      <div class="pdi-topic-rounds" id="pdi-rounds-info">First to 15 correct wins</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     RANKED MATCHMAKING QUEUE
+══════════════════════════════════════ -->
+<div id="matchmaking-overlay">
+  <div id="matchmaking-card">
+    <div class="mm-radar">🔍</div>
+    <div class="mm-type-badge ranked" id="mm-type-badge">🏆 Ranked</div>
+    <div class="mm-title" id="mm-title">Finding an Opponent...</div>
+    <div class="mm-status" id="mm-status">Looking for players in your rank range</div>
+    <div class="mm-timer" id="mm-timer">0:45</div>
+    <div class="mm-expand-msg" id="mm-expand-msg">
+      🌐 No players found in your rank range. <strong>Expanding to all ranks?</strong>
+      <br><button onclick="expandMatchmaking()" style="margin-top:8px;background:linear-gradient(135deg,var(--accent),#ff9a3c);border:none;color:white;font-family:'Nunito',sans-serif;font-size:0.82rem;font-weight:800;padding:7px 18px;border-radius:99px;cursor:pointer;">Yes, expand!</button>
+    </div>
+    <p style="font-size:0.72rem;color:var(--muted);margin-bottom:12px;" id="mm-topic-label">Your selected topics:</p>
+    <div class="mm-topic-row" id="mm-topic-chips"></div>
+    <button class="mm-cancel-btn" onclick="cancelMatchmaking()">Cancel</button>
   </div>
 </div>
 
