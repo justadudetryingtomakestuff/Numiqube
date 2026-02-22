@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Numiqube 🧊 — Math Study App</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet">
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <style>
 :root{
   --bg:#0f0e17;--bg2:#13121f;--card:#1a1830;--card2:#201e38;--card3:#252340;
@@ -345,7 +349,77 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 .formula-card strong{display:block;color:var(--a2);font-size:0.68rem;margin-bottom:2px;}
 .fn{font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--a3);}
 
-/* ─── EMAIL SIGNUP ─── */
+/* ─── ONBOARDING PAGE ─── */
+#page-onboarding{display:none;position:relative;z-index:1;min-height:100vh;
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  padding:24px 16px;gap:0;}
+#page-onboarding.active{display:flex;}
+.onb-card{background:var(--card);border:1px solid var(--border);border-radius:24px;
+  padding:28px 24px;width:100%;max-width:500px;box-shadow:var(--shadow);}
+.onb-steps{display:flex;gap:6px;justify-content:center;margin-bottom:24px;}
+.onb-step-dot{width:8px;height:8px;border-radius:50%;background:var(--card3);transition:all 0.3s;}
+.onb-step-dot.active{background:var(--accent);width:24px;border-radius:99px;}
+.onb-step-dot.done{background:var(--a3);}
+.onb-step{display:none;}
+.onb-step.active{display:block;animation:pageFadeIn 0.3s ease both;}
+.onb-google-avatar{width:72px;height:72px;border-radius:50%;border:3px solid var(--accent);
+  display:block;margin:0 auto 12px;}
+.onb-google-avatar-placeholder{width:72px;height:72px;border-radius:50%;border:3px solid var(--accent);
+  background:linear-gradient(135deg,var(--accent),var(--a5));display:flex;align-items:center;
+  justify-content:center;font-size:2rem;margin:0 auto 12px;}
+.onb-title{font-size:1.4rem;font-weight:900;text-align:center;margin-bottom:6px;}
+.onb-sub{font-size:0.85rem;color:var(--muted);text-align:center;margin-bottom:20px;line-height:1.6;}
+.onb-label{font-size:0.78rem;color:var(--muted);display:block;margin-bottom:5px;font-weight:700;}
+.onb-input{width:100%;background:var(--card2);border:1.5px solid var(--border);color:var(--text);
+  font-family:'Nunito',sans-serif;font-size:1rem;padding:10px 14px;border-radius:11px;
+  outline:none;transition:border-color 0.2s;margin-bottom:14px;}
+.onb-input:focus{border-color:var(--accent);}
+.onb-next-btn{width:100%;background:linear-gradient(135deg,var(--accent),#ff9a3c);border:none;
+  color:white;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:900;padding:13px;
+  border-radius:12px;cursor:pointer;transition:opacity 0.2s,transform 0.1s;margin-top:4px;}
+.onb-next-btn:hover{opacity:0.9;transform:translateY(-1px);}
+.onb-skip{background:none;border:none;color:var(--muted);font-family:'Nunito',sans-serif;
+  font-size:0.78rem;cursor:pointer;margin-top:10px;display:block;width:100%;text-align:center;
+  text-decoration:underline;transition:color 0.2s;}
+.onb-skip:hover{color:var(--text);}
+.avatar-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:16px;}
+.avatar-opt{font-size:1.6rem;width:100%;aspect-ratio:1;border-radius:10px;border:2px solid var(--border);
+  background:var(--card2);cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all 0.15s;}
+.avatar-opt:hover{border-color:var(--accent);transform:scale(1.08);}
+.avatar-opt.selected{border-color:var(--accent);background:rgba(255,107,53,0.12);}
+.topic-onb-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.topic-onb-btn{background:var(--card2);border:2px solid var(--border);border-radius:12px;
+  padding:10px 12px;cursor:pointer;text-align:left;transition:all 0.15s;display:flex;align-items:center;gap:8px;}
+.topic-onb-btn:hover{border-color:var(--accent);}
+.topic-onb-btn.selected{border-color:var(--accent);background:rgba(255,107,53,0.1);}
+.topic-onb-btn .t-icon{font-size:1.2rem;}
+.topic-onb-btn .t-name{font-size:0.8rem;font-weight:700;}
+.onb-feature-list{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+.onb-feature{display:flex;align-items:flex-start;gap:12px;padding:10px 12px;
+  background:var(--card2);border-radius:10px;}
+.onb-feature-icon{font-size:1.4rem;flex-shrink:0;}
+.onb-feature-text strong{display:block;font-size:0.88rem;margin-bottom:2px;}
+.onb-feature-text span{font-size:0.76rem;color:var(--muted);}
+
+
+.google-btn{display:flex;align-items:center;justify-content:center;gap:10px;
+  background:white;border:1.5px solid #ddd;border-radius:99px;color:#333;
+  font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:700;
+  padding:11px 28px;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+.google-btn:hover{box-shadow:0 4px 16px rgba(0,0,0,0.15);transform:translateY(-1px);}
+.google-btn img{width:20px;height:20px;}
+.auth-divider{display:flex;align-items:center;gap:10px;margin:14px 0;color:var(--muted);font-size:0.78rem;}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.auth-user-bar{display:none;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:10px 14px;margin-bottom:12px;}
+.auth-user-bar.show{display:flex;}
+.auth-avatar{width:32px;height:32px;border-radius:50%;object-fit:cover;}
+.auth-name{font-size:0.88rem;font-weight:700;flex:1;}
+.auth-signout{background:none;border:1px solid var(--border);color:var(--muted);font-family:'Nunito',sans-serif;
+  font-size:0.74rem;padding:4px 10px;border-radius:99px;cursor:pointer;transition:all 0.2s;}
+.auth-signout:hover{border-color:var(--wrong);color:var(--wrong);}
+.auth-status{font-size:0.72rem;color:var(--a3);margin-top:2px;}
 .email-signup-box{background:linear-gradient(135deg,rgba(76,201,240,0.1),rgba(199,125,255,0.08));
   border:1px solid rgba(76,201,240,0.25);border-radius:16px;padding:18px 20px;margin-top:12px;}
 .email-signup-box h4{font-size:0.95rem;font-weight:900;margin-bottom:4px;}
@@ -844,6 +918,11 @@ sub{font-size:0.7em;vertical-align:sub;line-height:0;}
     <button class="upgrade-btn" onclick="openProModal()">⭐ Upgrade</button>
     <span id="nav-streak">🔥0</span>
     <span id="nav-qstreak">⚡0</span>
+    <div id="nav-auth-bar" class="auth-user-bar" style="margin-bottom:0;padding:5px 10px;">
+      <img id="nav-auth-avatar" class="auth-avatar" src="" alt="" style="width:24px;height:24px;"/>
+      <span id="nav-auth-name" style="font-size:0.78rem;"></span>
+      <button class="auth-signout" onclick="signOut()">Sign out</button>
+    </div>
     <span id="nav-lvl">LVL 1</span>
     <span id="nav-xp">0 XP</span>
     <span id="nav-timer">00:00</span>
@@ -908,21 +987,31 @@ sub{font-size:0.7em;vertical-align:sub;line-height:0;}
   <h1 class="home-title">Numiqube</h1>
   <p class="home-motto">"We have a lot. From counting, to calculus."</p>
   <p class="home-sub">The math study app that actually makes sense — for everyone.</p>
+
   <div class="onboard-grid">
     <div class="onboard-card"><span class="oc-icon">📐</span><strong>12 Topics</strong><span>Counting → Calculus</span></div>
     <div class="onboard-card"><span class="oc-icon">🏆</span><strong>Achievements</strong><span>20+ to unlock</span></div>
-    <div class="onboard-card"><span class="oc-icon">🛍️</span><strong>XP Shop</strong><span>spend XP on rewards</span></div>
-    <div class="onboard-card"><span class="oc-icon">🖨️</span><strong>Print Sheets</strong><span>study offline too</span></div>
-    <div class="onboard-card"><span class="oc-icon">🔥</span><strong>Streaks</strong><span>study every day</span></div>
-    <div class="onboard-card"><span class="oc-icon">⭐</span><strong>Free & Pro</strong><span>upgrade anytime</span></div>
+    <div class="onboard-card"><span class="oc-icon">🛍️</span><strong>XP Shop</strong><span>Spend XP on rewards</span></div>
+    <div class="onboard-card"><span class="oc-icon">🔥</span><strong>Streaks</strong><span>Study every day</span></div>
   </div>
+
+  <!-- Google sign in -->
+  <button class="google-btn" onclick="signInWithGoogle()">
+    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"/>
+    Continue with Google
+  </button>
+
+  <div class="auth-divider">or</div>
+
+  <!-- Guest / name entry -->
   <div class="name-input-wrap">
     <input id="username-input" placeholder="Your name (e.g. Alex)" maxlength="20"/>
     <button class="btn-primary" onclick="beginApp()">Let's go →</button>
   </div>
-  <p style="color:var(--muted);font-size:0.75rem;margin-top:8px;">Progress saves automatically in your browser. No account needed.</p>
+  <p style="color:var(--muted);font-size:0.75rem;margin-top:8px;">Guest progress saves in this browser only. Sign in with Google to sync everywhere.</p>
 
-  <div class="email-signup-box" style="max-width:460px;width:100%;">
+  <!-- Email signup -->
+  <div class="email-signup-box" style="max-width:460px;width:100%;margin-top:8px;">
     <div id="home-step-email">
       <h4>📬 Stay in the loop</h4>
       <p>Get notified when new topics, features, and improvements drop. No spam, ever.</p>
@@ -942,6 +1031,73 @@ sub{font-size:0.7em;vertical-align:sub;line-height:0;}
       <button class="name-skip" onclick="skipName('home')">Skip for now</button>
     </div>
     <div class="email-success" id="home-email-success">✅ You're all set! Welcome to Numiqube.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     GOOGLE ONBOARDING PAGE
+══════════════════════════════════════ -->
+<div id="page-onboarding">
+  <div class="onb-card">
+    <!-- Step dots -->
+    <div class="onb-steps">
+      <div class="onb-step-dot active" id="onb-dot-0"></div>
+      <div class="onb-step-dot" id="onb-dot-1"></div>
+      <div class="onb-step-dot" id="onb-dot-2"></div>
+      <div class="onb-step-dot" id="onb-dot-3"></div>
+    </div>
+
+    <!-- Step 0: Welcome + what is Numiqube -->
+    <div class="onb-step active" id="onb-step-0">
+      <div id="onb-avatar-wrap" class="onb-google-avatar-placeholder">🧊</div>
+      <h2 class="onb-title" id="onb-welcome-title">Welcome to Numiqube! 👋</h2>
+      <p class="onb-sub">The math app that goes from counting to calculus — all in one place.</p>
+      <div class="onb-feature-list">
+        <div class="onb-feature">
+          <span class="onb-feature-icon">🎯</span>
+          <div class="onb-feature-text"><strong>Questions with real explanations</strong><span>Every wrong answer teaches you exactly what went wrong, step by step.</span></div>
+        </div>
+        <div class="onb-feature">
+          <span class="onb-feature-icon">⭐</span>
+          <div class="onb-feature-text"><strong>Earn XP & unlock rewards</strong><span>Spend XP in the shop on themes, titles, and avatars.</span></div>
+        </div>
+        <div class="onb-feature">
+          <span class="onb-feature-icon">🔥</span>
+          <div class="onb-feature-text"><strong>Daily streaks & challenges</strong><span>Build a habit. Come back every day and watch your streak grow.</span></div>
+        </div>
+        <div class="onb-feature">
+          <span class="onb-feature-icon">☁️</span>
+          <div class="onb-feature-text"><strong>Your progress syncs everywhere</strong><span>Signed in with Google — your XP, streak and achievements follow you.</span></div>
+        </div>
+      </div>
+      <button class="onb-next-btn" onclick="onbNext(1)">Let's set up your profile →</button>
+    </div>
+
+    <!-- Step 1: Name confirmation -->
+    <div class="onb-step" id="onb-step-1">
+      <h2 class="onb-title">What's your name?</h2>
+      <p class="onb-sub">This is how you'll appear in Numiqube. You can change it anytime in Settings.</p>
+      <label class="onb-label">Display name</label>
+      <input class="onb-input" id="onb-name-input" placeholder="e.g. Alex" maxlength="20"/>
+      <button class="onb-next-btn" onclick="onbSaveName()">Continue →</button>
+    </div>
+
+    <!-- Step 2: Avatar picker -->
+    <div class="onb-step" id="onb-step-2">
+      <h2 class="onb-title">Pick your avatar</h2>
+      <p class="onb-sub">Choose an icon that represents you!</p>
+      <div class="avatar-grid" id="onb-avatar-grid"></div>
+      <button class="onb-next-btn" onclick="onbNext(3)">Continue →</button>
+      <button class="onb-skip" onclick="onbNext(3)">Skip for now</button>
+    </div>
+
+    <!-- Step 3: Pick starting topic -->
+    <div class="onb-step" id="onb-step-3">
+      <h2 class="onb-title">What do you want to study?</h2>
+      <p class="onb-sub">Pick a topic to start with. You can always switch later.</p>
+      <div class="topic-onb-grid" id="onb-topic-grid"></div>
+      <button class="onb-next-btn" onclick="onbFinish()">Start learning 🚀</button>
+    </div>
   </div>
 </div>
 
@@ -1444,8 +1600,221 @@ sub{font-size:0.7em;vertical-align:sub;line-height:0;}
 ══════════════════════════════ -->
 <script>
 // ═══════════════════════════════════════════
-//  QUESTION BANK (100+ questions with full hints + step-by-step explanations)
+//  FIREBASE SETUP
 // ═══════════════════════════════════════════
+const firebaseConfig = {
+  apiKey: "AIzaSyDyjLVPEGhEeWxwqodCXaGGhcKhEh7GcG4",
+  authDomain: "numiqube-a67f9.firebaseapp.com",
+  projectId: "numiqube-a67f9",
+  storageBucket: "numiqube-a67f9.firebasestorage.app",
+  messagingSenderId: "91585910537",
+  appId: "1:91585910537:web:1d1661c19c004570eea5d8"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+const googleProvider = new firebase.auth.GoogleAuthProvider();
+
+let currentUser = null;
+
+function signInWithGoogle() {
+  auth.signInWithPopup(googleProvider).catch(err => {
+    console.error('Sign in error:', err);
+    alert('Sign in failed. Make sure popups are allowed and try again.');
+  });
+}
+
+function signOut() {
+  auth.signOut().then(() => {
+    currentUser = null;
+    updateAuthUI(null);
+  });
+}
+
+function updateAuthUI(user) {
+  const bar = document.getElementById('nav-auth-bar');
+  if (user) {
+    bar.classList.add('show');
+    document.getElementById('nav-auth-name').textContent = user.displayName || user.email;
+    if (user.photoURL) {
+      document.getElementById('nav-auth-avatar').src = user.photoURL;
+      document.getElementById('nav-auth-avatar').style.display = 'block';
+    } else {
+      document.getElementById('nav-auth-avatar').style.display = 'none';
+    }
+  } else {
+    bar.classList.remove('show');
+  }
+}
+
+async function saveStateToFirebase() {
+  if (!currentUser) return;
+  try {
+    const toSave = Object.assign({}, S);
+    toSave.earned = [...S.earned];
+    delete toSave.q; delete toSave.speedInterval; delete toSave.srQueue;
+    await db.collection('users').doc(currentUser.uid).set(toSave, { merge: true });
+  } catch(e) { console.error('Firebase save error:', e); }
+}
+
+async function loadStateFromFirebase() {
+  if (!currentUser) return false;
+  try {
+    const doc = await db.collection('users').doc(currentUser.uid).get();
+    if (doc.exists) {
+      const d = doc.data();
+      Object.assign(S, d);
+      S.earned = new Set(S.earned || []);
+      S.q = null; S.answered = false;
+      S.streak = S.streak || 0; S.lastTime = 999; S.lastCorrect = false; S.qStart = 0;
+      S.hintUsed = false; S.speedInterval = null; S.paused = false;
+      S.mode = 'normal'; S.srMode = false; S.srQueue = [];
+      S.sessionCorrect = 0; S.sessionXP = 0;
+      return true;
+    }
+  } catch(e) { console.error('Firebase load error:', e); }
+  return false;
+}
+
+// Listen for auth state changes
+auth.onAuthStateChanged(async user => {
+  currentUser = user;
+  if (user) {
+    updateAuthUI(user);
+    const loaded = await loadStateFromFirebase();
+    const isNewUser = !loaded || !S.onboardingDone;
+    if (!loaded) {
+      S.username = user.displayName || user.email.split('@')[0];
+    }
+    if (isNewUser) {
+      showOnboarding(user);
+    } else {
+      showHomePage();
+    }
+  } else {
+    updateAuthUI(null);
+    showHomePage();
+  }
+});
+
+const ONB_AVATARS = ['🦁','🦊','🐯','🐬','🦄','🐉','🦋','🦅','🐧','🦈','🦓','🐸','🐼','🦉','🦚','🐺','🦝','🐙'];
+let _onbSelectedAvatar = '⭐';
+let _onbSelectedTopic = 'quadratics';
+
+function showOnboarding(user) {
+  document.getElementById('loader').classList.add('hidden');
+  document.getElementById('page-home').style.display = 'none';
+  document.getElementById('page-onboarding').classList.add('active');
+  document.getElementById('nav').style.display = 'none';
+
+  // Set avatar/name from Google
+  if (user.photoURL) {
+    const wrap = document.getElementById('onb-avatar-wrap');
+    wrap.outerHTML = `<img id="onb-avatar-wrap" class="onb-google-avatar" src="${user.photoURL}" alt=""/>`;
+  }
+  const firstName = (user.displayName || S.username || '').split(' ')[0];
+  document.getElementById('onb-welcome-title').textContent = `Welcome, ${firstName}! 👋`;
+  document.getElementById('onb-name-input').value = user.displayName || S.username || '';
+
+  // Build avatar grid
+  const grid = document.getElementById('onb-avatar-grid');
+  grid.innerHTML = ONB_AVATARS.map(a =>
+    `<button class="avatar-opt${a===_onbSelectedAvatar?' selected':''}" onclick="selectOnbAvatar('${a}')">${a}</button>`
+  ).join('');
+
+  // Build topic grid
+  const tgrid = document.getElementById('onb-topic-grid');
+  tgrid.innerHTML = Object.entries(TL).map(([k,v]) =>
+    `<button class="topic-onb-btn${k===_onbSelectedTopic?' selected':''}" onclick="selectOnbTopic('${k}',this)">
+      <span class="t-icon">${TOPIC_ICONS[k]||'📚'}</span>
+      <span class="t-name">${v.replace(/[🍎🔢📐🔗📏🎲📈🧩📊🏆🔥⚖️🔣]/g,'').trim()}</span>
+    </button>`
+  ).join('');
+}
+
+function onbNext(step) {
+  document.querySelectorAll('.onb-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('onb-step-' + step).classList.add('active');
+  // Update dots
+  document.querySelectorAll('.onb-step-dot').forEach((d, i) => {
+    d.classList.remove('active','done');
+    if (i < step) d.classList.add('done');
+    else if (i === step) d.classList.add('active');
+  });
+}
+
+function onbSaveName() {
+  const name = document.getElementById('onb-name-input').value.trim();
+  if (!name) {
+    const inp = document.getElementById('onb-name-input');
+    inp.style.borderColor = 'var(--wrong)';
+    inp.placeholder = 'Please enter your name!';
+    setTimeout(() => { inp.style.borderColor=''; inp.placeholder='e.g. Alex'; }, 1800);
+    return;
+  }
+  S.username = name.slice(0, 20);
+  onbNext(2);
+}
+
+function selectOnbAvatar(a) {
+  _onbSelectedAvatar = a;
+  document.querySelectorAll('.avatar-opt').forEach(b => b.classList.remove('selected'));
+  event.target.closest('.avatar-opt').classList.add('selected');
+}
+
+function selectOnbTopic(key, el) {
+  _onbSelectedTopic = key;
+  document.querySelectorAll('.topic-onb-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function onbFinish() {
+  // Save choices
+  S.onboardingDone = true;
+  S.currentTopic = _onbSelectedTopic;
+  if (!S.shopEquipped) S.shopEquipped = {};
+  S.shopEquipped.avatar = _onbSelectedAvatar;
+
+  // Hide onboarding
+  document.getElementById('page-onboarding').classList.remove('active');
+
+  // Launch app to dashboard
+  document.getElementById('nav').style.display = 'flex';
+  updateDayStreak();
+  restoreEquipped();
+  isStudyPageActive = false;
+  buildTopicTabs();
+  startTimer();
+  loadQ();
+  showPage('dashboard');
+  refreshDashboard();
+  saveState();
+
+  // Welcome XP
+  S.xp += 25;
+  updateLevel();
+  saveState();
+  setTimeout(() => spawnXP('+25 XP 🎉 Welcome to Numiqube!', '#4cc9f0'), 600);
+}
+
+
+
+function showHomePage() {
+  document.getElementById('loader').classList.add('hidden');
+  document.getElementById('page-home').style.display = 'flex';
+  document.getElementById('nav').style.display = 'none';
+  // Pre-fill username input if we have a name
+  if (S.username) {
+    document.getElementById('username-input').value = S.username;
+  }
+  // If signed in with Google, show a welcome back message
+  if (currentUser) {
+    const firstName = (currentUser.displayName || S.username || '').split(' ')[0];
+    document.querySelector('.home-motto').textContent = `Welcome back, ${firstName}! 👋`;
+  }
+}
+
+
 const QB = {
   counting:[
     {text:"There are 3 apples and 2 oranges. How many fruits in total?",opts:["5","4","6","3"],ans:0,diff:"easy",type:"numpad",accepted:["5"],
@@ -2235,6 +2604,7 @@ function defaultState() {
     shopEquipped: {},
     shopSpent: 0,
     emailSignedUp: false,
+    onboardingDone: false,
     settings: { lightMode:false, sessionGoal:20, speedTimer:15, sound:true, confetti:true },
     // runtime only (not saved)
     currentTopic: 'quadratics',
@@ -2271,9 +2641,10 @@ function saveState() {
   try {
     const toSave = Object.assign({}, S);
     toSave.earned = [...S.earned];
-    // don't save runtime stuff
     delete toSave.q; delete toSave.speedInterval; delete toSave.srQueue;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
+    // Also save to Firebase if signed in
+    saveStateToFirebase();
   } catch(e) {}
 }
 
@@ -2283,10 +2654,8 @@ function saveState() {
 function init() {
   loadState();
   buildStars();
-  if (S.username) {
-    beginApp(true);
-  }
-  // init topic tracking
+  // Always show home page — auth state listener handles the rest
+  // (Don't auto-skip to study page anymore)
   Object.keys(QB).forEach(t => {
     if (!S.tCount[t]) S.tCount[t]=0;
     if (!S.tCorrect[t]) S.tCorrect[t]=0;
@@ -4161,11 +4530,13 @@ document.getElementById('pro-modal').addEventListener('click',e=>{
 init();
 // Apply saved settings immediately
 if(S.settings&&S.settings.lightMode){document.body.classList.add('light-mode');document.getElementById('theme-btn').textContent='🌙';}
-
-// Dismiss loader after animation completes
+// Fallback: if Firebase auth doesn't respond in 3s, show home anyway
 setTimeout(() => {
-  document.getElementById('loader').classList.add('hidden');
-}, 2000);
+  if(document.getElementById('loader') && !document.getElementById('loader').classList.contains('hidden')) {
+    document.getElementById('loader').classList.add('hidden');
+    document.getElementById('page-home').style.display = 'flex';
+  }
+}, 3000);
 </script>
 </body>
 </html>
