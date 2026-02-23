@@ -179,6 +179,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
   font-size:0.74rem;padding:5px 11px;border-radius:99px;cursor:pointer;transition:all 0.2s;}
 .tool-btn:hover{background:var(--card3);color:var(--text);}
 .tool-btn.active-tool{background:rgba(255,107,53,0.2);border-color:var(--accent);color:var(--accent);}
+.tool-btn.music-off{opacity:0.45;}
 
 /* More button */
 .more-btn{background:var(--card2);border:1px solid var(--border);color:var(--text);font-family:'Nunito',sans-serif;
@@ -812,6 +813,105 @@ sub{font-size:0.7em;vertical-align:sub;line-height:0;}
   .onboard-grid{grid-template-columns:1fr 1fr;}
 }
 
+/* ─── RANK SYSTEM ─── */
+:root {
+  --rank-apprentice:#a0a0b0;
+  --rank-scholar:#4cc9f0;
+  --rank-thinker:#06d6a0;
+  --rank-analyst:#c77dff;
+  --rank-sage:#ffd166;
+  --rank-genius:#118ab2;
+  --rank-mastermind:#f72585;
+}
+.rank-badge {
+  display:inline-flex;align-items:center;gap:6px;padding:4px 14px;
+  border-radius:99px;font-size:0.8rem;font-weight:900;letter-spacing:0.5px;
+  border:1.5px solid;
+}
+.rank-apprentice { background:rgba(160,160,176,0.15);border-color:var(--rank-apprentice);color:var(--rank-apprentice); }
+.rank-scholar    { background:rgba(76,201,240,0.15);border-color:var(--rank-scholar);color:var(--rank-scholar); }
+.rank-thinker    { background:rgba(6,214,160,0.15);border-color:var(--rank-thinker);color:var(--rank-thinker); }
+.rank-analyst    { background:rgba(199,125,255,0.15);border-color:var(--rank-analyst);color:var(--rank-analyst); }
+.rank-sage       { background:rgba(255,209,102,0.15);border-color:var(--rank-sage);color:var(--rank-sage); }
+.rank-genius     { background:rgba(17,138,178,0.15);border-color:var(--rank-genius);color:var(--rank-genius); }
+.rank-mastermind { background:rgba(247,37,133,0.2);border-color:var(--rank-mastermind);color:var(--rank-mastermind);animation:mastermindGlow 2s ease-in-out infinite alternate; }
+@keyframes mastermindGlow{from{box-shadow:0 0 8px rgba(247,37,133,0.3)}to{box-shadow:0 0 18px rgba(247,37,133,0.7)}}
+
+/* ─── RANKED LANDING PAGE ─── */
+.mode-landing {
+  background:var(--card);border:1px solid var(--border);border-radius:20px;
+  padding:28px 24px;margin-bottom:20px;
+}
+.mode-landing-header {
+  display:flex;align-items:center;gap:14px;margin-bottom:16px;
+}
+.mode-landing-icon {
+  width:60px;height:60px;border-radius:16px;display:flex;align-items:center;
+  justify-content:center;font-size:2rem;flex-shrink:0;
+}
+.mode-landing-icon.ranked { background:rgba(255,209,102,0.15);border:1.5px solid rgba(255,209,102,0.4); }
+.mode-landing-icon.casual { background:rgba(76,201,240,0.12);border:1.5px solid rgba(76,201,240,0.3); }
+.mode-landing-title { font-size:1.4rem;font-weight:900; }
+.mode-landing-sub { font-size:0.82rem;color:var(--muted);margin-top:2px; }
+.mode-info-grid { display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0; }
+.mode-info-card { background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:12px 14px; }
+.mode-info-label { font-size:0.65rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:700;margin-bottom:4px; }
+.mode-info-val { font-size:0.9rem;font-weight:700; }
+.queue-btn {
+  width:100%;padding:14px;border-radius:14px;font-family:'Nunito',sans-serif;
+  font-size:1.05rem;font-weight:900;border:none;cursor:pointer;transition:all 0.2s;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.queue-btn.ranked { background:linear-gradient(135deg,#ffd166,#ff9a3c);color:#000; }
+.queue-btn.ranked:hover { transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,209,102,0.4); }
+.queue-btn.casual { background:linear-gradient(135deg,#4cc9f0,#118ab2);color:#fff; }
+.queue-btn.casual:hover { transform:translateY(-2px);box-shadow:0 8px 24px rgba(76,201,240,0.4); }
+
+/* ─── RANK TIERS DISPLAY ─── */
+.rank-tiers-grid {
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin:12px 0;
+}
+.rank-tier-card {
+  background:var(--card2);border:1.5px solid var(--border);border-radius:14px;
+  padding:14px 10px;text-align:center;transition:transform 0.2s,border-color 0.2s;
+}
+.rank-tier-card:hover { transform:translateY(-2px); }
+.rank-tier-card.current { border-color:var(--accent);background:rgba(255,107,53,0.08); }
+.rank-tier-icon { font-size:1.8rem;display:block;margin-bottom:6px; }
+.rank-tier-name { font-size:0.8rem;font-weight:900;display:block;margin-bottom:2px; }
+.rank-tier-sub { font-size:0.65rem;color:var(--muted); }
+.rank-lp-bar-wrap { height:6px;background:var(--card3);border-radius:99px;overflow:hidden;margin-top:8px; }
+.rank-lp-bar { height:100%;border-radius:99px;transition:width 0.6s; }
+
+/* ─── RANKED LEADERBOARD ─── */
+.ranked-lb-row {
+  display:flex;align-items:center;gap:12px;padding:10px 14px;
+  background:var(--card2);border:1px solid var(--border);border-radius:12px;
+  margin-bottom:6px;transition:background 0.2s;
+}
+.ranked-lb-row.me { background:rgba(255,107,53,0.1);border-color:var(--accent); }
+.ranked-lb-pos { font-family:'Space Mono',monospace;font-size:0.8rem;font-weight:700;width:28px;text-align:center;flex-shrink:0; }
+.ranked-lb-avatar { font-size:1.3rem;flex-shrink:0; }
+.ranked-lb-info { flex:1;min-width:0; }
+.ranked-lb-name { font-size:0.85rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+.ranked-lb-rank { font-size:0.68rem;color:var(--muted); }
+.ranked-lb-lp { font-family:'Space Mono',monospace;font-size:0.82rem;font-weight:700;color:var(--a2);flex-shrink:0; }
+
+/* ─── DUELS PAGE ─── */
+.duels-hero {
+  background:linear-gradient(135deg,rgba(247,37,133,0.12),rgba(199,125,255,0.1));
+  border:1px solid rgba(247,37,133,0.25);border-radius:20px;
+  padding:24px;margin-bottom:20px;text-align:center;
+}
+.duels-hero-title { font-size:1.5rem;font-weight:900;margin-bottom:4px; }
+.duels-hero-sub { color:var(--muted);font-size:0.85rem;margin-bottom:16px; }
+.duel-record-row { display:flex;gap:12px;justify-content:center;margin-bottom:16px;flex-wrap:wrap; }
+.duel-record-card { background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 20px;text-align:center; }
+.duel-record-num { font-family:'Space Mono',monospace;font-size:1.4rem;font-weight:700; }
+.duel-record-lbl { font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px; }
+.friends-duel-list .friend-item { cursor:default; }
+
+
 
 
 /* ─── CUSTOM DIALOG (replaces alert/confirm/prompt) ─── */
@@ -1282,6 +1382,7 @@ sub{font-size:0.7em;vertical-align:sub;line-height:0;}
     <button class="nav-tab" onclick="showPage('progress')">📊 Progress</button>
     <button class="nav-tab" onclick="showPage('goals')">🎯 Goals</button>
     <button class="nav-tab" onclick="showPage('friends')">👥 Friends<span class="req-badge" id="req-badge">0</span></button>
+    <button class="nav-tab" onclick="showPage('duels')">⚔️ Duels</button>
     <button class="nav-tab" onclick="showPage('settings')">⚙️ Settings</button>
   </div>
   <div class="nav-right">
@@ -1498,6 +1599,7 @@ sub{font-size:0.7em;vertical-align:sub;line-height:0;}
   <button class="panel-btn" id="panel-pause-btn" onclick="togglePause()">⏸ Pause</button>
 
   <div class="panel-title">Other</div>
+  <button class="panel-btn" id="panel-music-btn" onclick="toggleMusic();closeMorePanel()">🎵 Music: ON</button>
   <button class="panel-btn" onclick="openPrintModal();closeMorePanel()">🖨️ Print Worksheet</button>
   <button class="panel-btn" onclick="showPage('progress');closeMorePanel()">📊 My Progress</button>
 </div>
@@ -1538,6 +1640,7 @@ sub{font-size:0.7em;vertical-align:sub;line-height:0;}
     <button class="more-btn" onclick="openMorePanel()">☰ More</button>
     <button class="tool-btn" id="pause-btn" onclick="togglePause()">⏸ Pause</button>
     <button class="tool-btn" onclick="skipQ()">⏭ Skip</button>
+    <button class="tool-btn" id="music-toolbar-btn" onclick="toggleMusic()" title="Toggle background music">🎵</button>
     <!-- Hidden elements still needed for JS references -->
     <button style="display:none" id="studymode-btn"></button>
     <button style="display:none" id="mode-btn"></button>
@@ -1883,26 +1986,8 @@ sub{font-size:0.7em;vertical-align:sub;line-height:0;}
 ══════════════════════════════════════ -->
 <div id="page-friends" class="page">
 <div class="container">
-  <h2 style="font-size:1.3rem;font-weight:900;margin-bottom:4px;">👥 Friends & Duels</h2>
-  <p style="color:var(--muted);font-size:0.8rem;margin-bottom:16px;">Challenge anyone, add friends, and compete.</p>
-  
-  <!-- Ranked Matchmaking Section -->
-  <div class="ranked-duel-section">
-    <div class="ranked-duel-title">⚔️ Quick Duel — Play Anyone</div>
-    <div class="ranked-duel-sub">Get matched with a real player online. No friend needed — just pick your mode and go. Email verification required.</div>
-    <div class="ranked-mode-btns">
-      <button class="ranked-mode-btn ranked-btn" onclick="startMatchmaking('ranked')">
-        <span class="rmb-icon">🏆</span>
-        <span class="rmb-name">Ranked</span>
-        <span class="rmb-sub">Affects your rank</span>
-      </button>
-      <button class="ranked-mode-btn casual-btn" onclick="startMatchmaking('casual')">
-        <span class="rmb-icon">🎮</span>
-        <span class="rmb-name">Casual</span>
-        <span class="rmb-sub">Just for fun</span>
-      </button>
-    </div>
-  </div>
+  <h2 style="font-size:1.3rem;font-weight:900;margin-bottom:4px;">👥 Friends</h2>
+  <p style="color:var(--muted);font-size:0.8rem;margin-bottom:16px;">Add friends, track their progress, and challenge them to duels.</p>
 
   <!-- Guest warning -->
   <div id="friends-guest-msg" style="display:none;background:rgba(255,107,53,0.1);border:1px solid rgba(255,107,53,0.3);border-radius:12px;padding:14px 16px;margin-bottom:16px;">
@@ -1938,13 +2023,186 @@ sub{font-size:0.7em;vertical-align:sub;line-height:0;}
     <div id="friends-list"><p style="color:var(--muted);font-size:0.82rem;">No friends yet. Add some!</p></div>
 
     <!-- Leaderboard -->
-    <p class="section-title" style="margin-top:20px;">🏆 Leaderboard</p>
+    <p class="section-title" style="margin-top:20px;">🏆 Friends Leaderboard</p>
     <div class="lb-tabs">
       <button class="lb-tab active" id="lb-tab-xp" onclick="switchLbTab('xp')">Total XP</button>
       <button class="lb-tab" id="lb-tab-weekly" onclick="switchLbTab('weekly')">Weekly XP</button>
       <button class="lb-tab" id="lb-tab-streak" onclick="switchLbTab('streak')">Streak</button>
     </div>
     <div id="leaderboard-list"></div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     DUELS PAGE
+══════════════════════════════════════ -->
+<div id="page-duels" class="page">
+<div class="container">
+
+  <div class="duels-hero">
+    <div class="duels-hero-title">⚔️ Duels</div>
+    <div class="duels-hero-sub">Challenge a friend or get matched with a random opponent. First to 15 correct wins.</div>
+    <div class="duel-record-row">
+      <div class="duel-record-card">
+        <div class="duel-record-num" id="duels-wins" style="color:var(--a3);">0</div>
+        <div class="duel-record-lbl">Wins</div>
+      </div>
+      <div class="duel-record-card">
+        <div class="duel-record-num" id="duels-losses" style="color:var(--wrong);">0</div>
+        <div class="duel-record-lbl">Losses</div>
+      </div>
+      <div class="duel-record-card">
+        <div class="duel-record-num" id="duels-winrate" style="color:var(--a2);">--%</div>
+        <div class="duel-record-lbl">Win Rate</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
+      <button class="queue-btn ranked" style="width:auto;padding:12px 28px;font-size:0.95rem;" onclick="showPage('ranked')">🏆 Ranked Queue</button>
+      <button class="queue-btn casual" style="width:auto;padding:12px 28px;font-size:0.95rem;" onclick="showPage('casual')">🎮 Casual Queue</button>
+    </div>
+  </div>
+
+  <!-- Challenge a friend -->
+  <p class="section-title">Challenge a Friend</p>
+  <div id="duels-guest-msg" style="display:none;background:rgba(255,107,53,0.1);border:1px solid rgba(255,107,53,0.3);border-radius:12px;padding:14px 16px;margin-bottom:12px;">
+    <strong style="font-size:0.88rem;">Sign in with Google to challenge friends</strong>
+  </div>
+  <div id="duels-friends-list" class="friends-duel-list">
+    <p style="color:var(--muted);font-size:0.82rem;">Loading friends...</p>
+  </div>
+
+  <p class="section-title" style="margin-top:20px;">How It Works</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;">
+    <div class="mode-info-card">
+      <div class="mode-info-label">🎯 Objective</div>
+      <div class="mode-info-val" style="font-size:0.82rem;margin-top:4px;color:var(--muted);font-weight:400;">First to answer 15 questions correctly wins the duel</div>
+    </div>
+    <div class="mode-info-card">
+      <div class="mode-info-label">🧠 Questions</div>
+      <div class="mode-info-val" style="font-size:0.82rem;margin-top:4px;color:var(--muted);font-weight:400;">Mental math — no paper needed. Fast, head-to-head</div>
+    </div>
+    <div class="mode-info-card">
+      <div class="mode-info-label">⭐ XP Rewards</div>
+      <div class="mode-info-val" style="font-size:0.82rem;margin-top:4px;color:var(--muted);font-weight:400;">Win: +150 XP &nbsp;|&nbsp; Lose: +50 XP — you always earn</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     RANKED MODE LANDING PAGE
+══════════════════════════════════════ -->
+<div id="page-ranked" class="page">
+<div class="container">
+  <button onclick="showPage('duels')" style="background:none;border:none;color:var(--muted);font-size:0.82rem;cursor:pointer;padding:0;margin-bottom:16px;font-family:'Nunito',sans-serif;">← Back to Duels</button>
+
+  <div class="mode-landing">
+    <div class="mode-landing-header">
+      <div class="mode-landing-icon ranked">🏆</div>
+      <div>
+        <div class="mode-landing-title">Ranked Mode</div>
+        <div class="mode-landing-sub">Compete for rank. Every match counts.</div>
+      </div>
+    </div>
+
+    <!-- Your rank display -->
+    <div style="background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+      <div>
+        <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:700;margin-bottom:4px;">Your Rank</div>
+        <div id="my-rank-badge" class="rank-badge rank-apprentice" style="font-size:0.95rem;">📖 Apprentice IV</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:0.68rem;color:var(--muted);font-weight:700;margin-bottom:4px;">LP (League Points)</div>
+        <div style="font-family:'Space Mono',monospace;font-size:1.2rem;font-weight:700;color:var(--a2);" id="my-lp">0 LP</div>
+        <div style="font-size:0.65rem;color:var(--muted);" id="my-lp-next">100 LP to next division</div>
+      </div>
+    </div>
+
+    <!-- LP bar -->
+    <div class="rank-lp-bar-wrap" style="height:8px;margin-bottom:16px;">
+      <div class="rank-lp-bar" id="lp-progress-bar" style="width:0%;background:var(--rank-apprentice);"></div>
+    </div>
+
+    <div class="mode-info-grid">
+      <div class="mode-info-card">
+        <div class="mode-info-label">Win</div>
+        <div class="mode-info-val" style="color:var(--a3);">+20–30 LP</div>
+      </div>
+      <div class="mode-info-card">
+        <div class="mode-info-label">Loss</div>
+        <div class="mode-info-val" style="color:var(--wrong);">−15 LP</div>
+      </div>
+      <div class="mode-info-card">
+        <div class="mode-info-label">First Win</div>
+        <div class="mode-info-val" style="color:var(--a5);">+35 LP bonus</div>
+      </div>
+      <div class="mode-info-card">
+        <div class="mode-info-label">Win Streak</div>
+        <div class="mode-info-val" style="color:var(--a2);">Bonus LP ×1.2</div>
+      </div>
+    </div>
+
+    <button class="queue-btn ranked" onclick="startMatchmaking('ranked')">🏆 Enter Ranked Queue</button>
+  </div>
+
+  <!-- All Ranks -->
+  <p class="section-title">All Ranks</p>
+  <div class="rank-tiers-grid" id="rank-tiers-display"></div>
+
+  <!-- Ranked Leaderboard Top 35 -->
+  <p class="section-title" style="margin-top:20px;">🌍 Global Ranked Leaderboard — Top 35</p>
+  <div id="ranked-leaderboard-list">
+    <div style="text-align:center;padding:20px;color:var(--muted);font-size:0.82rem;">Loading leaderboard...</div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     CASUAL MODE LANDING PAGE
+══════════════════════════════════════ -->
+<div id="page-casual" class="page">
+<div class="container">
+  <button onclick="showPage('duels')" style="background:none;border:none;color:var(--muted);font-size:0.82rem;cursor:pointer;padding:0;margin-bottom:16px;font-family:'Nunito',sans-serif;">← Back to Duels</button>
+
+  <div class="mode-landing">
+    <div class="mode-landing-header">
+      <div class="mode-landing-icon casual">🎮</div>
+      <div>
+        <div class="mode-landing-title">Casual Mode</div>
+        <div class="mode-landing-sub">Play for fun. No rank on the line.</div>
+      </div>
+    </div>
+
+    <div class="mode-info-grid">
+      <div class="mode-info-card">
+        <div class="mode-info-label">XP Reward</div>
+        <div class="mode-info-val" style="color:var(--a3);">Win: +150 XP</div>
+      </div>
+      <div class="mode-info-card">
+        <div class="mode-info-label">Participation</div>
+        <div class="mode-info-val" style="color:var(--a5);">+50 XP always</div>
+      </div>
+      <div class="mode-info-card">
+        <div class="mode-info-label">Rank Impact</div>
+        <div class="mode-info-val" style="color:var(--muted);">None — relax!</div>
+      </div>
+      <div class="mode-info-card">
+        <div class="mode-info-label">Wait Time</div>
+        <div class="mode-info-val" style="color:var(--a2);">~30 seconds avg</div>
+      </div>
+    </div>
+
+    <button class="queue-btn casual" onclick="startMatchmaking('casual')">🎮 Find Casual Match</button>
+  </div>
+
+  <p class="section-title">How Casual Works</p>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;">
+    <p style="font-size:0.85rem;line-height:1.8;color:var(--muted);">
+      Casual matches you with any available player — no rank restrictions. 
+      You'll answer mental math questions head-to-head. First to 15 correct wins. 
+      There's no penalty for losing, so it's perfect for warming up, practicing, or just having fun with a random opponent.
+    </p>
   </div>
 </div>
 </div>
@@ -3051,6 +3309,194 @@ const QB = {
   ],
 };
 
+// ── POST-PROCESS QB: tag all suitable questions as mental ──
+// mental = no pencil/paper needed, multiple choice, quick to solve in head
+(function tagMentalQuestions() {
+  const nonMentalKeywords = ['step','derivative','integral','completing the square','long division',
+    'prime factori','synthetic','matrix','system of','row echelon','gaussian','taylor','series sum',
+    'infinite series','binomial theorem','parametric'];
+  for (const topic of Object.keys(QB)) {
+    QB[topic].forEach(q => {
+      if (q.type === 'sort' || q.type === 'multivar' || q.type === 'free') return;
+      if (!q.opts || q.opts.length < 4) return;
+      const textLower = (q.text || '').toLowerCase();
+      const isTooComplex = nonMentalKeywords.some(kw => textLower.includes(kw));
+      if (!isTooComplex && q.diff !== 'hard' && q.diff !== 'competition') {
+        q.mental = true;
+      }
+    });
+  }
+})();
+
+// ── EXTRA MENTAL MATH QUESTION BANK (for duels) ──
+// These are tagged mental:true by default. Added to existing QB arrays.
+(function addMentalQuestions() {
+
+const extra = {
+  counting: [
+    {text:"5 + 8 = ?",opts:["13","12","14","11"],ans:0,diff:"easy",mental:true,hint:"Count up 8 from 5.",steps:["13"],exp:"13.",hint:"Count on from 5."},
+    {text:"19 − 7 = ?",opts:["12","11","13","14"],ans:0,diff:"easy",mental:true,hint:"Take 7 away from 19.",steps:["12"],exp:"12."},
+    {text:"6 × 7 = ?",opts:["42","36","48","35"],ans:0,diff:"easy",mental:true,hint:"6×7=42.",steps:["42"],exp:"42."},
+    {text:"What is 20% of 50?",opts:["10","5","15","25"],ans:0,diff:"easy",mental:true,hint:"20% = 1/5.",steps:["50÷5=10"],exp:"10."},
+    {text:"Next prime after 7?",opts:["11","9","10","13"],ans:0,diff:"easy",mental:true,hint:"8,9,10 not prime, 11 is.",steps:["11"],exp:"11."},
+    {text:"Half of 48?",opts:["24","22","26","20"],ans:0,diff:"easy",mental:true,hint:"48÷2.",steps:["24"],exp:"24."},
+    {text:"7 × 8 = ?",opts:["56","54","64","48"],ans:0,diff:"easy",mental:true,hint:"7×8=56.",steps:["56"],exp:"56."},
+    {text:"25% of 80?",opts:["20","25","15","40"],ans:0,diff:"easy",mental:true,hint:"25%=1/4.",steps:["80÷4=20"],exp:"20."},
+    {text:"100 − 37 = ?",opts:["63","73","53","67"],ans:0,diff:"easy",mental:true,hint:"37+63=100.",steps:["63"],exp:"63."},
+    {text:"3² + 4² = ?",opts:["25","7","13","49"],ans:0,diff:"easy",mental:true,hint:"9+16.",steps:["25"],exp:"25."},
+    {text:"LCM of 4 and 6?",opts:["12","24","6","8"],ans:0,diff:"easy",mental:true,hint:"List multiples.",steps:["12"],exp:"12."},
+    {text:"GCF of 12 and 18?",opts:["6","3","9","12"],ans:0,diff:"easy",mental:true,hint:"Factors of 12: 1,2,3,4,6,12.",steps:["6"],exp:"6."},
+    {text:"What is 10% of 350?",opts:["35","3.5","70","17.5"],ans:0,diff:"easy",mental:true,hint:"Move decimal one place left.",steps:["35"],exp:"35."},
+    {text:"9 × 9 = ?",opts:["81","72","64","90"],ans:0,diff:"easy",mental:true,hint:"9×9=81.",steps:["81"],exp:"81."},
+    {text:"Square root of 144?",opts:["12","11","13","14"],ans:0,diff:"easy",mental:true,hint:"12×12=144.",steps:["12"],exp:"12."},
+  ],
+  earlyMath: [
+    {text:"15% of 200?",opts:["30","20","25","35"],ans:0,diff:"easy",mental:true,hint:"10%=20, 5%=10.",steps:["30"],exp:"30."},
+    {text:"4³ = ?",opts:["64","48","16","256"],ans:0,diff:"easy",mental:true,hint:"4×4×4.",steps:["64"],exp:"64."},
+    {text:"What is 2/5 as a decimal?",opts:["0.4","0.2","0.5","0.25"],ans:0,diff:"easy",mental:true,hint:"2÷5.",steps:["0.4"],exp:"0.4."},
+    {text:"−5 × −3 = ?",opts:["15","−15","−8","8"],ans:0,diff:"easy",mental:true,hint:"Negative × negative = positive.",steps:["15"],exp:"15."},
+    {text:"What is 3/4 + 1/4?",opts:["1","3/8","1/2","4/8"],ans:0,diff:"easy",mental:true,hint:"Same denominator—add numerators.",steps:["4/4=1"],exp:"1."},
+    {text:"What is 7² − 5²?",opts:["24","4","12","49"],ans:0,diff:"easy",mental:true,hint:"49−25.",steps:["24"],exp:"24."},
+    {text:"Which is larger: 5/8 or 3/5?",opts:["5/8","3/5","Equal","Can't compare"],ans:0,diff:"medium",mental:true,hint:"Cross multiply: 5×5=25, 8×3=24.",steps:["5/8"],exp:"5/8 > 3/5."},
+    {text:"Round 3.485 to nearest hundredth?",opts:["3.49","3.48","3.5","3.4"],ans:0,diff:"easy",mental:true,hint:"Look at the thousandths digit.",steps:["3.49"],exp:"3.49."},
+    {text:"What is 0.3 × 0.4?",opts:["0.12","0.7","1.2","0.07"],ans:0,diff:"easy",mental:true,hint:"3×4=12, two decimal places.",steps:["0.12"],exp:"0.12."},
+    {text:"Simplify 24/36?",opts:["2/3","3/4","4/6","1/2"],ans:0,diff:"easy",mental:true,hint:"GCF(24,36)=12.",steps:["2/3"],exp:"2/3."},
+    {text:"A shirt costs $18, now 50% off. Price?",opts:["$9","$8","$10","$12"],ans:0,diff:"easy",mental:true,hint:"Half of 18.",steps:["$9"],exp:"$9."},
+    {text:"What is −8 + 3?",opts:["−5","5","−11","11"],ans:0,diff:"easy",mental:true,hint:"Move 3 right on number line.",steps:["−5"],exp:"−5."},
+    {text:"Order: 0.5, 1/3, 0.4, 2/5. Largest?",opts:["0.5","2/5","1/3","0.4"],ans:0,diff:"medium",mental:true,hint:"Convert to decimals.",steps:["0.5"],exp:"0.5 is largest."},
+    {text:"What is 5% of 60?",opts:["3","6","5","4"],ans:0,diff:"easy",mental:true,hint:"10%=6, 5%=3.",steps:["3"],exp:"3."},
+    {text:"12² = ?",opts:["144","124","132","148"],ans:0,diff:"easy",mental:true,hint:"12×12.",steps:["144"],exp:"144."},
+  ],
+  fractions: [
+    {text:"1/2 + 1/3 = ?",opts:["5/6","2/5","1/6","3/5"],ans:0,diff:"easy",mental:true,hint:"LCD is 6.",steps:["3/6+2/6=5/6"],exp:"5/6."},
+    {text:"3/4 × 2/3 = ?",opts:["1/2","6/12","1/4","3/8"],ans:0,diff:"easy",mental:true,hint:"Multiply numerators and denominators.",steps:["6/12=1/2"],exp:"1/2."},
+    {text:"2 ÷ 1/4 = ?",opts:["8","4","1/2","1/8"],ans:0,diff:"easy",mental:true,hint:"Dividing by a fraction: multiply by its reciprocal.",steps:["2×4=8"],exp:"8."},
+    {text:"What is 3/5 as a percent?",opts:["60%","50%","30%","55%"],ans:0,diff:"easy",mental:true,hint:"3÷5=0.6.",steps:["60%"],exp:"60%."},
+    {text:"Which is bigger: 7/10 or 2/3?",opts:["7/10","2/3","Equal","Can't tell"],ans:0,diff:"medium",mental:true,hint:"7/10=0.7, 2/3≈0.667.",steps:["7/10"],exp:"7/10 > 2/3."},
+    {text:"5/6 − 1/3 = ?",opts:["1/2","4/3","2/3","4/6"],ans:0,diff:"easy",mental:true,hint:"1/3=2/6.",steps:["5/6−2/6=3/6=1/2"],exp:"1/2."},
+    {text:"What is 7/8 of 24?",opts:["21","14","18","20"],ans:0,diff:"easy",mental:true,hint:"24÷8=3, 3×7=21.",steps:["21"],exp:"21."},
+    {text:"Mixed number: 2 + 3/4 as improper fraction?",opts:["11/4","7/4","8/4","5/4"],ans:0,diff:"easy",mental:true,hint:"2×4+3=11.",steps:["11/4"],exp:"11/4."},
+    {text:"1/2 ÷ 3 = ?",opts:["1/6","3/2","2/3","1/3"],ans:0,diff:"easy",mental:true,hint:"Same as 1/2 × 1/3.",steps:["1/6"],exp:"1/6."},
+    {text:"What fraction of 20 is 15?",opts:["3/4","4/5","2/3","5/6"],ans:0,diff:"easy",mental:true,hint:"15/20, simplify.",steps:["3/4"],exp:"3/4."},
+    {text:"4/5 + 3/10 = ?",opts:["11/10","7/10","1","7/15"],ans:0,diff:"easy",mental:true,hint:"LCD=10.",steps:["8/10+3/10=11/10"],exp:"11/10."},
+    {text:"2/3 of 45?",opts:["30","25","35","40"],ans:0,diff:"easy",mental:true,hint:"45÷3=15, 15×2=30.",steps:["30"],exp:"30."},
+    {text:"What is 3/8 as a decimal?",opts:["0.375","0.38","0.3","0.4"],ans:0,diff:"easy",mental:true,hint:"3÷8.",steps:["0.375"],exp:"0.375."},
+    {text:"Which is smallest: 1/2, 1/3, 1/4?",opts:["1/4","1/2","1/3","All equal"],ans:0,diff:"easy",mental:true,hint:"Bigger denominator = smaller fraction.",steps:["1/4"],exp:"1/4."},
+    {text:"Simplify 18/24?",opts:["3/4","2/3","9/12","6/8"],ans:0,diff:"easy",mental:true,hint:"GCF(18,24)=6.",steps:["3/4"],exp:"3/4."},
+  ],
+  numberTheory: [
+    {text:"Is 97 prime?",opts:["Yes","No","Not sure","Only in base 10"],ans:0,diff:"medium",mental:true,hint:"Check divisibility by 2,3,5,7.",steps:["97 is prime"],exp:"Yes, 97 is prime."},
+    {text:"What is 2⁵?",opts:["32","16","64","25"],ans:0,diff:"easy",mental:true,hint:"2×2×2×2×2.",steps:["32"],exp:"32."},
+    {text:"Sum of digits of 12345?",opts:["15","12","18","20"],ans:0,diff:"easy",mental:true,hint:"1+2+3+4+5.",steps:["15"],exp:"15."},
+    {text:"LCM of 6 and 8?",opts:["24","48","12","16"],ans:0,diff:"easy",mental:true,hint:"Multiples of 8: 8,16,24.",steps:["24"],exp:"24."},
+    {text:"GCF of 36 and 48?",opts:["12","6","24","9"],ans:0,diff:"easy",mental:true,hint:"Factors of 36: ...,12. Factors of 48: ...,12.",steps:["12"],exp:"12."},
+    {text:"Which of these is divisible by 9?",opts:["81","83","79","85"],ans:0,diff:"easy",mental:true,hint:"Sum of digits divisible by 9.",steps:["81: 8+1=9"],exp:"81."},
+    {text:"3⁴ = ?",opts:["81","27","64","36"],ans:0,diff:"easy",mental:true,hint:"3×3×3×3.",steps:["81"],exp:"81."},
+    {text:"Units digit of 3^100?",opts:["1","3","9","7"],ans:0,diff:"medium",mental:true,hint:"Cycle: 3,9,7,1 (length 4). 100÷4=25 remainder 0.",steps:["1"],exp:"1."},
+    {text:"Remainder of 17 ÷ 5?",opts:["2","3","1","4"],ans:0,diff:"easy",mental:true,hint:"5×3=15, 17-15=2.",steps:["2"],exp:"2."},
+    {text:"How many factors does 12 have?",opts:["6","4","5","8"],ans:0,diff:"easy",mental:true,hint:"1,2,3,4,6,12.",steps:["6"],exp:"6."},
+    {text:"Is 1 a prime number?",opts:["No","Yes","Sometimes","It depends"],ans:0,diff:"easy",mental:true,hint:"Primes have exactly 2 factors. 1 has only one.",steps:["No"],exp:"No. Primes have exactly 2 factors."},
+    {text:"Next term: 1, 1, 2, 3, 5, __ (Fibonacci)",opts:["8","7","9","6"],ans:0,diff:"easy",mental:true,hint:"Add last two terms.",steps:["3+5=8"],exp:"8."},
+    {text:"2^10 = ?",opts:["1024","512","2048","1000"],ans:0,diff:"medium",mental:true,hint:"Double from 2^9=512.",steps:["1024"],exp:"1024."},
+    {text:"What is 5! (5 factorial)?",opts:["120","60","24","100"],ans:0,diff:"easy",mental:true,hint:"5×4×3×2×1.",steps:["120"],exp:"120."},
+    {text:"Perfect square between 50 and 70?",opts:["64","49","81","60"],ans:0,diff:"easy",mental:true,hint:"8²=64.",steps:["64"],exp:"64."},
+  ],
+  geometry: [
+    {text:"Area of square with side 7?",opts:["49","28","14","42"],ans:0,diff:"easy",mental:true,hint:"side².",steps:["49"],exp:"49."},
+    {text:"Perimeter of rectangle 6×9?",opts:["30","54","15","24"],ans:0,diff:"easy",mental:true,hint:"2(l+w).",steps:["2×15=30"],exp:"30."},
+    {text:"Angles in a triangle sum to?",opts:["180°","360°","90°","270°"],ans:0,diff:"easy",mental:true,hint:"Always 180° in any triangle.",steps:["180°"],exp:"180°."},
+    {text:"Right angle = how many degrees?",opts:["90°","180°","45°","60°"],ans:0,diff:"easy",mental:true,hint:"A corner of a square.",steps:["90°"],exp:"90°."},
+    {text:"How many degrees in a straight line?",opts:["180°","360°","90°","270°"],ans:0,diff:"easy",mental:true,hint:"Half a full rotation.",steps:["180°"],exp:"180°."},
+    {text:"Area of right triangle with legs 6 and 8?",opts:["24","48","28","12"],ans:0,diff:"easy",mental:true,hint:"½ × base × height.",steps:["½×6×8=24"],exp:"24."},
+    {text:"3-4-5 right triangle. Hypotenuse = 5, leg = 3. Other leg?",opts:["4","3","2","5"],ans:0,diff:"easy",mental:true,hint:"Famous Pythagorean triple.",steps:["4"],exp:"4."},
+    {text:"Number of sides of a pentagon?",opts:["5","6","4","8"],ans:0,diff:"easy",mental:true,hint:"Penta = five.",steps:["5"],exp:"5."},
+    {text:"A square has 4 right angles. True or False?",opts:["True","False"],ans:0,diff:"easy",mental:true,hint:"All angles of a square are 90°.",steps:["True"],exp:"True."},
+    {text:"Circumference of circle with radius 5? (use π≈3)",opts:["30","15","25","60"],ans:0,diff:"easy",mental:true,hint:"2πr≈2×3×5.",steps:["30"],exp:"≈30."},
+    {text:"Supplement of 40°?",opts:["140°","50°","130°","60°"],ans:0,diff:"easy",mental:true,hint:"Supplementary angles sum to 180°.",steps:["180−40=140°"],exp:"140°."},
+    {text:"Complement of 25°?",opts:["65°","75°","55°","155°"],ans:0,diff:"easy",mental:true,hint:"Complementary angles sum to 90°.",steps:["90−25=65°"],exp:"65°."},
+    {text:"Diagonal of a square with side 1 is?",opts:["√2","2","1","√3"],ans:0,diff:"medium",mental:true,hint:"1²+1²=c².",steps:["√2"],exp:"√2."},
+    {text:"A hexagon has how many sides?",opts:["6","5","7","8"],ans:0,diff:"easy",mental:true,hint:"Hex = six.",steps:["6"],exp:"6."},
+    {text:"Which triangle has all sides equal?",opts:["Equilateral","Isosceles","Scalene","Right"],ans:0,diff:"easy",mental:true,hint:"Equi = equal.",steps:["Equilateral"],exp:"Equilateral."},
+  ],
+  algebra: [
+    {text:"If x + 5 = 12, then x = ?",opts:["7","8","17","6"],ans:0,diff:"easy",mental:true,hint:"Subtract 5 from both sides.",steps:["7"],exp:"7."},
+    {text:"If 3x = 21, then x = ?",opts:["7","6","8","3"],ans:0,diff:"easy",mental:true,hint:"Divide both sides by 3.",steps:["7"],exp:"7."},
+    {text:"Evaluate 2x + 1 when x = 4?",opts:["9","7","8","10"],ans:0,diff:"easy",mental:true,hint:"2×4+1.",steps:["9"],exp:"9."},
+    {text:"Simplify 5x − 2x?",opts:["3x","7x","10x","x"],ans:0,diff:"easy",mental:true,hint:"Combine like terms.",steps:["3x"],exp:"3x."},
+    {text:"What is the slope of y = 4x − 3?",opts:["4","−3","3","−4"],ans:0,diff:"easy",mental:true,hint:"y=mx+b, m is slope.",steps:["4"],exp:"4."},
+    {text:"Solve 2x − 6 = 0?",opts:["3","6","2","−3"],ans:0,diff:"easy",mental:true,hint:"2x=6.",steps:["3"],exp:"3."},
+    {text:"If y = x² and x = 3, y = ?",opts:["9","6","8","27"],ans:0,diff:"easy",mental:true,hint:"3².",steps:["9"],exp:"9."},
+    {text:"Expand (x + 3)(x − 3)?",opts:["x²−9","x²+9","x²−3","x²+6x−9"],ans:0,diff:"medium",mental:true,hint:"Difference of squares.",steps:["x²−9"],exp:"x²−9."},
+    {text:"Which is a perfect square: 49, 50, 51, 52?",opts:["49","50","51","52"],ans:0,diff:"easy",mental:true,hint:"7×7=49.",steps:["49"],exp:"49=7²."},
+    {text:"f(x) = 2x + 1. Find f(3)?",opts:["7","5","8","6"],ans:0,diff:"easy",mental:true,hint:"2(3)+1.",steps:["7"],exp:"7."},
+    {text:"What is the y-intercept of y = 3x + 5?",opts:["5","3","−5","0"],ans:0,diff:"easy",mental:true,hint:"Set x=0.",steps:["5"],exp:"5."},
+    {text:"Simplify x² × x³?",opts:["x⁵","x⁶","2x⁵","x"],ans:0,diff:"easy",mental:true,hint:"Add exponents.",steps:["x⁵"],exp:"x⁵."},
+    {text:"If 5 − x = 2, then x = ?",opts:["3","7","2","5"],ans:0,diff:"easy",mental:true,hint:"x = 5−2.",steps:["3"],exp:"3."},
+    {text:"x² = 36. x = ?",opts:["6 or −6","6","−6","18"],ans:0,diff:"easy",mental:true,hint:"Both positive and negative roots.",steps:["±6"],exp:"6 or −6."},
+    {text:"Simplify (x⁴)/(x²)?",opts:["x²","x⁶","x³","x"],ans:0,diff:"easy",mental:true,hint:"Subtract exponents.",steps:["x²"],exp:"x²."},
+  ],
+  quadratics: [
+    {text:"Roots of x² − 5x + 6 = 0?",opts:["2 and 3","1 and 6","−2 and −3","−1 and 6"],ans:0,diff:"medium",mental:true,hint:"Find two numbers that multiply to 6 and add to −5.",steps:["(x−2)(x−3)=0"],exp:"x=2 or x=3."},
+    {text:"Vertex of y = x² − 4x + 4?",opts:["(2,0)","(0,4)","(4,0)","(−2,0)"],ans:0,diff:"medium",mental:true,hint:"x = −b/(2a). Or notice it's (x−2)².",steps:["(2,0)"],exp:"(2,0)."},
+    {text:"Discriminant of x² − 4x + 4 = 0?",opts:["0","16","−4","8"],ans:0,diff:"medium",mental:true,hint:"b²−4ac = 16−16.",steps:["0"],exp:"0 → one repeated root."},
+    {text:"Sum of roots of x² − 7x + 10 = 0?",opts:["7","−7","10","−10"],ans:0,diff:"easy",mental:true,hint:"Sum of roots = −b/a.",steps:["7"],exp:"7."},
+    {text:"Product of roots of x² − 7x + 10 = 0?",opts:["10","−10","7","−7"],ans:0,diff:"easy",mental:true,hint:"Product of roots = c/a.",steps:["10"],exp:"10."},
+    {text:"x² − 9 = 0. Solutions?",opts:["3 and −3","3 only","9 and −9","±3√3"],ans:0,diff:"easy",mental:true,hint:"Difference of squares.",steps:["±3"],exp:"x=3 or x=−3."},
+    {text:"y = x². Opens which direction?",opts:["Up","Down","Left","Right"],ans:0,diff:"easy",mental:true,hint:"Positive leading coefficient.",steps:["Up"],exp:"Up."},
+    {text:"y = −x². Opens which direction?",opts:["Down","Up","Left","Right"],ans:0,diff:"easy",mental:true,hint:"Negative leading coefficient.",steps:["Down"],exp:"Down."},
+    {text:"Axis of symmetry of y = x² − 6x + 9?",opts:["x=3","x=−3","x=6","x=0"],ans:0,diff:"medium",mental:true,hint:"x = −b/(2a) = 6/2.",steps:["x=3"],exp:"x=3."},
+    {text:"How many real roots if discriminant < 0?",opts:["0","1","2","Infinite"],ans:0,diff:"easy",mental:true,hint:"Negative discriminant = no real solutions.",steps:["0"],exp:"0 real roots."},
+    {text:"Simplify (x+2)²?",opts:["x²+4x+4","x²+4","x²+2x+4","x²+2"],ans:0,diff:"medium",mental:true,hint:"(a+b)²=a²+2ab+b².",steps:["x²+4x+4"],exp:"x²+4x+4."},
+    {text:"Root of x² = 25?",opts:["±5","5","25","±25"],ans:0,diff:"easy",mental:true,hint:"Square root both sides.",steps:["±5"],exp:"±5."},
+    {text:"y = 2x². Does it have a minimum or maximum?",opts:["Minimum","Maximum","Neither","Both"],ans:0,diff:"easy",mental:true,hint:"Opens up = minimum.",steps:["Minimum"],exp:"Minimum at vertex."},
+    {text:"Factor x² + 5x + 6?",opts:["(x+2)(x+3)","(x+1)(x+6)","(x+2)(x−3)","(x−2)(x+3)"],ans:0,diff:"medium",mental:true,hint:"Find two numbers that multiply to 6 and add to 5.",steps:["(x+2)(x+3)"],exp:"(x+2)(x+3)."},
+    {text:"Vertex x-coordinate of y = x² + 2x − 1?",opts:["−1","1","−2","2"],ans:0,diff:"medium",mental:true,hint:"x = −b/(2a) = −2/2.",steps:["−1"],exp:"x=−1."},
+  ],
+  probability: [
+    {text:"P(rolling a 4 on a fair die)?",opts:["1/6","1/4","4/6","1/3"],ans:0,diff:"easy",mental:true,hint:"One favorable outcome out of 6.",steps:["1/6"],exp:"1/6."},
+    {text:"P(heads on a fair coin)?",opts:["1/2","1/4","1","2/3"],ans:0,diff:"easy",mental:true,hint:"Two equally likely outcomes.",steps:["1/2"],exp:"1/2."},
+    {text:"P(not rolling a 6 on a die)?",opts:["5/6","1/6","1/2","4/6"],ans:0,diff:"easy",mental:true,hint:"1 − P(rolling 6).",steps:["5/6"],exp:"5/6."},
+    {text:"Flip 2 coins. How many outcomes?",opts:["4","2","6","8"],ans:0,diff:"easy",mental:true,hint:"HH, HT, TH, TT.",steps:["4"],exp:"4."},
+    {text:"P(drawing an ace from a deck)?",opts:["1/13","1/52","4/13","1/4"],ans:0,diff:"easy",mental:true,hint:"4 aces in 52 cards.",steps:["4/52=1/13"],exp:"1/13."},
+    {text:"Roll two dice. P(same number)?",opts:["1/6","1/36","6/36","1/12"],ans:0,diff:"medium",mental:true,hint:"6 ways to match out of 36 total.",steps:["6/36=1/6"],exp:"1/6."},
+    {text:"P(red card from a deck)?",opts:["1/2","1/4","1/3","2/3"],ans:0,diff:"easy",mental:true,hint:"26 red out of 52.",steps:["1/2"],exp:"1/2."},
+    {text:"P(sum of 2 when rolling two dice)?",opts:["1/36","2/36","1/12","1/6"],ans:0,diff:"easy",mental:true,hint:"Only (1,1) gives sum 2.",steps:["1/36"],exp:"1/36."},
+    {text:"P(A or B) if P(A)=0.3, P(B)=0.4, mutually exclusive?",opts:["0.7","0.12","0.3","0.4"],ans:0,diff:"easy",mental:true,hint:"Mutually exclusive: just add.",steps:["0.7"],exp:"0.7."},
+    {text:"P(rolling even on a die)?",opts:["1/2","1/3","2/3","1/6"],ans:0,diff:"easy",mental:true,hint:"Even: 2,4,6 → 3 outcomes.",steps:["3/6=1/2"],exp:"1/2."},
+    {text:"Bag: 3 red, 2 blue. P(blue)?",opts:["2/5","3/5","1/2","2/3"],ans:0,diff:"easy",mental:true,hint:"2 blue out of 5 total.",steps:["2/5"],exp:"2/5."},
+    {text:"P(rolling < 3 on a die)?",opts:["1/3","2/6","1/2","1/6"],ans:0,diff:"easy",mental:true,hint:"1 and 2 are < 3.",steps:["2/6=1/3"],exp:"1/3."},
+    {text:"Certainty has probability?",opts:["1","0","0.5","100"],ans:0,diff:"easy",mental:true,hint:"Something that always happens.",steps:["1"],exp:"1."},
+    {text:"Impossible event has probability?",opts:["0","1","0.5","−1"],ans:0,diff:"easy",mental:true,hint:"Something that never happens.",steps:["0"],exp:"0."},
+    {text:"P(A and B) if independent and P(A)=0.5, P(B)=0.4?",opts:["0.2","0.9","0.1","0.45"],ans:0,diff:"easy",mental:true,hint:"Multiply for independent events.",steps:["0.5×0.4=0.2"],exp:"0.2."},
+  ],
+  statistics: [
+    {text:"Mean of 2, 4, 6, 8, 10?",opts:["6","5","7","8"],ans:0,diff:"easy",mental:true,hint:"Sum÷count. Sum=30, count=5.",steps:["30/5=6"],exp:"6."},
+    {text:"Median of 1, 3, 5, 7, 9?",opts:["5","4","6","3"],ans:0,diff:"easy",mental:true,hint:"Middle value of sorted list.",steps:["5"],exp:"5."},
+    {text:"Mode of 1, 2, 2, 3, 3, 3, 4?",opts:["3","2","4","1"],ans:0,diff:"easy",mental:true,hint:"Most frequent value.",steps:["3"],exp:"3."},
+    {text:"Range of 4, 8, 15, 16, 23?",opts:["19","11","18","23"],ans:0,diff:"easy",mental:true,hint:"Max − Min.",steps:["23−4=19"],exp:"19."},
+    {text:"Mean of 10, 10, 10?",opts:["10","30","3","0"],ans:0,diff:"easy",mental:true,hint:"All same value.",steps:["10"],exp:"10."},
+    {text:"Median of 2, 5, 8, 10?",opts:["6.5","5","8","7"],ans:0,diff:"easy",mental:true,hint:"Even count: average of middle two.",steps:["(5+8)/2=6.5"],exp:"6.5."},
+    {text:"Which measure is most affected by outliers?",opts:["Mean","Median","Mode","Range"],ans:0,diff:"medium",mental:true,hint:"Extreme values change the average a lot.",steps:["Mean"],exp:"Mean."},
+    {text:"Data: 5,5,5,5. Standard deviation = ?",opts:["0","5","1","4"],ans:0,diff:"easy",mental:true,hint:"No variation → no spread.",steps:["0"],exp:"0."},
+    {text:"Mean of 0, 0, 0, 100?",opts:["25","0","50","100"],ans:0,diff:"easy",mental:true,hint:"100÷4.",steps:["25"],exp:"25."},
+    {text:"A dataset has one outlier. Which measure best represents the center?",opts:["Median","Mean","Mode","Range"],ans:0,diff:"medium",mental:true,hint:"Median is not affected by outliers.",steps:["Median"],exp:"Median."},
+    {text:"Scores: 70,80,90. Mean?",opts:["80","70","85","90"],ans:0,diff:"easy",mental:true,hint:"Sum=240, count=3.",steps:["80"],exp:"80."},
+    {text:"Mode of 1, 2, 3, 4, 5?",opts:["No mode","3","1","5"],ans:0,diff:"easy",mental:true,hint:"Each appears once.",steps:["No mode"],exp:"No mode."},
+    {text:"Adding a 6th score of 0 to {4,6,8,10,12} changes the mean by?",opts:["−4","−6","−2","−8"],ans:0,diff:"medium",mental:true,hint:"Old mean=8, new sum=40, new mean=40/6≈6.67.",steps:["Decreases by ≈4"],exp:"Decreases by about 4."},
+    {text:"What does a histogram show?",opts:["Distribution of data","Individual values","Relationship between variables","Time series"],ans:0,diff:"easy",mental:true,hint:"Bars show frequency in ranges.",steps:["Distribution"],exp:"Distribution of data."},
+    {text:"3 tests: 70,80,x. Mean must be 80. x = ?",opts:["90","85","80","100"],ans:0,diff:"easy",mental:true,hint:"Sum must be 240. 70+80+x=240.",steps:["90"],exp:"90."},
+  ],
+};
+
+// Merge extra questions into QB
+for (const topic of Object.keys(extra)) {
+  if (QB[topic]) {
+    QB[topic] = QB[topic].concat(extra[topic]);
+  }
+}
+
+})();
+
 // ═══════════════════════════════════════════
 //  ACHIEVEMENTS (20 total)
 // ═══════════════════════════════════════════
@@ -3123,6 +3569,12 @@ function defaultState() {
     onboardingDone: false,
     duelWins: 0,
     duelLosses: 0,
+    rankedLP: 0,
+    rankedWins: 0,
+    rankedLosses: 0,
+    rankedWinStreak: 0,
+    firstWinToday: false,
+    lastWinDate: '',
     settings: { lightMode:false, sessionGoal:20, speedTimer:15, sound:true, confetti:true },
     // runtime only (not saved)
     currentTopic: 'quadratics',
@@ -3219,17 +3671,35 @@ function showPage(name) {
   const page = document.getElementById('page-'+name);
   if (page) page.classList.add('active');
   document.querySelectorAll('.nav-tab').forEach((t,i) => {
-    const names = ['study','dashboard','progress','goals','friends','settings'];
+    const names = ['study','dashboard','progress','goals','friends','duels','settings'];
     t.classList.toggle('active', names[i] === name);
   });
+  // Ranked/Casual are sub-pages of duels — highlight Duels tab
+  if (name === 'ranked' || name === 'casual') {
+    document.querySelectorAll('.nav-tab').forEach((t,i) => {
+      t.classList.toggle('active', i === 5); // duels tab index
+    });
+  }
   isStudyPageActive = (name === 'study');
   if (name==='dashboard') refreshDashboard();
   if (name==='progress') refreshProgress();
   if (name==='goals') refreshGoals();
   if (name==='settings') refreshSettings();
   if (name==='friends') refreshFriends();
-  if (name==='study') { setTimeout(() => { if(_musicEnabled) startAmbientMusic(); }, 500); }
-  else { stopAmbientMusic(); }
+  if (name==='duels') { refreshDuelsPage(); refreshFriends(); }
+  if (name==='ranked') refreshRankedPage();
+  if (name==='study') {
+    setTimeout(() => {
+      if (_musicEnabled) {
+        const track = S.mode === 'speed' ? 'speed' : 'study';
+        startMusic(track);
+      }
+    }, 500);
+  } else if (name === 'ranked' || name === 'casual' || name === 'duels') {
+    // Keep whatever music is playing — duel pages don't need silence
+  } else {
+    stopAmbientMusic();
+  }
 }
 
 // ═══════════════════════════════════════════
@@ -4778,7 +5248,6 @@ let audioCtx = null;
 //  SOUND ENGINE — Full procedural audio
 // ═══════════════════════════════════════════
 let _audioCtx = null;
-let _musicNodes = [];
 let _musicPlaying = false;
 let _musicEnabled = true;
 
@@ -5008,83 +5477,650 @@ function soundStreak() {
 
 // ── Background ambient music: lo-fi study mode ──
 let _ambientNodes = null;
-function startAmbientMusic() {
-  if (!S.settings.sound || !_musicEnabled || _ambientNodes) return;
+// ═══════════════════════════════════════════
+//  🎵 NUMIQUBE FULL SOUNDTRACK ENGINE
+//  Three distinct tracks, all Web Audio API:
+//  1. "Neon Library"   — study mode (lo-fi cosmic)
+//  2. "Overclock"      — speed mode (faster, driven)
+//  3. "Rival Signal"   — duel/arena (synthwave battle)
+// ═══════════════════════════════════════════
+
+let _musicTrack = 'study'; // 'study' | 'speed' | 'duel'
+let _musicNodes = null;    // { ctx, master, stopAll }
+let _musicScheduler = null;
+let _musicBeat = 0;
+
+// ── Reverb helper: creates a convolver with a synthesized room impulse ──
+function makeReverb(ctx, decayTime = 1.5, wet = 0.25) {
+  const convolver = ctx.createConvolver();
+  const rate = ctx.sampleRate;
+  const length = rate * decayTime;
+  const impulse = ctx.createBuffer(2, length, rate);
+  for (let c = 0; c < 2; c++) {
+    const ch = impulse.getChannelData(c);
+    for (let i = 0; i < length; i++) {
+      ch[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, 2.5);
+    }
+  }
+  convolver.buffer = impulse;
+  const dryGain = ctx.createGain(); dryGain.gain.value = 1 - wet;
+  const wetGain = ctx.createGain(); wetGain.gain.value = wet;
+  const output = ctx.createGain();
+  convolver.connect(wetGain); wetGain.connect(output);
+  dryGain.connect(output);
+  // Return a node-like object with connect method
+  return { input: dryGain, dry: dryGain, wet: wetGain, convIn: convolver, output, connect(dest){ output.connect(dest); return dest; } };
+}
+
+// ── Delay helper ──
+function makeDelay(ctx, time = 0.375, feedback = 0.35, wet = 0.3) {
+  const delay = ctx.createDelay(2.0);
+  delay.delayTime.value = time;
+  const fb = ctx.createGain(); fb.gain.value = feedback;
+  const wetG = ctx.createGain(); wetG.gain.value = wet;
+  const dryG = ctx.createGain(); dryG.gain.value = 1;
+  const out = ctx.createGain();
+  delay.connect(fb); fb.connect(delay);
+  delay.connect(wetG); wetG.connect(out);
+  dryG.connect(out);
+  delay.connect(wetG);
+  return { input: dryG, delayIn: delay, output: out, connect(dest){ out.connect(dest); } };
+}
+
+// ── Compressor/limiter on master ──
+function makeLimiter(ctx) {
+  const comp = ctx.createDynamicsCompressor();
+  comp.threshold.value = -6;
+  comp.knee.value = 3;
+  comp.ratio.value = 10;
+  comp.attack.value = 0.003;
+  comp.release.value = 0.1;
+  comp.connect(ctx.destination);
+  return comp;
+}
+
+// ── Note frequency helpers ──
+function noteHz(midi) { return 440 * Math.pow(2, (midi - 69) / 12); }
+// C minor pentatonic: C Eb F G Bb
+const CM_PEN = [0,3,5,7,10]; // semitone offsets from C
+// Scale roots for tracks
+const ROOT_STUDY = 48; // C3
+const ROOT_DUEL  = 45; // A2
+
+function pentatonicNote(root, degree, octave=0) {
+  const idx = ((degree % CM_PEN.length) + CM_PEN.length) % CM_PEN.length;
+  return noteHz(root + CM_PEN[idx] + octave * 12);
+}
+
+// ── Soft pad oscillator factory ──
+function makePad(ctx, freq, type='sine', detuneCents=0, vol=0.08) {
+  const osc = ctx.createOscillator();
+  const g = ctx.createGain();
+  osc.type = type;
+  osc.frequency.value = freq;
+  osc.detune.value = detuneCents;
+  g.gain.value = vol;
+  osc.connect(g);
+  osc.start();
+  return { osc, g, connect(dest){ g.connect(dest); } };
+}
+
+// ── Pluck / bell tone (ADSR envelope, auto-stops) ──
+function pluck(ctx, dest, freq, dur=0.8, vol=0.18, type='sine', attack=0.01, decay=0.15, sustain=0.4) {
+  const osc = ctx.createOscillator();
+  const env = ctx.createGain();
+  osc.type = type;
+  osc.frequency.value = freq;
+  osc.connect(env); env.connect(dest);
+  const t = ctx.currentTime;
+  env.gain.setValueAtTime(0, t);
+  env.gain.linearRampToValueAtTime(vol, t + attack);
+  env.gain.linearRampToValueAtTime(vol * sustain, t + attack + decay);
+  env.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  osc.start(t);
+  osc.stop(t + dur + 0.05);
+}
+
+// ── Sub bass note (sine, smooth) ──
+function bassNote(ctx, dest, freq, dur=0.9, vol=0.22) {
+  const osc = ctx.createOscillator();
+  const env = ctx.createGain();
+  osc.type = 'sine';
+  osc.frequency.value = freq;
+  osc.connect(env); env.connect(dest);
+  const t = ctx.currentTime;
+  env.gain.setValueAtTime(0, t);
+  env.gain.linearRampToValueAtTime(vol, t + 0.02);
+  env.gain.setValueAtTime(vol * 0.7, t + dur * 0.6);
+  env.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  osc.start(t);
+  osc.stop(t + dur + 0.05);
+}
+
+// ── Hi-hat (noise burst) ──
+function hihat(ctx, dest, vol=0.06, dur=0.04) {
+  const buf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 0.1), ctx.sampleRate);
+  const d = buf.getChannelData(0);
+  for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+  const src = ctx.createBufferSource();
+  src.buffer = buf;
+  const filt = ctx.createBiquadFilter();
+  filt.type = 'highpass'; filt.frequency.value = 8000;
+  const env = ctx.createGain();
+  src.connect(filt); filt.connect(env); env.connect(dest);
+  const t = ctx.currentTime;
+  env.gain.setValueAtTime(vol, t);
+  env.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  src.start(t); src.stop(t + 0.12);
+}
+
+// ── Kick drum (sine thud) ──
+function kick(ctx, dest, vol=0.28) {
+  const osc = ctx.createOscillator();
+  const env = ctx.createGain();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(150, ctx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.12);
+  osc.connect(env); env.connect(dest);
+  const t = ctx.currentTime;
+  env.gain.setValueAtTime(vol, t);
+  env.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
+  osc.start(t); osc.stop(t + 0.2);
+}
+
+// ── Snare (noise + tone) ──
+function snare(ctx, dest, vol=0.14) {
+  const noise = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 0.15), ctx.sampleRate);
+  const nd = noise.getChannelData(0);
+  for (let i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
+  const ns = ctx.createBufferSource(); ns.buffer = noise;
+  const nfilt = ctx.createBiquadFilter(); nfilt.type = 'bandpass'; nfilt.frequency.value = 2500; nfilt.Q.value = 0.5;
+  const nenv = ctx.createGain();
+  ns.connect(nfilt); nfilt.connect(nenv); nenv.connect(dest);
+  const t = ctx.currentTime;
+  nenv.gain.setValueAtTime(vol, t);
+  nenv.gain.exponentialRampToValueAtTime(0.0001, t + 0.15);
+  ns.start(t); ns.stop(t + 0.2);
+
+  const osc = ctx.createOscillator(); const oenv = ctx.createGain();
+  osc.type = 'triangle'; osc.frequency.value = 220;
+  osc.connect(oenv); oenv.connect(dest);
+  oenv.gain.setValueAtTime(vol * 0.5, t);
+  oenv.gain.exponentialRampToValueAtTime(0.0001, t + 0.08);
+  osc.start(t); osc.stop(t + 0.1);
+}
+
+// ══════════════════════════════════════════
+//  TRACK 1: "Neon Library" — Study Mode
+//  Tempo: 80 BPM | Key: C minor pentatonic
+//  Vibe: cosmic lo-fi, dreamy pads, soft arpeggios
+// ══════════════════════════════════════════
+function startStudyTrack(ctx, master) {
+  const BPM = 80;
+  const BEAT = 60 / BPM;
+  const BAR = BEAT * 4;
+
+  // Reverb + delay chain
+  const verb = makeReverb(ctx, 2.5, 0.35);
+  verb.connect(master);
+  const dly = makeDelay(ctx, BEAT * 0.75, 0.3, 0.25);
+  dly.connect(verb.input);
+
+  // ── Pad layer: stacked warm chords (Cm7 → Fm7 → Gm7 → Ebmaj7) ──
+  const CHORDS = [
+    [noteHz(ROOT_STUDY), noteHz(ROOT_STUDY+3), noteHz(ROOT_STUDY+7), noteHz(ROOT_STUDY+10), noteHz(ROOT_STUDY+12)],
+    [noteHz(ROOT_STUDY-7), noteHz(ROOT_STUDY-4), noteHz(ROOT_STUDY), noteHz(ROOT_STUDY+3), noteHz(ROOT_STUDY+7)],
+    [noteHz(ROOT_STUDY-5), noteHz(ROOT_STUDY-2), noteHz(ROOT_STUDY+2), noteHz(ROOT_STUDY+5), noteHz(ROOT_STUDY+9)],
+    [noteHz(ROOT_STUDY+3), noteHz(ROOT_STUDY+6), noteHz(ROOT_STUDY+10), noteHz(ROOT_STUDY+14), noteHz(ROOT_STUDY+17)],
+  ];
+  let chordIdx = 0;
+  const padGain = ctx.createGain(); padGain.gain.value = 0.0;
+  padGain.connect(verb.input);
+  padGain.gain.linearRampToValueAtTime(0.09, ctx.currentTime + 4);
+
+  const pads = CHORDS[0].map((f, i) => {
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = i === 0 ? 'sine' : 'triangle';
+    osc.frequency.value = f;
+    osc.detune.value = (Math.random() - 0.5) * 12;
+    g.gain.value = 1 / CHORDS[0].length;
+    osc.connect(g); g.connect(padGain);
+    osc.start();
+    return osc;
+  });
+
+  // Chord change every 2 bars
+  let chordTimer;
+  function scheduleChordChange() {
+    if (!_musicNodes || !_musicNodes.playing) return;
+    chordTimer = setTimeout(() => {
+      chordIdx = (chordIdx + 1) % CHORDS.length;
+      const newChord = CHORDS[chordIdx];
+      pads.forEach((osc, i) => {
+        if (newChord[i]) {
+          osc.frequency.linearRampToValueAtTime(newChord[i], ctx.currentTime + BAR * 0.5);
+        }
+      });
+      scheduleChordChange();
+    }, BAR * 2 * 1000);
+  }
+  scheduleChordChange();
+
+  // ── Arpeggio melody: soft crystal bells on pentatonic ──
+  const arpGain = ctx.createGain(); arpGain.gain.value = 0.12;
+  arpGain.connect(dly.input);
+  arpGain.connect(verb.input);
+
+  const ARP_PATTERN = [0, 2, 4, 2, 1, 3, 2, 0]; // pentatonic degree steps
+  const ARP_OCTAVES = [1, 1, 2, 1, 1, 2, 1, 0];
+  let arpStep = 0;
+  let arpChordOffset = 0;
+  const arpIntervals = [BEAT*0.5, BEAT*0.5, BEAT*0.25, BEAT*0.25, BEAT*0.5, BEAT*0.5, BEAT*0.5, BEAT*1.0];
+
+  function scheduleArp() {
+    if (!_musicNodes || !_musicNodes.playing) return;
+    const degree = ARP_PATTERN[arpStep % ARP_PATTERN.length] + arpChordOffset;
+    const oct = ARP_OCTAVES[arpStep % ARP_OCTAVES.length];
+    const freq = pentatonicNote(ROOT_STUDY, degree, oct);
+    // Occasional skip for groove
+    if (Math.random() > 0.15) {
+      pluck(ctx, arpGain, freq, 0.6, 0.22, 'sine', 0.005, 0.08, 0.3);
+    }
+    arpStep++;
+    if (arpStep % 16 === 0) arpChordOffset = (arpChordOffset + CM_PEN.length) % (CM_PEN.length * 2);
+    const dur = arpIntervals[arpStep % arpIntervals.length];
+    if (_musicNodes && _musicNodes.playing) {
+      _musicNodes._arpTimeout = setTimeout(scheduleArp, dur * 1000);
+    }
+  }
+  // Start arp after a couple beats
+  _musicNodes._arpTimeout = setTimeout(scheduleArp, BEAT * 2 * 1000);
+
+  // ── Slow bass line: root + fifth, very gentle ──
+  const bassGain = ctx.createGain(); bassGain.gain.value = 0.18;
+  bassGain.connect(master);
+
+  const BASS_PATTERN = [
+    { deg:0, oct:-1, dur:BAR }, { deg:0, oct:-1, dur:BAR },
+    { deg:3, oct:-1, dur:BAR }, { deg:4, oct:-1, dur:BAR },
+  ];
+  let bassStep = 0;
+  function scheduleBass() {
+    if (!_musicNodes || !_musicNodes.playing) return;
+    const note = BASS_PATTERN[bassStep % BASS_PATTERN.length];
+    bassNote(ctx, bassGain, pentatonicNote(ROOT_STUDY, note.deg, note.oct), note.dur * 0.85, 0.2);
+    bassStep++;
+    if (_musicNodes && _musicNodes.playing) {
+      _musicNodes._bassTimeout = setTimeout(scheduleBass, note.dur * 1000);
+    }
+  }
+  setTimeout(scheduleBass, BEAT * 4 * 1000);
+
+  // ── Ambient shimmer: very sparse high chimes ──
+  const shimGain = ctx.createGain(); shimGain.gain.value = 0.1;
+  shimGain.connect(verb.input);
+  function scheduleShimmer() {
+    if (!_musicNodes || !_musicNodes.playing) return;
+    const freq = pentatonicNote(ROOT_STUDY, Math.floor(Math.random()*5), 2 + (Math.random()>0.6?1:0));
+    pluck(ctx, shimGain, freq, 1.4, 0.15, 'sine', 0.01, 0.05, 0.2);
+    const nextIn = (3000 + Math.random() * 5000);
+    if (_musicNodes && _musicNodes.playing) {
+      _musicNodes._shimTimeout = setTimeout(scheduleShimmer, nextIn);
+    }
+  }
+  setTimeout(scheduleShimmer, 6000);
+
+  return { pads, padGain, chordTimer };
+}
+
+// ══════════════════════════════════════════
+//  TRACK 2: "Overclock" — Speed Mode
+//  Tempo: 128 BPM | Key: C minor pentatonic
+//  Vibe: driving, urgent, electronic pulse
+// ══════════════════════════════════════════
+function startSpeedTrack(ctx, master) {
+  const BPM = 128;
+  const BEAT = 60 / BPM;
+  const BAR = BEAT * 4;
+
+  const verb = makeReverb(ctx, 1.0, 0.15);
+  verb.connect(master);
+  const dly = makeDelay(ctx, BEAT * 0.5, 0.25, 0.2);
+  dly.connect(verb.input);
+
+  // ── Driving pulse pad: tense tritone stack ──
+  const PULSE_CHORDS = [
+    [noteHz(ROOT_STUDY), noteHz(ROOT_STUDY+3), noteHz(ROOT_STUDY+7), noteHz(ROOT_STUDY+10)],
+    [noteHz(ROOT_STUDY-5), noteHz(ROOT_STUDY-2), noteHz(ROOT_STUDY+2), noteHz(ROOT_STUDY+5)],
+    [noteHz(ROOT_STUDY+2), noteHz(ROOT_STUDY+5), noteHz(ROOT_STUDY+9), noteHz(ROOT_STUDY+12)],
+    [noteHz(ROOT_STUDY-3), noteHz(ROOT_STUDY), noteHz(ROOT_STUDY+4), noteHz(ROOT_STUDY+7)],
+  ];
+  let pChordIdx = 0;
+  const pulseGain = ctx.createGain(); pulseGain.gain.value = 0.07;
+  pulseGain.connect(verb.input);
+
+  const pulsePads = PULSE_CHORDS[0].map((f, i) => {
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = i < 2 ? 'sawtooth' : 'triangle';
+    osc.frequency.value = f;
+    osc.detune.value = (i % 2 === 0 ? 6 : -6);
+    g.gain.value = 0.25;
+    osc.connect(g); g.connect(pulseGain);
+    osc.start();
+    return osc;
+  });
+
+  // Wobble LFO on pad
+  const lfo = ctx.createOscillator();
+  const lfoGain = ctx.createGain(); lfoGain.gain.value = 8;
+  lfo.frequency.value = 4;
+  lfo.connect(lfoGain);
+  pulsePads.forEach(o => lfoGain.connect(o.detune));
+  lfo.start();
+
+  // Chord change every bar
+  let pChordTimer;
+  function schedPulseChord() {
+    if (!_musicNodes || !_musicNodes.playing) return;
+    pChordIdx = (pChordIdx + 1) % PULSE_CHORDS.length;
+    const nc = PULSE_CHORDS[pChordIdx];
+    pulsePads.forEach((o, i) => { if (nc[i]) o.frequency.linearRampToValueAtTime(nc[i], ctx.currentTime + 0.1); });
+    pChordTimer = setTimeout(schedPulseChord, BAR * 1000);
+  }
+  pChordTimer = setTimeout(schedPulseChord, BAR * 1000);
+
+  // ── Fast arpeggio: 16th notes, aggressive ──
+  const arpG = ctx.createGain(); arpG.gain.value = 0.16;
+  arpG.connect(dly.input);
+  const FAST_ARP = [0,4,2,4,1,4,3,4, 0,4,2,3,1,3,0,4];
+  const FAST_OCT = [1,2,1,2,1,2,1,2, 1,2,1,2,1,2,0,2];
+  let farpStep = 0;
+  function scheduleFastArp() {
+    if (!_musicNodes || !_musicNodes.playing) return;
+    const freq = pentatonicNote(ROOT_STUDY, FAST_ARP[farpStep % FAST_ARP.length], FAST_OCT[farpStep % FAST_OCT.length]);
+    pluck(ctx, arpG, freq, BEAT*0.4, 0.2, 'square', 0.003, 0.06, 0.15);
+    farpStep++;
+    if (_musicNodes && _musicNodes.playing) {
+      _musicNodes._farpTimeout = setTimeout(scheduleFastArp, BEAT * 0.25 * 1000);
+    }
+  }
+  _musicNodes._farpTimeout = setTimeout(scheduleFastArp, BEAT * 2 * 1000);
+
+  // ── Kick + snare + hihats: 4-on-floor pattern ──
+  const drumGain = ctx.createGain(); drumGain.gain.value = 0.9;
+  drumGain.connect(master);
+
+  // Kick: beats 1 & 3
+  // Snare: beats 2 & 4
+  // Hats: every 8th note
+  function scheduleDrums() {
+    if (!_musicNodes || !_musicNodes.playing) return;
+    const t = _musicBeat;
+    // Kick on 1 and 3 of bar
+    if (t % 4 === 0 || t % 4 === 2) kick(ctx, drumGain, 0.3);
+    // Snare on 2 and 4
+    if (t % 4 === 1 || t % 4 === 3) snare(ctx, drumGain, 0.14);
+    // Hats every step (8th notes at 128bpm)
+    hihat(ctx, drumGain, 0.055, 0.03);
+    _musicBeat++;
+    if (_musicNodes && _musicNodes.playing) {
+      _musicNodes._drumTimeout = setTimeout(scheduleDrums, BEAT * 0.5 * 1000);
+    }
+  }
+  _musicNodes._drumTimeout = setTimeout(scheduleDrums, 500);
+
+  // ── Bass: driving 8th note line ──
+  const bassG = ctx.createGain(); bassG.gain.value = 0.22;
+  bassG.connect(master);
+  const SPEED_BASS = [0,0,3,0, 4,4,2,4, 0,0,3,3, 2,2,0,4];
+  let sbStep = 0;
+  function schedSpeedBass() {
+    if (!_musicNodes || !_musicNodes.playing) return;
+    const deg = SPEED_BASS[sbStep % SPEED_BASS.length];
+    bassNote(ctx, bassG, pentatonicNote(ROOT_STUDY, deg, -1), BEAT * 0.45, 0.25);
+    sbStep++;
+    if (_musicNodes && _musicNodes.playing) {
+      _musicNodes._sbTimeout = setTimeout(schedSpeedBass, BEAT * 0.5 * 1000);
+    }
+  }
+  _musicNodes._sbTimeout = setTimeout(schedSpeedBass, 1000);
+
+  return { pulsePads, lfo, pulseGain };
+}
+
+// ══════════════════════════════════════════
+//  TRACK 3: "Rival Signal" — Duel Mode
+//  Tempo: 140 BPM | Key: A minor pentatonic
+//  Vibe: synthwave battle, tense, competitive
+// ══════════════════════════════════════════
+function startDuelTrack(ctx, master) {
+  const BPM = 140;
+  const BEAT = 60 / BPM;
+  const BAR = BEAT * 4;
+
+  const verb = makeReverb(ctx, 0.8, 0.12);
+  verb.connect(master);
+  const dly = makeDelay(ctx, BEAT * 0.375, 0.4, 0.28);
+  dly.connect(verb.input);
+
+  // ── Stab chords: sharp, punchy (Am → F → C → E) ──
+  const STAB_CHORDS = [
+    [noteHz(ROOT_DUEL), noteHz(ROOT_DUEL+3), noteHz(ROOT_DUEL+7), noteHz(ROOT_DUEL+12)],
+    [noteHz(ROOT_DUEL-7), noteHz(ROOT_DUEL-4), noteHz(ROOT_DUEL), noteHz(ROOT_DUEL+3)],
+    [noteHz(ROOT_DUEL-9), noteHz(ROOT_DUEL-5), noteHz(ROOT_DUEL-2), noteHz(ROOT_DUEL+3)],
+    [noteHz(ROOT_DUEL+4), noteHz(ROOT_DUEL+7), noteHz(ROOT_DUEL+11), noteHz(ROOT_DUEL+16)],
+  ];
+  let stabIdx = 0;
+
+  const stabGain = ctx.createGain(); stabGain.gain.value = 0.0;
+  stabGain.connect(verb.input);
+  stabGain.gain.linearRampToValueAtTime(0.08, ctx.currentTime + 1.5);
+
+  const stabOscs = STAB_CHORDS[0].map((f, i) => {
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = i < 2 ? 'sawtooth' : 'square';
+    osc.frequency.value = f;
+    osc.detune.value = i % 2 === 0 ? 10 : -10;
+    g.gain.value = 0.25;
+    osc.connect(g); g.connect(stabGain);
+    osc.start();
+    return osc;
+  });
+
+  // Filter sweep on stabs
+  const stabFilt = ctx.createBiquadFilter();
+  stabFilt.type = 'lowpass'; stabFilt.frequency.value = 400; stabFilt.Q.value = 2;
+  stabOscs.forEach(o => { /* already connected via gain */ });
+
+  // Rhythmic chord "stabs" — cut in/out with envelope automation
+  function schedStabs() {
+    if (!_musicNodes || !_musicNodes.playing) return;
+    stabIdx = (stabIdx + 1) % STAB_CHORDS.length;
+    const nc = STAB_CHORDS[stabIdx];
+    stabOscs.forEach((o, i) => { if (nc[i]) o.frequency.setValueAtTime(nc[i], ctx.currentTime); });
+    // Rapid attack/decay on each chord hit
+    stabGain.gain.cancelScheduledValues(ctx.currentTime);
+    stabGain.gain.setValueAtTime(0.11, ctx.currentTime);
+    stabGain.gain.exponentialRampToValueAtTime(0.05, ctx.currentTime + BEAT * 0.4);
+    // Filter sweep up
+    stabFilt.frequency.setValueAtTime(300, ctx.currentTime);
+    stabFilt.frequency.linearRampToValueAtTime(3000, ctx.currentTime + BEAT * 1.5);
+    if (_musicNodes && _musicNodes.playing) {
+      _musicNodes._stabTimeout = setTimeout(schedStabs, BAR * 1000);
+    }
+  }
+  _musicNodes._stabTimeout = setTimeout(schedStabs, BAR * 1000);
+
+  // ── Lead melody: aggressive pentatonic run ──
+  const leadGain = ctx.createGain(); leadGain.gain.value = 0.18;
+  leadGain.connect(dly.input);
+  const DUEL_MELODY = [
+    {deg:4,oct:1,dur:BEAT*0.5},
+    {deg:3,oct:1,dur:BEAT*0.25},
+    {deg:2,oct:1,dur:BEAT*0.25},
+    {deg:4,oct:1,dur:BEAT*0.5},
+    {deg:0,oct:2,dur:BEAT*0.5},
+    {deg:4,oct:1,dur:BEAT*0.25},
+    {deg:3,oct:1,dur:BEAT*0.25},
+    {deg:1,oct:1,dur:BEAT*0.5},
+    {deg:2,oct:1,dur:BEAT*0.25},
+    {deg:0,oct:1,dur:BEAT*0.25},
+    {deg:3,oct:1,dur:BEAT*0.5},
+    {deg:4,oct:1,dur:BEAT*0.25},
+    {deg:2,oct:2,dur:BEAT*0.25},
+    {deg:0,oct:2,dur:BEAT*1.0},
+    {deg:4,oct:1,dur:BEAT*0.5},
+    {deg:3,oct:1,dur:BEAT*0.5},
+  ];
+  let mStep = 0;
+  function schedLead() {
+    if (!_musicNodes || !_musicNodes.playing) return;
+    const note = DUEL_MELODY[mStep % DUEL_MELODY.length];
+    const freq = pentatonicNote(ROOT_DUEL, note.deg, note.oct);
+    pluck(ctx, leadGain, freq, note.dur * 0.9, 0.22, 'sawtooth', 0.005, 0.1, 0.4);
+    mStep++;
+    if (_musicNodes && _musicNodes.playing) {
+      _musicNodes._leadTimeout = setTimeout(schedLead, note.dur * 1000);
+    }
+  }
+  _musicNodes._leadTimeout = setTimeout(schedLead, BEAT * 4 * 1000);
+
+  // ── Counter-melody: lower register response ──
+  const ctGain = ctx.createGain(); ctGain.gain.value = 0.12;
+  ctGain.connect(verb.input);
+  const CT_MELODY = [
+    {deg:0,oct:0,dur:BEAT},{deg:2,oct:0,dur:BEAT},{deg:4,oct:0,dur:BEAT*0.5},{deg:3,oct:0,dur:BEAT*0.5},
+    {deg:1,oct:0,dur:BAR},{deg:0,oct:0,dur:BEAT},{deg:3,oct:0,dur:BEAT},{deg:4,oct:0,dur:BEAT},{deg:2,oct:0,dur:BEAT},
+  ];
+  let ctStep = 0;
+  function schedCounter() {
+    if (!_musicNodes || !_musicNodes.playing) return;
+    const note = CT_MELODY[ctStep % CT_MELODY.length];
+    pluck(ctx, ctGain, pentatonicNote(ROOT_DUEL, note.deg, note.oct), note.dur * 0.85, 0.15, 'triangle', 0.01, 0.08, 0.3);
+    ctStep++;
+    if (_musicNodes && _musicNodes.playing) {
+      _musicNodes._ctTimeout = setTimeout(schedCounter, note.dur * 1000);
+    }
+  }
+  _musicNodes._ctTimeout = setTimeout(schedCounter, BEAT * 8 * 1000);
+
+  // ── Drums: kick-heavy battle pattern ──
+  const drumG = ctx.createGain(); drumG.gain.value = 1.0;
+  drumG.connect(master);
+  // Pattern: K=kick S=snare H=hihat . = rest
+  // 16th notes: K . H . S . H . K K H . S . H H
+  const DRUM_PAT = ['K','.','H','.','S','.','H','.','K','K','H','.','S','.','H','H'];
+  let dStep = 0;
+  function schedDuelDrums() {
+    if (!_musicNodes || !_musicNodes.playing) return;
+    const hit = DRUM_PAT[dStep % DRUM_PAT.length];
+    if (hit === 'K') kick(ctx, drumG, 0.32);
+    else if (hit === 'S') snare(ctx, drumG, 0.16);
+    else if (hit === 'H') hihat(ctx, drumG, 0.07, 0.025);
+    dStep++;
+    if (_musicNodes && _musicNodes.playing) {
+      _musicNodes._duelDrumTimeout = setTimeout(schedDuelDrums, BEAT * 0.25 * 1000);
+    }
+  }
+  _musicNodes._duelDrumTimeout = setTimeout(schedDuelDrums, 500);
+
+  // ── Pulsing bass: 8th note groove ──
+  const bassG = ctx.createGain(); bassG.gain.value = 0.24;
+  bassG.connect(master);
+  const DUEL_BASS = [0,0,4,0, 3,3,0,3, 2,2,0,2, 4,3,0,0];
+  let dbStep = 0;
+  function schedDuelBass() {
+    if (!_musicNodes || !_musicNodes.playing) return;
+    const deg = DUEL_BASS[dbStep % DUEL_BASS.length];
+    bassNote(ctx, bassG, pentatonicNote(ROOT_DUEL, deg, -1), BEAT * 0.42, 0.26);
+    dbStep++;
+    if (_musicNodes && _musicNodes.playing) {
+      _musicNodes._duelBassTimeout = setTimeout(schedDuelBass, BEAT * 0.5 * 1000);
+    }
+  }
+  _musicNodes._duelBassTimeout = setTimeout(schedDuelBass, 800);
+
+  return { stabOscs, stabGain };
+}
+
+// ══════════════════════════════════════════
+//  MASTER MUSIC CONTROLLER
+// ══════════════════════════════════════════
+function startMusic(track = 'study') {
+  if (!S.settings.sound || !_musicEnabled) return;
+  if (_musicNodes && _musicNodes.track === track) return; // already playing this track
+  stopMusic(false); // stop cleanly, then start new
+  setTimeout(() => _startMusicInternal(track), _musicNodes ? 2200 : 0);
+}
+
+function _startMusicInternal(track) {
   try {
     const ctx = getAudioCtx();
-    const masterGain = ctx.createGain();
-    masterGain.gain.setValueAtTime(0, ctx.currentTime);
-    masterGain.gain.linearRampToValueAtTime(0.04, ctx.currentTime + 3);
-    masterGain.connect(ctx.destination);
-    _ambientNodes = { masterGain, oscs: [], playing: true };
+    const limiter = makeLimiter(ctx);
+    const master = ctx.createGain();
+    master.gain.setValueAtTime(0, ctx.currentTime);
+    master.gain.linearRampToValueAtTime(track === 'study' ? 0.55 : track === 'speed' ? 0.65 : 0.58, ctx.currentTime + 2.5);
+    master.connect(limiter);
 
-    // Lo-fi pad: stacked soft sine waves (Cmaj7 chord)
-    const chordFreqs = [65.41, 130.81, 164.81, 196, 246.94, 261.63]; // C2 C3 E3 G3 B3 C4
-    chordFreqs.forEach((freq, i) => {
-      const osc = ctx.createOscillator();
-      const env = ctx.createGain();
-      osc.connect(env); env.connect(masterGain);
-      osc.type = i < 2 ? 'sine' : 'triangle';
-      osc.frequency.setValueAtTime(freq, ctx.currentTime);
-      // Subtle detuning for warmth
-      osc.detune.setValueAtTime((Math.random() - 0.5) * 8, ctx.currentTime);
-      env.gain.setValueAtTime(0.15 / chordFreqs.length, ctx.currentTime);
-      osc.start(ctx.currentTime);
-      _ambientNodes.oscs.push(osc);
-    });
+    _musicBeat = 0;
+    _musicNodes = { ctx, master, limiter, playing: true, track };
 
-    // Slow chord transitions every 8 bars (at ~80bpm ~24s)
-    _scheduleChordChanges(ctx, masterGain);
-  } catch(e) {}
+    if (track === 'study') startStudyTrack(ctx, master);
+    else if (track === 'speed') startSpeedTrack(ctx, master);
+    else if (track === 'duel') startDuelTrack(ctx, master);
+
+  } catch(e) { console.error('Music error:', e); }
 }
 
-function _scheduleChordChanges(ctx, masterGain) {
-  // Chord progression: Cmaj7 → Am7 → Fmaj7 → G7
-  const progressions = [
-    [65.41, 164.81, 196, 246.94],    // Cmaj7
-    [55, 146.83, 174.61, 220],        // Am7
-    [43.65, 130.81, 174.61, 207.65],  // Fmaj7
-    [49, 146.83, 196, 245.94],        // G7
-  ];
-  let idx = 0;
-  function changeChord() {
-    if (!_ambientNodes || !_ambientNodes.playing) return;
-    idx = (idx + 1) % progressions.length;
-    // Gentle chord swell
-    const newFreqs = progressions[idx];
-    if (_ambientNodes.oscs) {
-      _ambientNodes.oscs.slice(2).forEach((osc, i) => {
-        if (newFreqs[i]) osc.frequency.linearRampToValueAtTime(newFreqs[i], ctx.currentTime + 4);
-      });
-    }
-    setTimeout(changeChord, 24000);
-  }
-  setTimeout(changeChord, 24000);
-}
-
-function stopAmbientMusic() {
-  if (!_ambientNodes) return;
+function stopMusic(fade = true) {
+  if (!_musicNodes) return;
+  _musicNodes.playing = false;
+  // Clear all scheduled timeouts
+  const keys = ['_arpTimeout','_bassTimeout','_shimTimeout','_farpTimeout','_drumTimeout',
+    '_sbTimeout','_stabTimeout','_leadTimeout','_ctTimeout','_duelDrumTimeout','_duelBassTimeout'];
+  keys.forEach(k => { if (_musicNodes[k]) clearTimeout(_musicNodes[k]); });
+  // Fade out master
   try {
-    _ambientNodes.playing = false;
-    _ambientNodes.masterGain.gain.linearRampToValueAtTime(0, getAudioCtx().currentTime + 2);
-    setTimeout(() => {
-      if (_ambientNodes) {
-        _ambientNodes.oscs.forEach(o => { try { o.stop(); } catch(e){} });
-        _ambientNodes = null;
-      }
-    }, 2100);
-  } catch(e) { _ambientNodes = null; }
+    if (fade) {
+      _musicNodes.master.gain.linearRampToValueAtTime(0, getAudioCtx().currentTime + 2);
+    } else {
+      _musicNodes.master.gain.setValueAtTime(0, getAudioCtx().currentTime);
+    }
+  } catch(e) {}
+  const old = _musicNodes;
+  _musicNodes = null;
 }
+
+// ── Public wrappers (keep existing API working) ──
+function startAmbientMusic() { startMusic('study'); }
+function stopAmbientMusic()  { stopMusic(true); }
+
+function startDuelMusic()    { startMusic('duel'); }
+function stopDuelMusic()     { stopMusic(true); }
+
+function startSpeedMusic()   { startMusic('speed'); }
 
 function toggleMusic() {
   _musicEnabled = !_musicEnabled;
   const btn = document.getElementById('panel-music-btn');
+  const tbBtn = document.getElementById('music-toolbar-btn');
   if (_musicEnabled) {
-    if (btn) btn.innerHTML = '<span class="sound-wave"><span class="sw-bar"></span><span class="sw-bar"></span><span class="sw-bar"></span><span class="sw-bar"></span><span class="sw-bar"></span></span>Music: ON';
-    startAmbientMusic();
+    if (btn) btn.innerHTML = '🎵 Music: ON';
+    if (tbBtn) { tbBtn.innerHTML = '🎵'; tbBtn.classList.remove('music-off'); }
+    // Resume the right track based on context
+    const currentPage = document.querySelector('.page.active');
+    const pageId = currentPage ? currentPage.id : '';
+    const duelArenaVisible = document.getElementById('duel-arena') && document.getElementById('duel-arena').classList.contains('show');
+    if (duelArenaVisible) startMusic('duel');
+    else if (S.mode === 'speed') startMusic('speed');
+    else if (pageId === 'page-study') startMusic('study');
   } else {
-    if (btn) btn.innerHTML = '🔇 Music: Off';
-    stopAmbientMusic();
+    if (btn) btn.innerHTML = '🔇 Music: OFF';
+    if (tbBtn) { tbBtn.innerHTML = '🔇'; tbBtn.classList.add('music-off'); }
+    stopMusic(true);
   }
 }
 
@@ -5168,6 +6204,11 @@ function toggleMode() {
   document.getElementById('mode-btn').classList.toggle('active-tool',S.mode==='speed');
   const pb=document.getElementById('panel-mode-btn');
   if(pb){ pb.textContent=S.mode==='speed'?'⚡ Speed Mode':'🎯 Normal Mode'; pb.classList.toggle('active-tool',S.mode==='speed'); }
+  // Switch music track to match mode
+  if (_musicEnabled) {
+    if (S.mode === 'speed') startMusic('speed');
+    else startMusic('study');
+  }
 }
 
 // ═══════════════════════════════════════════
@@ -5584,7 +6625,14 @@ async function ensureFriendCode() {
   // Always regenerate from UID to fix old random codes
   const code = generateFriendCode(currentUser.uid);
   if (!doc.exists || !doc.data().friendCode || doc.data().friendCode !== code) {
-    await ref.set({ friendCode: code, username: S.username, xp: S.xp, dayStreak: S.dayStreak, weeklyXP: S.sessionXP || 0, photoURL: currentUser.photoURL || '', friends: [], pendingIn: [], pendingOut: [] }, { merge: true });
+    // Only set fields that DON'T already exist — never overwrite friends/pendingIn
+    const updates = { friendCode: code, username: S.username, xp: S.xp, dayStreak: S.dayStreak, weeklyXP: S.sessionXP || 0, photoURL: currentUser.photoURL || '' };
+    if (!doc.exists) {
+      updates.friends = [];
+      updates.pendingIn = [];
+      updates.pendingOut = [];
+    }
+    await ref.set(updates, { merge: true });
   }
   return code;
 }
@@ -5900,13 +6948,15 @@ let _duelIncomingTimer = null;
 let _duelTopics = [];
 const DUEL_WIN_SCORE = 15;
 
-// ── Pick a shared question pool for the duel ──
+// ── Pick a shared question pool for the duel (mental math only) ──
 function buildDuelQuestions(topics) {
   let pool = [];
   topics.forEach(t => {
     const qs = QB[t] || [];
-    // Take up to 25 questions per topic, shuffled
-    const shuffled = [...qs].sort(() => Math.random() - 0.5).slice(0, 25);
+    // Only use questions tagged mental:true for duels
+    const mental = qs.filter(q => q.mental === true);
+    const src = mental.length >= 10 ? mental : qs.filter(q => q.type !== 'sort' && q.type !== 'multivar');
+    const shuffled = [...src].sort(() => Math.random() - 0.5).slice(0, 30);
     pool = pool.concat(shuffled.map(q => ({...q, _topic: t})));
   });
   // Shuffle combined pool
@@ -6051,6 +7101,8 @@ function startDuelArena(duelId, data, isChallenger) {
   // Show pre-duel intro → countdown → arena
   showPreDuelIntro(data, isChallenger, _isRankedDuel || false, () => {
     document.getElementById('duel-arena').classList.add('show');
+    // 🎵 Start duel battle music
+    if (_musicEnabled) startMusic('duel');
     loadDuelQuestion();
 
     // Listen for opponent's score updates
@@ -6246,6 +7298,10 @@ function endDuel(data, isChallenger) {
   const xpReward = iWon ? 150 : 50;
   S.xp += xpReward; S.sessionXP += xpReward;
   spawnXP(`+${xpReward} XP ⚔️ ${iWon ? 'Duel Win!' : 'Good fight!'}`, iWon ? '#ffd166' : '#a7a9be');
+  // LP reward for ranked
+  if (_isRankedDuel) {
+    updateRankedLP(iWon, S.rankedWinStreak || 0);
+  }
   saveState();
 
   // Show result screen
@@ -6268,6 +7324,9 @@ function endDuel(data, isChallenger) {
   if (iWon) soundDuelWin(); else soundDuelLose();
   if (S.settings.confetti && iWon) launchConfetti();
   document.getElementById('duel-result').classList.add('show');
+  // 🎵 Stop duel music, fade back to study track after result screen
+  stopMusic(true);
+  setTimeout(() => { if (_musicEnabled) startMusic('study'); }, 3000);
 }
 
 function closeDuelResult() {
@@ -6315,6 +7374,9 @@ async function quitDuel() {
 
 function endDuelCancelled() {
   document.getElementById('duel-arena').classList.remove('show');
+  // 🎵 Stop duel music
+  stopMusic(true);
+  setTimeout(() => { if (_musicEnabled) startMusic('study'); }, 2500);
   // Show a neutral result screen
   document.getElementById('dr-crown').textContent = '⚡';
   document.getElementById('dr-outcome').textContent = 'Match Cancelled';
@@ -6372,7 +7434,7 @@ async function startMatchmaking(mode) {
     ? 'Searching for players in your rank range...'
     : 'Searching for anyone online...';
   document.getElementById('mm-expand-msg').style.display = 'none';
-  document.getElementById('mm-timer').textContent = '0:45';
+  document.getElementById('mm-timer').textContent = '0:00';
 
   // Topic chips
   const chips = document.getElementById('mm-topic-chips');
@@ -6400,6 +7462,7 @@ async function startMatchmaking(mode) {
     level: S.level || 1,
     duelWins: S.duelWins || 0,
     duelLosses: S.duelLosses || 0,
+    rankedLP: S.rankedLP || 0,
     mode,
     topics: _mmTopics,
     status: 'searching',
@@ -6428,20 +7491,20 @@ async function startMatchmaking(mode) {
     }
   });
 
-  // Countdown timer
-  let remaining = 45;
+  // Count-up timer
+  let _mmElapsedSecs = 0;
   _mmTimer = setInterval(() => {
-    remaining--;
+    _mmElapsedSecs++;
     _mmElapsed++;
-    const mins = Math.floor(remaining/60);
-    const secs = remaining % 60;
+    const mins = Math.floor(_mmElapsedSecs/60);
+    const secs = _mmElapsedSecs % 60;
     const timerEl = document.getElementById('mm-timer');
     if (timerEl) timerEl.textContent = `${mins}:${secs.toString().padStart(2,'0')}`;
-    if (timerEl) timerEl.style.color = remaining <= 10 ? 'var(--wrong)' : 'var(--a3)';
+    if (timerEl) timerEl.style.color = _mmElapsedSecs > 90 ? 'var(--wrong)' : 'var(--a3)';
 
-    if (remaining <= 0) {
+    if (_mmElapsedSecs >= 120) {
       clearInterval(_mmTimer);
-      cancelMatchmaking(true); // timeout
+      cancelMatchmaking(true); // timeout after 2 minutes
     }
   }, 1000);
 
@@ -6551,6 +7614,251 @@ async function attemptPairing(opponentUid, opponentData) {
   }
 }
 
+
+// ═══════════════════════════════════════════
+//  RANK SYSTEM
+// ═══════════════════════════════════════════
+const RANKS = [
+  { id:'apprentice', name:'Apprentice', icon:'📖', color:'var(--rank-apprentice)', cls:'rank-apprentice', minLP:0, divisions:4 },
+  { id:'scholar',    name:'Scholar',    icon:'🔍', color:'var(--rank-scholar)',    cls:'rank-scholar',    minLP:400, divisions:4 },
+  { id:'thinker',    name:'Thinker',    icon:'💡', color:'var(--rank-thinker)',    cls:'rank-thinker',    minLP:800, divisions:4 },
+  { id:'analyst',    name:'Analyst',    icon:'📊', color:'var(--rank-analyst)',    cls:'rank-analyst',    minLP:1200, divisions:4 },
+  { id:'sage',       name:'Sage',       icon:'🔮', color:'var(--rank-sage)',       cls:'rank-sage',       minLP:1600, divisions:4 },
+  { id:'genius',     name:'Genius',     icon:'🧠', color:'var(--rank-genius)',     cls:'rank-genius',     minLP:2000, divisions:4 },
+  { id:'mastermind', name:'Mastermind', icon:'👑', color:'var(--rank-mastermind)', cls:'rank-mastermind', minLP:2400, divisions:0 },
+];
+const LP_PER_DIVISION = 100;
+const DIVISIONS = ['IV','III','II','I'];
+
+function getTotalLP() { return S.rankedLP || 0; }
+
+function getRankFromLP(lp) {
+  for (let i = RANKS.length - 1; i >= 0; i--) {
+    if (lp >= RANKS[i].minLP) return RANKS[i];
+  }
+  return RANKS[0];
+}
+
+function getDivisionFromLP(lp) {
+  const rank = getRankFromLP(lp);
+  if (rank.id === 'mastermind') return '';
+  const lpInRank = lp - rank.minLP;
+  const divIdx = Math.min(Math.floor(lpInRank / LP_PER_DIVISION), 3);
+  return DIVISIONS[divIdx];
+}
+
+function getRankDisplayName(lp) {
+  const rank = getRankFromLP(lp);
+  if (rank.id === 'mastermind') return `${rank.icon} Mastermind`;
+  const div = getDivisionFromLP(lp);
+  return `${rank.icon} ${rank.name} ${div}`;
+}
+
+function getRankClass(lp) {
+  return getRankFromLP(lp).cls;
+}
+
+function getLPInDivision(lp) {
+  const rank = getRankFromLP(lp);
+  if (rank.id === 'mastermind') return lp - rank.minLP;
+  const lpInRank = lp - rank.minLP;
+  return lpInRank % LP_PER_DIVISION;
+}
+
+function updateRankedLP(won, winStreak) {
+  if (!S.rankedLP) S.rankedLP = 0;
+  if (!S.rankedWins) S.rankedWins = 0;
+  if (!S.rankedLosses) S.rankedLosses = 0;
+  if (!S.rankedWinStreak) S.rankedWinStreak = 0;
+  if (!S.firstWinToday) S.firstWinToday = false;
+  
+  const today = new Date().toISOString().slice(0,10);
+  
+  if (won) {
+    S.rankedWins++;
+    S.rankedWinStreak = (S.rankedWinStreak || 0) + 1;
+    let lpGain = 20 + Math.floor(Math.random() * 11); // 20-30 LP
+    if (S.rankedWinStreak >= 3) lpGain = Math.floor(lpGain * 1.2); // streak bonus
+    if (!S.firstWinToday || S.lastWinDate !== today) {
+      lpGain += 35; // first win of day bonus
+      S.firstWinToday = true;
+      S.lastWinDate = today;
+    }
+    S.rankedLP = Math.max(0, S.rankedLP + lpGain);
+    spawnXP(`+${lpGain} LP 🏆 Rank Up!`, 'var(--rank-sage)');
+  } else {
+    S.rankedLosses++;
+    S.rankedWinStreak = 0;
+    const lpLoss = 15;
+    S.rankedLP = Math.max(0, S.rankedLP - lpLoss);
+    spawnXP(`−${lpLoss} LP`, 'var(--wrong)');
+  }
+  saveState();
+}
+
+function buildRankTiersDisplay() {
+  const el = document.getElementById('rank-tiers-display');
+  if (!el) return;
+  const myLP = getTotalLP();
+  const myRank = getRankFromLP(myLP);
+  el.innerHTML = RANKS.map(r => {
+    const isCurrent = r.id === myRank.id;
+    const divText = r.id === 'mastermind' ? 'Top tier — no divisions' : 'Divisions IV → I';
+    return `<div class="rank-tier-card${isCurrent?' current':''}">
+      <span class="rank-tier-icon">${r.icon}</span>
+      <span class="rank-tier-name" style="color:${r.color}">${r.name}</span>
+      <span class="rank-tier-sub">${divText}</span>
+      ${isCurrent ? `<div class="rank-lp-bar-wrap"><div class="rank-lp-bar" style="width:${getLPInDivision(myLP)}%;background:${r.color}"></div></div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function refreshRankedPage() {
+  const lp = getTotalLP();
+  const rankName = getRankDisplayName(lp);
+  const rankCls = getRankClass(lp);
+  const badge = document.getElementById('my-rank-badge');
+  if (badge) {
+    badge.textContent = rankName;
+    badge.className = `rank-badge ${rankCls}`;
+  }
+  const lpEl = document.getElementById('my-lp');
+  if (lpEl) lpEl.textContent = `${lp} LP`;
+  
+  const rank = getRankFromLP(lp);
+  const lpNext = document.getElementById('my-lp-next');
+  if (lpNext) {
+    if (rank.id === 'mastermind') {
+      lpNext.textContent = '👑 Maximum rank achieved';
+    } else {
+      const lpInDiv = getLPInDivision(lp);
+      lpNext.textContent = `${LP_PER_DIVISION - lpInDiv} LP to next division`;
+    }
+  }
+  
+  const bar = document.getElementById('lp-progress-bar');
+  if (bar) {
+    bar.style.width = (getLPInDivision(lp)) + '%';
+    bar.style.background = rank.color;
+  }
+  
+  buildRankTiersDisplay();
+  buildRankedLeaderboard();
+}
+
+async function buildRankedLeaderboard() {
+  const container = document.getElementById('ranked-leaderboard-list');
+  if (!container) return;
+  container.innerHTML = '<div style="text-align:center;padding:16px;color:var(--muted);font-size:0.8rem;">Loading top 35...</div>';
+  
+  try {
+    const snap = await db.collection('users')
+      .orderBy('rankedLP', 'desc')
+      .limit(35)
+      .get();
+    
+    const docs = snap.docs;
+    const myLP = getTotalLP();
+    
+    if (docs.length === 0) {
+      // No ranked data yet — show placeholder with current user
+      const myRankName = getRankDisplayName(myLP);
+      const myRankCls = getRankClass(myLP);
+      container.innerHTML = `
+        <div class="ranked-lb-row me">
+          <div class="ranked-lb-pos">1</div>
+          <div class="ranked-lb-avatar">${(S.shopEquipped&&S.shopEquipped.avatar)?'⭐':'⭐'}</div>
+          <div class="ranked-lb-info">
+            <div class="ranked-lb-name">${S.username||'You'} (You)</div>
+            <div class="ranked-lb-rank"><span class="rank-badge ${myRankCls}" style="font-size:0.62rem;padding:2px 8px;">${myRankName}</span></div>
+          </div>
+          <div class="ranked-lb-lp">${myLP} LP</div>
+        </div>
+        <div style="text-align:center;padding:12px;color:var(--muted);font-size:0.78rem;">Be the first to climb the leaderboard!</div>`;
+      return;
+    }
+    
+    let myShown = false;
+    container.innerHTML = docs.map((doc, i) => {
+      const u = doc.data();
+      const isMe = currentUser && doc.id === currentUser.uid;
+      if (isMe) myShown = true;
+      const uLP = u.rankedLP || 0;
+      const rankName = getRankDisplayName(uLP);
+      const rankCls = getRankClass(uLP);
+      const posIcon = i===0?'🥇':i===1?'🥈':i===2?'🥉':`#${i+1}`;
+      return `<div class="ranked-lb-row${isMe?' me':''}">
+        <div class="ranked-lb-pos">${posIcon}</div>
+        <div class="ranked-lb-avatar">${u.photoURL ? `<img src="${u.photoURL}" style="width:28px;height:28px;border-radius:50%;"/>` : '👤'}</div>
+        <div class="ranked-lb-info">
+          <div class="ranked-lb-name">${u.username||'Unknown'}${isMe?' (You)':''}</div>
+          <div class="ranked-lb-rank"><span class="rank-badge ${rankCls}" style="font-size:0.62rem;padding:2px 8px;">${rankName}</span></div>
+        </div>
+        <div class="ranked-lb-lp">${uLP} LP</div>
+      </div>`;
+    }).join('');
+    
+    // If current user isn't in top 35, show their position at bottom
+    if (!myShown && currentUser) {
+      container.innerHTML += `<div style="text-align:center;padding:8px;color:var(--muted);font-size:0.72rem;">— — —</div>
+      <div class="ranked-lb-row me">
+        <div class="ranked-lb-pos" style="color:var(--muted);">?</div>
+        <div class="ranked-lb-avatar">⭐</div>
+        <div class="ranked-lb-info">
+          <div class="ranked-lb-name">${S.username||'You'} (You)</div>
+          <div class="ranked-lb-rank"><span class="rank-badge ${getRankClass(myLP)}" style="font-size:0.62rem;padding:2px 8px;">${getRankDisplayName(myLP)}</span></div>
+        </div>
+        <div class="ranked-lb-lp">${myLP} LP</div>
+      </div>`;
+    }
+  } catch(e) {
+    console.error('Ranked leaderboard error:', e);
+    container.innerHTML = '<div style="text-align:center;padding:12px;color:var(--muted);font-size:0.8rem;">Leaderboard unavailable — check your connection.</div>';
+  }
+}
+
+function refreshDuelsPage() {
+  const wins = S.duelWins || 0;
+  const losses = S.duelLosses || 0;
+  const total = wins + losses;
+  const winrate = total > 0 ? Math.round(wins / total * 100) : 0;
+  const wEl = document.getElementById('duels-wins');
+  const lEl = document.getElementById('duels-losses');
+  const wrEl = document.getElementById('duels-winrate');
+  if (wEl) wEl.textContent = wins;
+  if (lEl) lEl.textContent = losses;
+  if (wrEl) wrEl.textContent = winrate + '%';
+  
+  // Load friends for challenge list
+  const list = document.getElementById('duels-friends-list');
+  if (!currentUser) {
+    if (document.getElementById('duels-guest-msg')) document.getElementById('duels-guest-msg').style.display='block';
+    if (list) list.style.display = 'none';
+    return;
+  }
+  if (document.getElementById('duels-guest-msg')) document.getElementById('duels-guest-msg').style.display='none';
+  if (!list) return;
+  
+  if (_friendsData.filter(f=>!f.isMe).length === 0) {
+    list.innerHTML = '<p style="color:var(--muted);font-size:0.82rem;">Add friends to challenge them! Head to the 👥 Friends tab.</p>';
+    return;
+  }
+  
+  list.innerHTML = _friendsData.filter(f=>!f.isMe).map(u => {
+    const isOnline = (Date.now() - (u.lastSeen || 0)) < 120000;
+    return `<div class="friend-item">
+      <div class="friend-avatar">${u.photoURL ? `<img src="${u.photoURL}"/>` : '👤'}</div>
+      <div style="flex:1;">
+        <div style="display:flex;align-items:center;gap:6px;">
+          <div class="friend-name">${u.username||'Unknown'}</div>
+          <div class="online-dot ${isOnline?'online':''}" title="${isOnline?'Online':'Offline'}"></div>
+        </div>
+        <div class="friend-sub">${u.xp||0} XP · ${u.dayStreak||0} day streak</div>
+      </div>
+      <button class="duel-btn challenge" onclick="sendDuelChallenge('${u.uid}','${(u.username||'Unknown').replace(/'/g,'')}')">⚔️ Challenge</button>
+    </div>`;
+  }).join('');
+}
 
 // ═══════════════════════════════════════════
 //  BOOT
