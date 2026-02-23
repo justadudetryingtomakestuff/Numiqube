@@ -5541,11 +5541,11 @@ function makeLimiter(ctx) {
 
 // ── Note frequency helpers ──
 function noteHz(midi) { return 440 * Math.pow(2, (midi - 69) / 12); }
-// C minor pentatonic: C Eb F G Bb
-const CM_PEN = [0,3,5,7,10]; // semitone offsets from C
+// C major pentatonic: C D E G A  (bright, happy, friendly!)
+const CM_PEN = [0,2,4,7,9]; // semitone offsets from C
 // Scale roots for tracks
-const ROOT_STUDY = 48; // C3
-const ROOT_DUEL  = 45; // A2
+const ROOT_STUDY = 60; // C4 (higher = brighter)
+const ROOT_DUEL  = 55; // G3 (friendly energetic key)
 
 function pentatonicNote(root, degree, octave=0) {
   const idx = ((degree % CM_PEN.length) + CM_PEN.length) % CM_PEN.length;
@@ -5651,46 +5651,48 @@ function snare(ctx, dest, vol=0.14) {
 }
 
 // ══════════════════════════════════════════
-//  TRACK 1: "Neon Library" — Study Mode
-//  Tempo: 80 BPM | Key: C minor pentatonic
-//  Vibe: cosmic lo-fi, dreamy pads, soft arpeggios
+//  TRACK 1: "Cozy Corner" — Study Mode
+//  Tempo: 76 BPM | Key: C major pentatonic
+//  Vibe: warm, bright, friendly — like a cozy game menu
 // ══════════════════════════════════════════
 function startStudyTrack(ctx, master) {
-  const BPM = 80;
+  const BPM = 76;
   const BEAT = 60 / BPM;
   const BAR = BEAT * 4;
 
-  // Reverb + delay chain
-  const verb = makeReverb(ctx, 2.5, 0.35);
+  // Gentle reverb, a little warmth
+  const verb = makeReverb(ctx, 2.0, 0.3);
   verb.connect(master);
-  const dly = makeDelay(ctx, BEAT * 0.75, 0.3, 0.25);
+  const dly = makeDelay(ctx, BEAT * 0.75, 0.25, 0.2);
   dly.connect(verb.input);
 
-  // ── Pad layer: stacked warm chords (Cm7 → Fm7 → Gm7 → Ebmaj7) ──
+  // ── Pad layer: bright major chords — Cmaj → Gmaj → Amaj → Fmaj ──
+  // All intervals from major scale (2,4,7,9,12 = whole, major third, fifth, sixth, octave)
   const CHORDS = [
-    [noteHz(ROOT_STUDY), noteHz(ROOT_STUDY+3), noteHz(ROOT_STUDY+7), noteHz(ROOT_STUDY+10), noteHz(ROOT_STUDY+12)],
-    [noteHz(ROOT_STUDY-7), noteHz(ROOT_STUDY-4), noteHz(ROOT_STUDY), noteHz(ROOT_STUDY+3), noteHz(ROOT_STUDY+7)],
-    [noteHz(ROOT_STUDY-5), noteHz(ROOT_STUDY-2), noteHz(ROOT_STUDY+2), noteHz(ROOT_STUDY+5), noteHz(ROOT_STUDY+9)],
-    [noteHz(ROOT_STUDY+3), noteHz(ROOT_STUDY+6), noteHz(ROOT_STUDY+10), noteHz(ROOT_STUDY+14), noteHz(ROOT_STUDY+17)],
+    [noteHz(ROOT_STUDY), noteHz(ROOT_STUDY+4), noteHz(ROOT_STUDY+7), noteHz(ROOT_STUDY+12)],   // Cmaj
+    [noteHz(ROOT_STUDY-5), noteHz(ROOT_STUDY-1), noteHz(ROOT_STUDY+2), noteHz(ROOT_STUDY+7)],  // Gmaj
+    [noteHz(ROOT_STUDY+9), noteHz(ROOT_STUDY+13), noteHz(ROOT_STUDY+16), noteHz(ROOT_STUDY+21)], // Amaj
+    [noteHz(ROOT_STUDY+5), noteHz(ROOT_STUDY+9), noteHz(ROOT_STUDY+12), noteHz(ROOT_STUDY+17)], // Fmaj
   ];
   let chordIdx = 0;
   const padGain = ctx.createGain(); padGain.gain.value = 0.0;
   padGain.connect(verb.input);
-  padGain.gain.linearRampToValueAtTime(0.09, ctx.currentTime + 4);
+  padGain.gain.linearRampToValueAtTime(0.07, ctx.currentTime + 3.5);
 
+  // Use gentle sine + triangle — NO sawtooth or square
   const pads = CHORDS[0].map((f, i) => {
     const osc = ctx.createOscillator();
     const g = ctx.createGain();
-    osc.type = i === 0 ? 'sine' : 'triangle';
+    osc.type = 'sine';
     osc.frequency.value = f;
-    osc.detune.value = (Math.random() - 0.5) * 12;
-    g.gain.value = 1 / CHORDS[0].length;
+    osc.detune.value = (Math.random() - 0.5) * 8; // tiny detune for warmth
+    g.gain.value = 0.28;
     osc.connect(g); g.connect(padGain);
     osc.start();
     return osc;
   });
 
-  // Chord change every 2 bars
+  // Chord change every 2 bars — smooth glide
   let chordTimer;
   function scheduleChordChange() {
     if (!_musicNodes || !_musicNodes.playing) return;
@@ -5698,352 +5700,334 @@ function startStudyTrack(ctx, master) {
       chordIdx = (chordIdx + 1) % CHORDS.length;
       const newChord = CHORDS[chordIdx];
       pads.forEach((osc, i) => {
-        if (newChord[i]) {
-          osc.frequency.linearRampToValueAtTime(newChord[i], ctx.currentTime + BAR * 0.5);
-        }
+        if (newChord[i]) osc.frequency.linearRampToValueAtTime(newChord[i], ctx.currentTime + BAR * 0.4);
       });
       scheduleChordChange();
     }, BAR * 2 * 1000);
   }
   scheduleChordChange();
 
-  // ── Arpeggio melody: soft crystal bells on pentatonic ──
-  const arpGain = ctx.createGain(); arpGain.gain.value = 0.12;
+  // ── Arp melody: playful bouncy bells, major pentatonic ──
+  const arpGain = ctx.createGain(); arpGain.gain.value = 0.14;
   arpGain.connect(dly.input);
   arpGain.connect(verb.input);
 
-  const ARP_PATTERN = [0, 2, 4, 2, 1, 3, 2, 0]; // pentatonic degree steps
-  const ARP_OCTAVES = [1, 1, 2, 1, 1, 2, 1, 0];
+  // A fun, skipping pattern — like a xylophone in a kids' game
+  const ARP_PATTERN = [0, 1, 2, 4, 3, 2, 1, 0, 2, 4, 3, 1, 0, 2, 1, 3];
+  const ARP_OCTAVES = [1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 2];
   let arpStep = 0;
-  let arpChordOffset = 0;
-  const arpIntervals = [BEAT*0.5, BEAT*0.5, BEAT*0.25, BEAT*0.25, BEAT*0.5, BEAT*0.5, BEAT*0.5, BEAT*1.0];
+  // Varied rhythm — gives it a dancing feel
+  const arpIntervals = [BEAT*0.5, BEAT*0.25, BEAT*0.5, BEAT*0.5, BEAT*0.25, BEAT*0.75, BEAT*0.5, BEAT*0.25];
 
   function scheduleArp() {
     if (!_musicNodes || !_musicNodes.playing) return;
-    const degree = ARP_PATTERN[arpStep % ARP_PATTERN.length] + arpChordOffset;
+    const degree = ARP_PATTERN[arpStep % ARP_PATTERN.length];
     const oct = ARP_OCTAVES[arpStep % ARP_OCTAVES.length];
     const freq = pentatonicNote(ROOT_STUDY, degree, oct);
-    // Occasional skip for groove
-    if (Math.random() > 0.15) {
-      pluck(ctx, arpGain, freq, 0.6, 0.22, 'sine', 0.005, 0.08, 0.3);
+    if (Math.random() > 0.1) {
+      pluck(ctx, arpGain, freq, 0.55, 0.2, 'sine', 0.004, 0.07, 0.25);
     }
     arpStep++;
-    if (arpStep % 16 === 0) arpChordOffset = (arpChordOffset + CM_PEN.length) % (CM_PEN.length * 2);
     const dur = arpIntervals[arpStep % arpIntervals.length];
     if (_musicNodes && _musicNodes.playing) {
       _musicNodes._arpTimeout = setTimeout(scheduleArp, dur * 1000);
     }
   }
-  // Start arp after a couple beats
-  _musicNodes._arpTimeout = setTimeout(scheduleArp, BEAT * 2 * 1000);
+  _musicNodes._arpTimeout = setTimeout(scheduleArp, BEAT * 1.5 * 1000);
 
-  // ── Slow bass line: root + fifth, very gentle ──
-  const bassGain = ctx.createGain(); bassGain.gain.value = 0.18;
+  // ── Soft bass: gentle, round, warm — not deep/heavy ──
+  const bassGain = ctx.createGain(); bassGain.gain.value = 0.13;
   bassGain.connect(master);
 
   const BASS_PATTERN = [
-    { deg:0, oct:-1, dur:BAR }, { deg:0, oct:-1, dur:BAR },
-    { deg:3, oct:-1, dur:BAR }, { deg:4, oct:-1, dur:BAR },
+    { deg:0, oct:0, dur:BAR }, { deg:0, oct:0, dur:BAR*0.5 }, { deg:2, oct:0, dur:BAR*0.5 },
+    { deg:3, oct:0, dur:BAR }, { deg:4, oct:0, dur:BAR },
   ];
   let bassStep = 0;
   function scheduleBass() {
     if (!_musicNodes || !_musicNodes.playing) return;
     const note = BASS_PATTERN[bassStep % BASS_PATTERN.length];
-    bassNote(ctx, bassGain, pentatonicNote(ROOT_STUDY, note.deg, note.oct), note.dur * 0.85, 0.2);
+    // Play bass one octave lower, sine wave = round and warm
+    bassNote(ctx, bassGain, pentatonicNote(ROOT_STUDY, note.deg, note.oct - 1), note.dur * 0.8, 0.15);
     bassStep++;
     if (_musicNodes && _musicNodes.playing) {
       _musicNodes._bassTimeout = setTimeout(scheduleBass, note.dur * 1000);
     }
   }
-  setTimeout(scheduleBass, BEAT * 4 * 1000);
+  setTimeout(scheduleBass, BEAT * 3 * 1000);
 
-  // ── Ambient shimmer: very sparse high chimes ──
-  const shimGain = ctx.createGain(); shimGain.gain.value = 0.1;
+  // ── Sparkle chimes: high, bright twinkling ──
+  const shimGain = ctx.createGain(); shimGain.gain.value = 0.12;
   shimGain.connect(verb.input);
   function scheduleShimmer() {
     if (!_musicNodes || !_musicNodes.playing) return;
-    const freq = pentatonicNote(ROOT_STUDY, Math.floor(Math.random()*5), 2 + (Math.random()>0.6?1:0));
-    pluck(ctx, shimGain, freq, 1.4, 0.15, 'sine', 0.01, 0.05, 0.2);
-    const nextIn = (3000 + Math.random() * 5000);
+    const freq = pentatonicNote(ROOT_STUDY, Math.floor(Math.random()*5), 2);
+    pluck(ctx, shimGain, freq, 1.2, 0.18, 'sine', 0.005, 0.04, 0.15);
+    const nextIn = (2000 + Math.random() * 4000);
     if (_musicNodes && _musicNodes.playing) {
       _musicNodes._shimTimeout = setTimeout(scheduleShimmer, nextIn);
     }
   }
-  setTimeout(scheduleShimmer, 6000);
+  setTimeout(scheduleShimmer, 4000);
 
   return { pads, padGain, chordTimer };
 }
 
 // ══════════════════════════════════════════
-//  TRACK 2: "Overclock" — Speed Mode
-//  Tempo: 128 BPM | Key: C minor pentatonic
-//  Vibe: driving, urgent, electronic pulse
+//  TRACK 2: "Brain Sprint" — Speed Mode
+//  Tempo: 110 BPM | Key: C major pentatonic
+//  Vibe: upbeat, energetic, fun — like a mini-game!
 // ══════════════════════════════════════════
 function startSpeedTrack(ctx, master) {
-  const BPM = 128;
+  const BPM = 110;
   const BEAT = 60 / BPM;
   const BAR = BEAT * 4;
 
-  const verb = makeReverb(ctx, 1.0, 0.15);
+  const verb = makeReverb(ctx, 1.0, 0.18);
   verb.connect(master);
-  const dly = makeDelay(ctx, BEAT * 0.5, 0.25, 0.2);
+  const dly = makeDelay(ctx, BEAT * 0.5, 0.22, 0.18);
   dly.connect(verb.input);
 
-  // ── Driving pulse pad: tense tritone stack ──
+  // ── Bright bouncy chords — major, happy ──
   const PULSE_CHORDS = [
-    [noteHz(ROOT_STUDY), noteHz(ROOT_STUDY+3), noteHz(ROOT_STUDY+7), noteHz(ROOT_STUDY+10)],
-    [noteHz(ROOT_STUDY-5), noteHz(ROOT_STUDY-2), noteHz(ROOT_STUDY+2), noteHz(ROOT_STUDY+5)],
-    [noteHz(ROOT_STUDY+2), noteHz(ROOT_STUDY+5), noteHz(ROOT_STUDY+9), noteHz(ROOT_STUDY+12)],
-    [noteHz(ROOT_STUDY-3), noteHz(ROOT_STUDY), noteHz(ROOT_STUDY+4), noteHz(ROOT_STUDY+7)],
+    [noteHz(ROOT_STUDY), noteHz(ROOT_STUDY+4), noteHz(ROOT_STUDY+7), noteHz(ROOT_STUDY+12)],  // Cmaj
+    [noteHz(ROOT_STUDY+5), noteHz(ROOT_STUDY+9), noteHz(ROOT_STUDY+12), noteHz(ROOT_STUDY+17)], // Fmaj
+    [noteHz(ROOT_STUDY+7), noteHz(ROOT_STUDY+11), noteHz(ROOT_STUDY+14), noteHz(ROOT_STUDY+19)], // Gmaj
+    [noteHz(ROOT_STUDY+9), noteHz(ROOT_STUDY+13), noteHz(ROOT_STUDY+16), noteHz(ROOT_STUDY+21)], // Amaj
   ];
   let pChordIdx = 0;
-  const pulseGain = ctx.createGain(); pulseGain.gain.value = 0.07;
+  const pulseGain = ctx.createGain(); pulseGain.gain.value = 0.06;
   pulseGain.connect(verb.input);
 
+  // Triangle waves only — bright but not harsh
   const pulsePads = PULSE_CHORDS[0].map((f, i) => {
     const osc = ctx.createOscillator();
     const g = ctx.createGain();
-    osc.type = i < 2 ? 'sawtooth' : 'triangle';
+    osc.type = 'triangle';
     osc.frequency.value = f;
-    osc.detune.value = (i % 2 === 0 ? 6 : -6);
+    osc.detune.value = (i % 2 === 0 ? 5 : -5);
     g.gain.value = 0.25;
     osc.connect(g); g.connect(pulseGain);
     osc.start();
     return osc;
   });
 
-  // Wobble LFO on pad
+  // Gentle LFO — just a light wobble, not aggressive
   const lfo = ctx.createOscillator();
-  const lfoGain = ctx.createGain(); lfoGain.gain.value = 8;
-  lfo.frequency.value = 4;
+  const lfoGain = ctx.createGain(); lfoGain.gain.value = 4;
+  lfo.frequency.value = 3;
   lfo.connect(lfoGain);
   pulsePads.forEach(o => lfoGain.connect(o.detune));
   lfo.start();
 
-  // Chord change every bar
+  // Chord change every 2 bars
   let pChordTimer;
   function schedPulseChord() {
     if (!_musicNodes || !_musicNodes.playing) return;
     pChordIdx = (pChordIdx + 1) % PULSE_CHORDS.length;
     const nc = PULSE_CHORDS[pChordIdx];
-    pulsePads.forEach((o, i) => { if (nc[i]) o.frequency.linearRampToValueAtTime(nc[i], ctx.currentTime + 0.1); });
-    pChordTimer = setTimeout(schedPulseChord, BAR * 1000);
+    pulsePads.forEach((o, i) => { if (nc[i]) o.frequency.linearRampToValueAtTime(nc[i], ctx.currentTime + 0.15); });
+    pChordTimer = setTimeout(schedPulseChord, BAR * 2 * 1000);
   }
-  pChordTimer = setTimeout(schedPulseChord, BAR * 1000);
+  pChordTimer = setTimeout(schedPulseChord, BAR * 2 * 1000);
 
-  // ── Fast arpeggio: 16th notes, aggressive ──
-  const arpG = ctx.createGain(); arpG.gain.value = 0.16;
+  // ── Bright staccato melody: happy, quick, playful ──
+  const arpG = ctx.createGain(); arpG.gain.value = 0.18;
   arpG.connect(dly.input);
-  const FAST_ARP = [0,4,2,4,1,4,3,4, 0,4,2,3,1,3,0,4];
-  const FAST_OCT = [1,2,1,2,1,2,1,2, 1,2,1,2,1,2,0,2];
+  // Major pentatonic staircase pattern — very "game-y" and cheerful
+  const FAST_ARP = [0,1,2,3,4,3,2,1, 2,3,4,3,2,1,0,2, 1,2,3,4,3,4,3,2];
+  const FAST_OCT = [1,1,1,1,1,1,1,1, 1,1,2,1,1,1,1,1, 1,1,1,2,1,2,1,1];
   let farpStep = 0;
   function scheduleFastArp() {
     if (!_musicNodes || !_musicNodes.playing) return;
     const freq = pentatonicNote(ROOT_STUDY, FAST_ARP[farpStep % FAST_ARP.length], FAST_OCT[farpStep % FAST_OCT.length]);
-    pluck(ctx, arpG, freq, BEAT*0.4, 0.2, 'square', 0.003, 0.06, 0.15);
+    // sine for bright clean tone — not square (which is harsh)
+    pluck(ctx, arpG, freq, BEAT*0.35, 0.18, 'sine', 0.003, 0.05, 0.12);
     farpStep++;
     if (_musicNodes && _musicNodes.playing) {
       _musicNodes._farpTimeout = setTimeout(scheduleFastArp, BEAT * 0.25 * 1000);
     }
   }
-  _musicNodes._farpTimeout = setTimeout(scheduleFastArp, BEAT * 2 * 1000);
+  _musicNodes._farpTimeout = setTimeout(scheduleFastArp, BEAT * 1.5 * 1000);
 
-  // ── Kick + snare + hihats: 4-on-floor pattern ──
-  const drumGain = ctx.createGain(); drumGain.gain.value = 0.9;
+  // ── Light punchy drums — bouncy, not heavy ──
+  const drumGain = ctx.createGain(); drumGain.gain.value = 0.7; // softer overall
   drumGain.connect(master);
 
-  // Kick: beats 1 & 3
-  // Snare: beats 2 & 4
-  // Hats: every 8th note
   function scheduleDrums() {
     if (!_musicNodes || !_musicNodes.playing) return;
     const t = _musicBeat;
-    // Kick on 1 and 3 of bar
-    if (t % 4 === 0 || t % 4 === 2) kick(ctx, drumGain, 0.3);
-    // Snare on 2 and 4
-    if (t % 4 === 1 || t % 4 === 3) snare(ctx, drumGain, 0.14);
-    // Hats every step (8th notes at 128bpm)
-    hihat(ctx, drumGain, 0.055, 0.03);
+    // Kick on 1 only (not every beat — less heavy)
+    if (t % 4 === 0) kick(ctx, drumGain, 0.22);
+    // Light snare on 2 and 4
+    if (t % 4 === 1 || t % 4 === 3) snare(ctx, drumGain, 0.10);
+    // Hi-hats on every 8th
+    hihat(ctx, drumGain, 0.04, 0.025);
     _musicBeat++;
     if (_musicNodes && _musicNodes.playing) {
       _musicNodes._drumTimeout = setTimeout(scheduleDrums, BEAT * 0.5 * 1000);
     }
   }
-  _musicNodes._drumTimeout = setTimeout(scheduleDrums, 500);
+  _musicNodes._drumTimeout = setTimeout(scheduleDrums, 600);
 
-  // ── Bass: driving 8th note line ──
-  const bassG = ctx.createGain(); bassG.gain.value = 0.22;
+  // ── Bass: light and bouncy ──
+  const bassG = ctx.createGain(); bassG.gain.value = 0.14;
   bassG.connect(master);
-  const SPEED_BASS = [0,0,3,0, 4,4,2,4, 0,0,3,3, 2,2,0,4];
+  const SPEED_BASS = [0,0,2,0, 3,3,2,3, 4,4,2,4, 2,2,0,2];
   let sbStep = 0;
   function schedSpeedBass() {
     if (!_musicNodes || !_musicNodes.playing) return;
     const deg = SPEED_BASS[sbStep % SPEED_BASS.length];
-    bassNote(ctx, bassG, pentatonicNote(ROOT_STUDY, deg, -1), BEAT * 0.45, 0.25);
+    bassNote(ctx, bassG, pentatonicNote(ROOT_STUDY, deg, 0), BEAT * 0.4, 0.17);
     sbStep++;
     if (_musicNodes && _musicNodes.playing) {
       _musicNodes._sbTimeout = setTimeout(schedSpeedBass, BEAT * 0.5 * 1000);
     }
   }
-  _musicNodes._sbTimeout = setTimeout(schedSpeedBass, 1000);
+  _musicNodes._sbTimeout = setTimeout(schedSpeedBass, 800);
 
   return { pulsePads, lfo, pulseGain };
 }
 
 // ══════════════════════════════════════════
-//  TRACK 3: "Rival Signal" — Duel Mode
-//  Tempo: 140 BPM | Key: A minor pentatonic
-//  Vibe: synthwave battle, tense, competitive
+//  TRACK 3: "Math Battle!" — Duel Mode
+//  Tempo: 118 BPM | Key: G major pentatonic
+//  Vibe: exciting, competitive, fun — like a game show!
 // ══════════════════════════════════════════
 function startDuelTrack(ctx, master) {
-  const BPM = 140;
+  const BPM = 118;
   const BEAT = 60 / BPM;
   const BAR = BEAT * 4;
 
-  const verb = makeReverb(ctx, 0.8, 0.12);
+  const verb = makeReverb(ctx, 1.2, 0.2);
   verb.connect(master);
-  const dly = makeDelay(ctx, BEAT * 0.375, 0.4, 0.28);
+  const dly = makeDelay(ctx, BEAT * 0.375, 0.3, 0.22);
   dly.connect(verb.input);
 
-  // ── Stab chords: sharp, punchy (Am → F → C → E) ──
-  const STAB_CHORDS = [
-    [noteHz(ROOT_DUEL), noteHz(ROOT_DUEL+3), noteHz(ROOT_DUEL+7), noteHz(ROOT_DUEL+12)],
-    [noteHz(ROOT_DUEL-7), noteHz(ROOT_DUEL-4), noteHz(ROOT_DUEL), noteHz(ROOT_DUEL+3)],
-    [noteHz(ROOT_DUEL-9), noteHz(ROOT_DUEL-5), noteHz(ROOT_DUEL-2), noteHz(ROOT_DUEL+3)],
-    [noteHz(ROOT_DUEL+4), noteHz(ROOT_DUEL+7), noteHz(ROOT_DUEL+11), noteHz(ROOT_DUEL+16)],
+  // ── Bright energetic chords — all major, all happy ──
+  // G major pentatonic: G A B D E
+  const DUEL_CHORDS = [
+    [noteHz(ROOT_DUEL), noteHz(ROOT_DUEL+4), noteHz(ROOT_DUEL+7), noteHz(ROOT_DUEL+12)],    // Gmaj
+    [noteHz(ROOT_DUEL+5), noteHz(ROOT_DUEL+9), noteHz(ROOT_DUEL+12), noteHz(ROOT_DUEL+16)], // Cmaj
+    [noteHz(ROOT_DUEL+7), noteHz(ROOT_DUEL+11), noteHz(ROOT_DUEL+14), noteHz(ROOT_DUEL+19)], // Dmaj
+    [noteHz(ROOT_DUEL+9), noteHz(ROOT_DUEL+13), noteHz(ROOT_DUEL+16), noteHz(ROOT_DUEL+21)], // Emaj
   ];
-  let stabIdx = 0;
+  let dChordIdx = 0;
 
-  const stabGain = ctx.createGain(); stabGain.gain.value = 0.0;
-  stabGain.connect(verb.input);
-  stabGain.gain.linearRampToValueAtTime(0.08, ctx.currentTime + 1.5);
+  const duelPadGain = ctx.createGain(); duelPadGain.gain.value = 0.0;
+  duelPadGain.connect(verb.input);
+  duelPadGain.gain.linearRampToValueAtTime(0.07, ctx.currentTime + 1.5);
 
-  const stabOscs = STAB_CHORDS[0].map((f, i) => {
+  // Triangle waves for brightness without harshness
+  const duelPads = DUEL_CHORDS[0].map((f, i) => {
     const osc = ctx.createOscillator();
     const g = ctx.createGain();
-    osc.type = i < 2 ? 'sawtooth' : 'square';
+    osc.type = 'triangle';
     osc.frequency.value = f;
-    osc.detune.value = i % 2 === 0 ? 10 : -10;
+    osc.detune.value = i % 2 === 0 ? 6 : -6;
     g.gain.value = 0.25;
-    osc.connect(g); g.connect(stabGain);
+    osc.connect(g); g.connect(duelPadGain);
     osc.start();
     return osc;
   });
 
-  // Filter sweep on stabs
-  const stabFilt = ctx.createBiquadFilter();
-  stabFilt.type = 'lowpass'; stabFilt.frequency.value = 400; stabFilt.Q.value = 2;
-  stabOscs.forEach(o => { /* already connected via gain */ });
-
-  // Rhythmic chord "stabs" — cut in/out with envelope automation
+  // Chord stab — bright punchy with positive energy
   function schedStabs() {
     if (!_musicNodes || !_musicNodes.playing) return;
-    stabIdx = (stabIdx + 1) % STAB_CHORDS.length;
-    const nc = STAB_CHORDS[stabIdx];
-    stabOscs.forEach((o, i) => { if (nc[i]) o.frequency.setValueAtTime(nc[i], ctx.currentTime); });
-    // Rapid attack/decay on each chord hit
-    stabGain.gain.cancelScheduledValues(ctx.currentTime);
-    stabGain.gain.setValueAtTime(0.11, ctx.currentTime);
-    stabGain.gain.exponentialRampToValueAtTime(0.05, ctx.currentTime + BEAT * 0.4);
-    // Filter sweep up
-    stabFilt.frequency.setValueAtTime(300, ctx.currentTime);
-    stabFilt.frequency.linearRampToValueAtTime(3000, ctx.currentTime + BEAT * 1.5);
+    dChordIdx = (dChordIdx + 1) % DUEL_CHORDS.length;
+    const nc = DUEL_CHORDS[dChordIdx];
+    duelPads.forEach((o, i) => { if (nc[i]) o.frequency.setValueAtTime(nc[i], ctx.currentTime); });
+    // Quick bright pop, not a dark slam
+    duelPadGain.gain.cancelScheduledValues(ctx.currentTime);
+    duelPadGain.gain.setValueAtTime(0.10, ctx.currentTime);
+    duelPadGain.gain.exponentialRampToValueAtTime(0.05, ctx.currentTime + BEAT * 0.6);
     if (_musicNodes && _musicNodes.playing) {
       _musicNodes._stabTimeout = setTimeout(schedStabs, BAR * 1000);
     }
   }
   _musicNodes._stabTimeout = setTimeout(schedStabs, BAR * 1000);
 
-  // ── Lead melody: aggressive pentatonic run ──
-  const leadGain = ctx.createGain(); leadGain.gain.value = 0.18;
+  // ── Lead melody: fast, catchy, upbeat game-show energy ──
+  const leadGain = ctx.createGain(); leadGain.gain.value = 0.20;
   leadGain.connect(dly.input);
   const DUEL_MELODY = [
-    {deg:4,oct:1,dur:BEAT*0.5},
-    {deg:3,oct:1,dur:BEAT*0.25},
-    {deg:2,oct:1,dur:BEAT*0.25},
-    {deg:4,oct:1,dur:BEAT*0.5},
-    {deg:0,oct:2,dur:BEAT*0.5},
-    {deg:4,oct:1,dur:BEAT*0.25},
-    {deg:3,oct:1,dur:BEAT*0.25},
-    {deg:1,oct:1,dur:BEAT*0.5},
-    {deg:2,oct:1,dur:BEAT*0.25},
-    {deg:0,oct:1,dur:BEAT*0.25},
-    {deg:3,oct:1,dur:BEAT*0.5},
-    {deg:4,oct:1,dur:BEAT*0.25},
-    {deg:2,oct:2,dur:BEAT*0.25},
-    {deg:0,oct:2,dur:BEAT*1.0},
-    {deg:4,oct:1,dur:BEAT*0.5},
-    {deg:3,oct:1,dur:BEAT*0.5},
+    {deg:0,oct:1,dur:BEAT*0.5}, {deg:2,oct:1,dur:BEAT*0.25}, {deg:4,oct:1,dur:BEAT*0.25},
+    {deg:3,oct:1,dur:BEAT*0.5}, {deg:4,oct:1,dur:BEAT*0.5},
+    {deg:2,oct:2,dur:BEAT*0.5}, {deg:4,oct:1,dur:BEAT*0.25}, {deg:3,oct:1,dur:BEAT*0.25},
+    {deg:1,oct:1,dur:BEAT*0.5}, {deg:0,oct:1,dur:BEAT*0.25}, {deg:2,oct:1,dur:BEAT*0.25},
+    {deg:4,oct:1,dur:BEAT*0.5}, {deg:3,oct:1,dur:BEAT*0.25}, {deg:2,oct:2,dur:BEAT*0.25},
+    {deg:0,oct:2,dur:BEAT*0.75}, {deg:4,oct:1,dur:BEAT*0.25},
   ];
   let mStep = 0;
   function schedLead() {
     if (!_musicNodes || !_musicNodes.playing) return;
     const note = DUEL_MELODY[mStep % DUEL_MELODY.length];
     const freq = pentatonicNote(ROOT_DUEL, note.deg, note.oct);
-    pluck(ctx, leadGain, freq, note.dur * 0.9, 0.22, 'sawtooth', 0.005, 0.1, 0.4);
+    // sine wave lead — bright and clean
+    pluck(ctx, leadGain, freq, note.dur * 0.85, 0.22, 'sine', 0.004, 0.08, 0.35);
     mStep++;
     if (_musicNodes && _musicNodes.playing) {
       _musicNodes._leadTimeout = setTimeout(schedLead, note.dur * 1000);
     }
   }
-  _musicNodes._leadTimeout = setTimeout(schedLead, BEAT * 4 * 1000);
+  _musicNodes._leadTimeout = setTimeout(schedLead, BEAT * 3 * 1000);
 
-  // ── Counter-melody: lower register response ──
-  const ctGain = ctx.createGain(); ctGain.gain.value = 0.12;
+  // ── Counter-melody: bright chime response ──
+  const ctGain = ctx.createGain(); ctGain.gain.value = 0.13;
   ctGain.connect(verb.input);
   const CT_MELODY = [
-    {deg:0,oct:0,dur:BEAT},{deg:2,oct:0,dur:BEAT},{deg:4,oct:0,dur:BEAT*0.5},{deg:3,oct:0,dur:BEAT*0.5},
-    {deg:1,oct:0,dur:BAR},{deg:0,oct:0,dur:BEAT},{deg:3,oct:0,dur:BEAT},{deg:4,oct:0,dur:BEAT},{deg:2,oct:0,dur:BEAT},
+    {deg:4,oct:1,dur:BEAT},{deg:3,oct:1,dur:BEAT},{deg:2,oct:1,dur:BEAT*0.5},{deg:4,oct:1,dur:BEAT*0.5},
+    {deg:0,oct:2,dur:BAR},{deg:4,oct:1,dur:BEAT},{deg:2,oct:1,dur:BEAT},{deg:0,oct:1,dur:BEAT*2},
   ];
   let ctStep = 0;
   function schedCounter() {
     if (!_musicNodes || !_musicNodes.playing) return;
     const note = CT_MELODY[ctStep % CT_MELODY.length];
-    pluck(ctx, ctGain, pentatonicNote(ROOT_DUEL, note.deg, note.oct), note.dur * 0.85, 0.15, 'triangle', 0.01, 0.08, 0.3);
+    pluck(ctx, ctGain, pentatonicNote(ROOT_DUEL, note.deg, note.oct), note.dur * 0.8, 0.14, 'sine', 0.008, 0.07, 0.25);
     ctStep++;
     if (_musicNodes && _musicNodes.playing) {
       _musicNodes._ctTimeout = setTimeout(schedCounter, note.dur * 1000);
     }
   }
-  _musicNodes._ctTimeout = setTimeout(schedCounter, BEAT * 8 * 1000);
+  _musicNodes._ctTimeout = setTimeout(schedCounter, BEAT * 7 * 1000);
 
-  // ── Drums: kick-heavy battle pattern ──
-  const drumG = ctx.createGain(); drumG.gain.value = 1.0;
+  // ── Drums: fun and bouncy, not heavy ──
+  const drumG = ctx.createGain(); drumG.gain.value = 0.75;
   drumG.connect(master);
-  // Pattern: K=kick S=snare H=hihat . = rest
-  // 16th notes: K . H . S . H . K K H . S . H H
-  const DRUM_PAT = ['K','.','H','.','S','.','H','.','K','K','H','.','S','.','H','H'];
+  // More swing, less stomp — like a friendly game show rhythm
+  const DRUM_PAT = ['K','.','H','.','S','.','H','H','K','.','H','.','S','.','H','.'];
   let dStep = 0;
   function schedDuelDrums() {
     if (!_musicNodes || !_musicNodes.playing) return;
     const hit = DRUM_PAT[dStep % DRUM_PAT.length];
-    if (hit === 'K') kick(ctx, drumG, 0.32);
-    else if (hit === 'S') snare(ctx, drumG, 0.16);
-    else if (hit === 'H') hihat(ctx, drumG, 0.07, 0.025);
+    if (hit === 'K') kick(ctx, drumG, 0.24);
+    else if (hit === 'S') snare(ctx, drumG, 0.12);
+    else if (hit === 'H') hihat(ctx, drumG, 0.055, 0.022);
     dStep++;
     if (_musicNodes && _musicNodes.playing) {
       _musicNodes._duelDrumTimeout = setTimeout(schedDuelDrums, BEAT * 0.25 * 1000);
     }
   }
-  _musicNodes._duelDrumTimeout = setTimeout(schedDuelDrums, 500);
+  _musicNodes._duelDrumTimeout = setTimeout(schedDuelDrums, 400);
 
-  // ── Pulsing bass: 8th note groove ──
-  const bassG = ctx.createGain(); bassG.gain.value = 0.24;
+  // ── Bouncy bass: root notes, bright register ──
+  const bassG = ctx.createGain(); bassG.gain.value = 0.16;
   bassG.connect(master);
-  const DUEL_BASS = [0,0,4,0, 3,3,0,3, 2,2,0,2, 4,3,0,0];
+  const DUEL_BASS = [0,0,2,0, 3,3,2,3, 4,4,2,4, 2,0,2,4];
   let dbStep = 0;
   function schedDuelBass() {
     if (!_musicNodes || !_musicNodes.playing) return;
     const deg = DUEL_BASS[dbStep % DUEL_BASS.length];
-    bassNote(ctx, bassG, pentatonicNote(ROOT_DUEL, deg, -1), BEAT * 0.42, 0.26);
+    // Slightly higher register than before — less ominous
+    bassNote(ctx, bassG, pentatonicNote(ROOT_DUEL, deg, 0), BEAT * 0.38, 0.18);
     dbStep++;
     if (_musicNodes && _musicNodes.playing) {
       _musicNodes._duelBassTimeout = setTimeout(schedDuelBass, BEAT * 0.5 * 1000);
     }
   }
-  _musicNodes._duelBassTimeout = setTimeout(schedDuelBass, 800);
+  _musicNodes._duelBassTimeout = setTimeout(schedDuelBass, 700);
 
-  return { stabOscs, stabGain };
+  return { duelPads, duelPadGain };
 }
 
 // ══════════════════════════════════════════
