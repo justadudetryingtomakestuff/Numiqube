@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Numiqube 🧊 — Math Study App</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet">
+<!-- KaTeX for math rendering -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -234,6 +238,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 .d-easy{background:rgba(6,214,160,0.18);color:var(--a3);}
 .d-medium{background:rgba(255,209,102,0.18);color:var(--a2);}
 .d-hard{background:rgba(239,71,111,0.18);color:var(--wrong);}
+.d-custom{background:rgba(199,125,255,0.18);color:var(--a5);}
 .d-competition{background:rgba(17,138,178,0.18);color:var(--a4);}
 #question-text{font-size:1.15rem;line-height:1.85;margin-bottom:20px;color:var(--text);min-height:3em;word-wrap:break-word;overflow-wrap:break-word;}
 
@@ -845,7 +850,38 @@ sub{font-size:0.7em;vertical-align:sub;line-height:0;}
 
 
 
-/* ─── CUSTOM DIALOG (replaces alert/confirm/prompt) ─── */
+/* ─── KATEX MATH RENDERING ─── */
+.katex { font-size: 1.05em; color: var(--text); }
+.katex-display { overflow-x: auto; overflow-y: hidden; padding: 4px 0; }
+.opt-btn .katex { font-size: 0.98em; }
+#question-text .katex { font-size: 1.08em; }
+#feedback-box .katex { font-size: 0.95em; }
+.fb-step .katex { font-size: 0.92em; }
+/* Make KaTeX fractions readable on dark bg */
+.katex .mfrac .frac-line { border-color: var(--text); }
+
+
+/* ─── CUSTOM QUESTION BUILDER ─── */
+.cq-keyboard{display:flex;flex-direction:column;gap:6px;}
+.cq-key-row{display:flex;flex-wrap:wrap;gap:5px;}
+.cq-key{background:var(--card2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);
+  font-family:'Nunito',sans-serif;font-size:0.82rem;font-weight:700;padding:7px 10px;cursor:pointer;
+  transition:all 0.15s;min-width:36px;text-align:center;}
+.cq-key:hover{background:var(--card3);border-color:var(--accent);color:var(--accent);}
+.cq-key-op{background:rgba(199,125,255,0.08);border-color:rgba(199,125,255,0.25);color:var(--a5);}
+.cq-key-op:hover{background:rgba(199,125,255,0.18);border-color:var(--a5);}
+.cq-key-del{background:rgba(239,71,111,0.08);border-color:rgba(239,71,111,0.25);color:var(--wrong);}
+.cq-key-del:hover{background:rgba(239,71,111,0.18);}
+.cq-key-clear{background:rgba(239,71,111,0.08);border-color:rgba(239,71,111,0.25);color:var(--wrong);padding:7px 14px;}
+.cq-key-clear:hover{background:rgba(239,71,111,0.18);}
+.custom-q-item{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;
+  margin-bottom:8px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
+.custom-q-text{font-size:0.9rem;font-weight:600;flex:1;}
+.custom-q-ans{font-size:0.78rem;color:var(--correct);margin-top:3px;}
+.custom-q-hint{font-size:0.75rem;color:var(--muted);margin-top:2px;}
+.custom-q-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:2px 6px;border-radius:6px;transition:color 0.15s;}
+.custom-q-del:hover{color:var(--wrong);}
+
 #custom-dialog-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:2000;
   display:none;align-items:center;justify-content:center;padding:20px;}
 #custom-dialog-overlay.show{display:flex;}
@@ -1420,6 +1456,7 @@ sub{font-size:0.7em;vertical-align:sub;line-height:0;}
     <button class="nav-tab" onclick="showPage('dashboard')">🏠 Dashboard</button>
     <button class="nav-tab" onclick="showPage('progress')">📊 Progress</button>
     <button class="nav-tab" onclick="showPage('goals')">🎯 Goals</button>
+    <button class="nav-tab" onclick="showPage('custom')">✏️ Custom</button>
     <button class="nav-tab" onclick="showPage('duels')">⚔️ Duels</button>
     <button class="nav-tab" onclick="showPage('friends')">👥 Friends<span class="req-badge" id="req-badge">0</span></button>
     <button class="nav-tab" onclick="showPage('settings')">⚙️ Settings</button>
@@ -1874,6 +1911,124 @@ sub{font-size:0.7em;vertical-align:sub;line-height:0;}
 <!-- ══════════════════════════════════════
      GOALS PAGE
 ══════════════════════════════════════ -->
+<!-- ══════════════════════════════════════════ -->
+<!--  CUSTOM QUESTIONS PAGE                    -->
+<!-- ══════════════════════════════════════════ -->
+<div id="page-custom" class="page">
+  <div class="page-inner">
+    <h2 style="font-size:1.3rem;font-weight:900;margin-bottom:4px;">✏️ Custom Questions</h2>
+    <p style="color:var(--muted);font-size:0.83rem;margin-bottom:16px;">Build your own practice set for anything you're studying in class.</p>
+
+    <!-- Question Builder -->
+    <div class="card-section" id="custom-builder">
+      <h3 style="font-size:0.95rem;font-weight:900;margin-bottom:12px;">➕ New Question</h3>
+
+      <!-- Question text builder -->
+      <div style="margin-bottom:10px;">
+        <label style="font-size:0.78rem;color:var(--muted);font-weight:700;display:block;margin-bottom:6px;">QUESTION</label>
+        <div id="custom-q-display" style="min-height:44px;background:var(--card2);border:1.5px solid var(--border);border-radius:11px;padding:10px 14px;font-size:0.97rem;color:var(--text);margin-bottom:6px;word-break:break-all;"></div>
+        <!-- Symbol keyboard -->
+        <div class="cq-keyboard">
+          <div class="cq-key-row">
+            <button class="cq-key" onclick="cqInsert('x')">x</button>
+            <button class="cq-key" onclick="cqInsert('y')">y</button>
+            <button class="cq-key" onclick="cqInsert('n')">n</button>
+            <button class="cq-key cq-key-op" onclick="cqInsert('^2')">x²</button>
+            <button class="cq-key cq-key-op" onclick="cqInsert('^3')">x³</button>
+            <button class="cq-key cq-key-op" onclick="cqInsert('^')">xⁿ</button>
+            <button class="cq-key cq-key-op" onclick="cqInsert('√(')">√</button>
+            <button class="cq-key cq-key-op" onclick="cqInsert('/')">fraction</button>
+          </div>
+          <div class="cq-key-row">
+            <button class="cq-key" onclick="cqInsert('1')">1</button>
+            <button class="cq-key" onclick="cqInsert('2')">2</button>
+            <button class="cq-key" onclick="cqInsert('3')">3</button>
+            <button class="cq-key" onclick="cqInsert('4')">4</button>
+            <button class="cq-key" onclick="cqInsert('5')">5</button>
+            <button class="cq-key" onclick="cqInsert('6')">6</button>
+            <button class="cq-key" onclick="cqInsert('7')">7</button>
+            <button class="cq-key" onclick="cqInsert('8')">8</button>
+            <button class="cq-key" onclick="cqInsert('9')">9</button>
+            <button class="cq-key" onclick="cqInsert('0')">0</button>
+          </div>
+          <div class="cq-key-row">
+            <button class="cq-key cq-key-op" onclick="cqInsert('+')">+</button>
+            <button class="cq-key cq-key-op" onclick="cqInsert('−')">−</button>
+            <button class="cq-key cq-key-op" onclick="cqInsert('×')">×</button>
+            <button class="cq-key cq-key-op" onclick="cqInsert('÷')">÷</button>
+            <button class="cq-key cq-key-op" onclick="cqInsert('=')">= </button>
+            <button class="cq-key cq-key-op" onclick="cqInsert('±')">±</button>
+            <button class="cq-key cq-key-op" onclick="cqInsert('(')"> ( </button>
+            <button class="cq-key cq-key-op" onclick="cqInsert(')')"> ) </button>
+            <button class="cq-key cq-key-op" onclick="cqInsert(' ')">&nbsp;_&nbsp;</button>
+            <button class="cq-key cq-key-del" onclick="cqDelete()">⌫</button>
+          </div>
+          <div class="cq-key-row">
+            <button class="cq-key cq-key-op" onclick="cqInsert('π')">π</button>
+            <button class="cq-key cq-key-op" onclick="cqInsert('θ')">θ</button>
+            <button class="cq-key cq-key-op" onclick="cqInsert('≤')">≤</button>
+            <button class="cq-key cq-key-op" onclick="cqInsert('≥')">≥</button>
+            <button class="cq-key cq-key-op" onclick="cqInsert('<')"><</button>
+            <button class="cq-key cq-key-op" onclick="cqInsert('>')">></button>
+            <button class="cq-key cq-key-op" onclick="cqInsert('f(n)=')">f(n)=</button>
+            <button class="cq-key cq-key-op" onclick="cqInsert('f(x)=')">f(x)=</button>
+            <button class="cq-key cq-key-clear" onclick="cqClear()">Clear</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Answer -->
+      <div style="margin-bottom:10px;">
+        <label style="font-size:0.78rem;color:var(--muted);font-weight:700;display:block;margin-bottom:6px;">CORRECT ANSWER</label>
+        <div id="custom-a-display" style="min-height:44px;background:var(--card2);border:1.5px solid rgba(6,214,160,0.4);border-radius:11px;padding:10px 14px;font-size:0.97rem;color:var(--correct);margin-bottom:6px;"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="cq-key" onclick="caInsert('x')" style="font-size:0.85rem;">x</button>
+          <button class="cq-key" onclick="caInsert('y')" style="font-size:0.85rem;">y</button>
+          <button class="cq-key" onclick="caInsert('n')" style="font-size:0.85rem;">n</button>
+          <button class="cq-key cq-key-op" onclick="caInsert('^2')" style="font-size:0.85rem;">x²</button>
+          <button class="cq-key" onclick="caInsert('1')" style="font-size:0.85rem;">1</button>
+          <button class="cq-key" onclick="caInsert('2')" style="font-size:0.85rem;">2</button>
+          <button class="cq-key" onclick="caInsert('3')" style="font-size:0.85rem;">3</button>
+          <button class="cq-key" onclick="caInsert('4')" style="font-size:0.85rem;">4</button>
+          <button class="cq-key" onclick="caInsert('5')" style="font-size:0.85rem;">5</button>
+          <button class="cq-key" onclick="caInsert('6')" style="font-size:0.85rem;">6</button>
+          <button class="cq-key" onclick="caInsert('7')" style="font-size:0.85rem;">7</button>
+          <button class="cq-key" onclick="caInsert('8')" style="font-size:0.85rem;">8</button>
+          <button class="cq-key" onclick="caInsert('9')" style="font-size:0.85rem;">9</button>
+          <button class="cq-key" onclick="caInsert('0')" style="font-size:0.85rem;">0</button>
+          <button class="cq-key cq-key-op" onclick="caInsert('+')" style="font-size:0.85rem;">+</button>
+          <button class="cq-key cq-key-op" onclick="caInsert('−')" style="font-size:0.85rem;">−</button>
+          <button class="cq-key cq-key-op" onclick="caInsert('/')" style="font-size:0.85rem;">/</button>
+          <button class="cq-key cq-key-op" onclick="caInsert('±')" style="font-size:0.85rem;">±</button>
+          <button class="cq-key cq-key-op" onclick="caInsert('(')" style="font-size:0.85rem;">(</button>
+          <button class="cq-key cq-key-op" onclick="caInsert(')')" style="font-size:0.85rem;">)</button>
+          <button class="cq-key cq-key-del" onclick="caDelete()" style="font-size:0.85rem;">⌫</button>
+        </div>
+      </div>
+
+      <!-- Hint (optional) -->
+      <div style="margin-bottom:14px;">
+        <label style="font-size:0.78rem;color:var(--muted);font-weight:700;display:block;margin-bottom:6px;">HINT <span style="font-weight:400;">(optional)</span></label>
+        <input id="custom-hint-input" placeholder="e.g. Use the quadratic formula..." maxlength="120"
+          style="width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:11px;color:var(--text);font-family:'Nunito',sans-serif;font-size:0.9rem;padding:10px 14px;outline:none;"/>
+      </div>
+
+      <button class="btn-primary" onclick="saveCustomQuestion()" style="width:100%;">➕ Add to My Questions</button>
+    </div>
+
+    <!-- My Questions List -->
+    <div class="card-section" style="margin-top:14px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <h3 style="font-size:0.95rem;font-weight:900;">📋 My Questions <span id="custom-count" style="color:var(--muted);font-weight:400;font-size:0.8rem;"></span></h3>
+        <button id="custom-practice-btn" class="btn-primary" onclick="startCustomPractice()" style="font-size:0.8rem;padding:7px 16px;display:none;">▶ Practice All</button>
+      </div>
+      <div id="custom-questions-list">
+        <p style="color:var(--muted);font-size:0.83rem;text-align:center;padding:20px 0;">No custom questions yet. Add one above!</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="page-goals" class="page">
 <div class="container">
   <h2 style="font-size:1.3rem;font-weight:900;margin-bottom:14px;">🎯 My Goals</h2>
@@ -3518,6 +3673,7 @@ function defaultState() {
     rankTier: 'integer',
     rankDivision: 3,
     duelHistory: [],
+    customQuestions: [],
     settings: { lightMode:false, sessionGoal:20, speedTimer:15, sound:true, confetti:true },
     // runtime only (not saved)
     currentTopic: 'quadratics',
@@ -3614,7 +3770,7 @@ function showPage(name) {
   const page = document.getElementById('page-'+name);
   if (page) page.classList.add('active');
   document.querySelectorAll('.nav-tab').forEach((t,i) => {
-    const names = ['study','dashboard','progress','goals','duels','friends','settings'];
+    const names = ['study','dashboard','progress','goals','custom','duels','friends','settings'];
     t.classList.toggle('active', names[i] === name);
   });
   isStudyPageActive = (name === 'study');
@@ -3623,6 +3779,7 @@ function showPage(name) {
   if (name==='goals') refreshGoals();
   if (name==='settings') refreshSettings();
   if (name==='friends') refreshFriends();
+  if (name==='custom') refreshCustomPage();
   if (name==='duels') { updateRankUI(); refreshDuelFriendsList(); }
   if (name==='study') { setTimeout(() => { if(_musicEnabled) startAmbientMusic(); }, 500); }
   else { stopAmbientMusic(); }
@@ -4613,33 +4770,54 @@ function getNextQ() {
 // ═══════════════════════════════════════════
 function renderMath(str) {
   if (!str) return str;
-  // Fractions: a/b surrounded by spaces or at start/end → make fraction
-  // Handle explicit fraction notation like ½, ¼ etc already in text
   str = String(str);
 
-  // Superscripts: x^2 → x<sup>2</sup>, handles multi-char like x^(n+1)
-  str = str.replace(/\^(\([^)]+\))/g, (_, exp) => `<sup>${exp.replace(/[()]/g,'')}</sup>`);
-  str = str.replace(/\^(-?\d+)/g, (_, exp) => `<sup>${exp}</sup>`);
-  str = str.replace(/\^([a-zA-Z])/g, (_, exp) => `<sup>${exp}</sup>`);
+  // Convert our shorthand notation to LaTeX before passing to KaTeX
+  // x^2 → x^{2}, x^(n+1) → x^{n+1}
+  str = str.replace(/\^(\([^)]+\))/g, (_, e) => `^{${e.replace(/[()]/g,'')}}`);
+  str = str.replace(/\^(-?\d+)/g, (_, e) => `^{${e}}`);
+  str = str.replace(/\^([a-zA-Z])/g, (_, e) => `^{${e}}`);
 
-  // Subscripts: x_1 → x<sub>1</sub>
-  str = str.replace(/_(\d+)/g, (_, sub) => `<sub>${sub}</sub>`);
-  str = str.replace(/_([a-zA-Z])/g, (_, sub) => `<sub>${sub}</sub>`);
+  // Split on $...$ blocks vs plain text, render each math block with KaTeX
+  // Also auto-detect common math patterns and wrap them
+  // We'll use a simpler approach: find LaTeX-like expressions and render inline
 
-  // Simple inline fractions like (a/b) → proper fraction display when surrounded by spaces
-  // Pattern: number/number not inside a word context
-  str = str.replace(/(\b\d+)\/(\d+\b)/g, (_, n, d) => 
-    `<span class="inline-frac"><sup>${n}</sup>⁄<sub>${d}</sub></span>`);
+  // If katex is available, render any $...$ delimited math
+  if (typeof katex !== 'undefined') {
+    // Wrap common math patterns in $ $ for KaTeX
+    // Fractions: number/number
+    str = str.replace(/(\b\d+)\/(\d+\b)/g, (_, n, d) => `$\\frac{${n}}{${d}}$`);
+    // Square roots
+    str = str.replace(/√\(([^)]+)\)/g, (_, inner) => `$\\sqrt{${inner}}$`);
+    str = str.replace(/√(\d+)/g, (_, n) => `$\\sqrt{${n}}$`);
+    // ± 
+    str = str.replace(/±/g, '$\\pm$');
+    // x^{n} patterns already converted above — wrap bare ones
+    str = str.replace(/([a-zA-Z])\^{([^}]+)}/g, (_, base, exp) => `$${base}^{${exp}}$`);
+    // Subscripts
+    str = str.replace(/_(\d+)/g, (_, s) => `$_{${s}}$`);
 
-  // Square root: √(expr) or √n
-  str = str.replace(/√\(([^)]+)\)/g, (_, inner) => `<span class="sqrt-wrap">√<span class="sqrt-inner">${inner}</span></span>`);
-
-  // ± → proper symbol (already in some questions but make sure)
-  str = str.replace(/\+\/-/g, '±');
-
-  // → already fine
-  // × already fine
-  // ÷ already fine
+    // Now render all $...$ with KaTeX
+    const parts = str.split(/(\$[^$]+\$)/g);
+    str = parts.map(part => {
+      if (part.startsWith('$') && part.endsWith('$')) {
+        const latex = part.slice(1, -1);
+        try {
+          return katex.renderToString(latex, { throwOnError: false, displayMode: false });
+        } catch(e) { return part; }
+      }
+      return part;
+    }).join('');
+  } else {
+    // Fallback if KaTeX not loaded yet
+    str = str.replace(/\^{([^}]+)}/g, (_, e) => `<sup>${e}</sup>`);
+    str = str.replace(/(\b\d+)\/(\d+\b)/g, (_, n, d) =>
+      `<span class="inline-frac"><sup>${n}</sup>⁄<sub>${d}</sub></span>`);
+    str = str.replace(/√\(([^)]+)\)/g, (_, inner) =>
+      `<span class="sqrt-wrap">√<span class="sqrt-inner">${inner}</span></span>`);
+    str = str.replace(/_(\d+)/g, (_, s) => `<sub>${s}</sub>`);
+    str = str.replace(/_([a-zA-Z])/g, (_, s) => `<sub>${s}</sub>`);
+  }
 
   return str;
 }
@@ -5879,6 +6057,150 @@ function buildLeaderboard() {
 // ═══════════════════════════════════════════
 //  SETTINGS
 // ═══════════════════════════════════════════
+// ═══════════════════════════════════════════
+//  CUSTOM QUESTIONS
+// ═══════════════════════════════════════════
+let _cqText = '';
+let _caText = '';
+
+function cqInsert(val) {
+  _cqText += val;
+  document.getElementById('custom-q-display').innerHTML = renderMath(_cqText) || '<span style="color:var(--muted);font-size:0.85rem;">Your question will appear here...</span>';
+}
+function cqDelete() {
+  _cqText = _cqText.slice(0, -1);
+  document.getElementById('custom-q-display').innerHTML = renderMath(_cqText) || '<span style="color:var(--muted);font-size:0.85rem;">Your question will appear here...</span>';
+}
+function cqClear() {
+  _cqText = '';
+  document.getElementById('custom-q-display').innerHTML = '<span style="color:var(--muted);font-size:0.85rem;">Your question will appear here...</span>';
+}
+function caInsert(val) {
+  _caText += val;
+  document.getElementById('custom-a-display').innerHTML = renderMath(_caText) || '<span style="color:var(--muted);font-size:0.85rem;">Answer...</span>';
+}
+function caDelete() {
+  _caText = _caText.slice(0, -1);
+  document.getElementById('custom-a-display').innerHTML = renderMath(_caText) || '<span style="color:var(--muted);font-size:0.85rem;">Answer...</span>';
+}
+
+function saveCustomQuestion() {
+  if (!_cqText.trim()) { uiAlert('Please enter a question first!', '⚠️', 'Missing Question'); return; }
+  if (!_caText.trim()) { uiAlert('Please enter the correct answer!', '⚠️', 'Missing Answer'); return; }
+  if (!S.customQuestions) S.customQuestions = [];
+  const hint = document.getElementById('custom-hint-input').value.trim();
+  S.customQuestions.push({
+    text: _cqText.trim(),
+    ans: _caText.trim(),
+    hint: hint || '',
+    created: Date.now()
+  });
+  saveState();
+  // Reset builder
+  _cqText = ''; _caText = '';
+  document.getElementById('custom-q-display').innerHTML = '<span style="color:var(--muted);font-size:0.85rem;">Your question will appear here...</span>';
+  document.getElementById('custom-a-display').innerHTML = '<span style="color:var(--muted);font-size:0.85rem;">Answer...</span>';
+  document.getElementById('custom-hint-input').value = '';
+  refreshCustomPage();
+}
+
+function deleteCustomQuestion(idx) {
+  S.customQuestions.splice(idx, 1);
+  saveState();
+  refreshCustomPage();
+}
+
+function refreshCustomPage() {
+  const qs = S.customQuestions || [];
+  const list = document.getElementById('custom-questions-list');
+  const count = document.getElementById('custom-count');
+  const practiceBtn = document.getElementById('custom-practice-btn');
+  count.textContent = qs.length ? `(${qs.length})` : '';
+  practiceBtn.style.display = qs.length ? 'block' : 'none';
+  if (!qs.length) {
+    list.innerHTML = '<p style="color:var(--muted);font-size:0.83rem;text-align:center;padding:20px 0;">No custom questions yet. Add one above!</p>';
+    return;
+  }
+  list.innerHTML = qs.map((q, i) => `
+    <div class="custom-q-item">
+      <div style="flex:1;">
+        <div class="custom-q-text">${renderMath(q.text)}</div>
+        <div class="custom-q-ans">✓ ${renderMath(q.ans)}</div>
+        ${q.hint ? `<div class="custom-q-hint">💡 ${q.hint}</div>` : ''}
+      </div>
+      <button class="custom-q-del" onclick="deleteCustomQuestion(${i})">🗑️</button>
+    </div>
+  `).join('');
+}
+
+function startCustomPractice() {
+  const qs = S.customQuestions || [];
+  if (!qs.length) return;
+  // Convert to study format and load
+  S.customSession = qs.map(q => ({
+    text: q.text,
+    type: 'free',
+    ans: q.ans,
+    accepted: [q.ans.toLowerCase().trim()],
+    hint: q.hint || '',
+    diff: 'custom',
+    exp: `The correct answer is: ${q.ans}`,
+    steps: []
+  }));
+  S.customSessionIdx = 0;
+  S.mode = 'normal';
+  showPage('study');
+  // Override next question load to use custom session
+  _customPracticeActive = true;
+  loadCustomSessionQ();
+}
+
+let _customPracticeActive = false;
+
+function loadCustomSessionQ() {
+  if (!_customPracticeActive || !S.customSession) return;
+  const qs = S.customSession;
+  if (S.customSessionIdx >= qs.length) {
+    _customPracticeActive = false;
+    uiAlert(`Done! You completed all ${qs.length} custom questions.`, '🎉', 'Custom Practice Complete!');
+    return;
+  }
+  S.q = qs[S.customSessionIdx];
+  S.answered = false;
+  S.hintUsed = false;
+  // Show question
+  document.getElementById('diff-tag').textContent = 'CUSTOM';
+  document.getElementById('diff-tag').className = 'd-custom';
+  document.getElementById('question-text').innerHTML = renderMath(S.q.text);
+  document.getElementById('hint-text').innerHTML = S.q.hint || 'No hint available.';
+  document.getElementById('hint-text').style.display = 'none';
+  document.getElementById('hint-btn').textContent = '💡 Hint';
+  document.getElementById('feedback-box').style.display = 'none';
+  document.getElementById('next-btn').style.display = 'none';
+  // Show free input
+  document.getElementById('options-grid').style.display = 'none';
+  document.getElementById('free-wrap').style.display = 'block';
+  document.getElementById('free-input').value = '';
+  document.getElementById('free-input').focus();
+}
+
+function submitCustomAnswer() {
+  if (!_customPracticeActive) return;
+  const input = document.getElementById('free-input').value.trim().toLowerCase();
+  const correct = S.q.accepted.some(a => a.toLowerCase() === input);
+  const box = document.getElementById('feedback-box');
+  box.style.display = 'block';
+  box.className = correct ? 'fb-correct' : 'fb-wrong';
+  box.innerHTML = `<strong>${correct ? '✅ Correct!' : '❌ Not quite.'}</strong>
+    <div style="margin-top:6px;font-size:0.88rem;color:var(--muted);">Correct answer: ${renderMath(S.q.ans)}</div>`;
+  document.getElementById('next-btn').style.display = 'block';
+  document.getElementById('next-btn').onclick = () => {
+    S.customSessionIdx++;
+    loadCustomSessionQ();
+  };
+  if (correct) soundCorrect(); else soundWrong();
+}
+
 function refreshSettings() {
   const s=S.settings;
   document.getElementById('light-toggle').className='toggle'+(s.lightMode?' on':'');
