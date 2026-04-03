@@ -893,6 +893,7 @@ sub{font-size:0.7em;vertical-align:sub;line-height:0;}
 .custom-set-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:4px 8px;border-radius:8px;transition:color 0.15s;flex-shrink:0;}
 .custom-set-del:hover{color:var(--wrong);}
 
+.custom-q-item{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;
   margin-bottom:8px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
 .custom-q-text{font-size:0.9rem;font-weight:600;flex:1;}
 .custom-q-ans{font-size:0.78rem;color:var(--correct);margin-top:3px;}
@@ -2410,6 +2411,7 @@ sub{font-size:0.7em;vertical-align:sub;line-height:0;}
 <!-- ══════════════════════════════════════
      SETTINGS PAGE
 ══════════════════════════════════════ -->
+<div id="page-settings" class="page">
 <div class="container">
   <h2 style="font-size:1.3rem;font-weight:900;margin-bottom:16px;">⚙️ Settings</h2>
 
@@ -2829,6 +2831,7 @@ function showHomePage() {
 }
 
 function launchAppDirectly() {
+  _sessionQCount = 0; _sessionQCorrect = 0;
   document.getElementById('page-home').classList.remove('show');
   document.getElementById('nav').style.display = 'flex';
   updateDayStreak();
@@ -3864,6 +3867,7 @@ function buildStars() {
 }
 
 function beginApp(returning=false) {
+  _sessionQCount = 0; _sessionQCorrect = 0;
   const input = document.getElementById('username-input');
   if (!returning) {
     const name = input.value.trim();
@@ -4484,6 +4488,9 @@ function submitReport() {
 //  GO HOME
 // ═══════════════════════════════════════════
 function goHome() {
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+  if (S.speedInterval) { clearInterval(S.speedInterval); S.speedInterval = null; }
+  stopAmbientMusic();
   document.getElementById('page-home').classList.add('show');
   document.getElementById('nav').style.display = 'none';
   isStudyPageActive = false;
@@ -4922,6 +4929,7 @@ function renderQuestion(text) {
 function renderMath(str) {
   if (!str) return str;
   str = String(str);
+  if (str.includes('class="katex"') || str.includes('class="katex-html"')) return str;
 
   // Convert our shorthand notation to LaTeX before passing to KaTeX
   // x^2 → x^{2}, x^(n+1) → x^{n+1}
@@ -5160,7 +5168,10 @@ function submitFree() {
   S.lastTime=elapsed;
   const inp=document.getElementById('free-input').value.trim().toLowerCase();
   const acc=S.q.accepted.map(a=>a.toLowerCase());
-  S.lastCorrect=acc.some(a=>inp===a||inp.replace(/\s/g,'')===a.replace(/\s/g,''));
+  S.lastCorrect=acc.some(a=>{
+    const ai=a.replace(/\s/g,'').toLowerCase(), ii=inp.replace(/\s/g,'').toLowerCase();
+    return ii===ai || (!isNaN(parseFloat(ii)) && !isNaN(parseFloat(ai)) && parseFloat(ii)===parseFloat(ai));
+  });
   document.getElementById('free-input').disabled=true;
   document.getElementById('submit-free').disabled=true;
   showFeedback(S.lastCorrect,S.q.exp,elapsed);
@@ -5203,7 +5214,11 @@ function submitNumpad() {
   S.lastTime = elapsed;
   const acc = S.q.accepted.map(a => a.toString().toLowerCase().trim());
   const inp = _numpadVal.toLowerCase().trim();
-  S.lastCorrect = acc.includes(inp);
+  const normInp = inp.replace(/\u2212/g, '-');
+  S.lastCorrect = acc.some(a => {
+    const na = a.replace(/\u2212/g, '-');
+    return na === normInp || (!isNaN(parseFloat(normInp)) && !isNaN(parseFloat(na)) && parseFloat(normInp) === parseFloat(na));
+  });
   document.querySelectorAll('.numpad-btn').forEach(b=>b.disabled=true);
   const disp = document.getElementById('numpad-display');
   disp.style.borderColor = S.lastCorrect ? 'var(--correct)' : 'var(--wrong)';
@@ -5425,6 +5440,7 @@ function updateScore(correct) {
     // Session goal reached — maybe show results card
     const sg = S.settings.sessionGoal || 20;
     if (_sessionQCount === sg) setTimeout(maybeShowResultsCard, 1200);
+    if (_sessionQCount > sg + 10) { _sessionQCount = 0; _sessionQCorrect = 0; }
 
     spawnXP(`+${gained} XP${streakBonus>0?' 🔥':''}${speedBonus>0?' ⚡':''}${noHintBonus>0?' 🧠':''}`)
     updateLevel();
@@ -5773,6 +5789,7 @@ function startMusicForMode(mode) {
   const tracks = MUSIC_TRACKS[category];
   const file = tracks[Math.floor(Math.random() * tracks.length)];
   _bgAudio = new Audio(file);
+  _bgAudio.onerror = () => { _bgAudio = null; _currentMusicMode = null; };
   _bgAudio.loop = true;
   _bgAudio.volume = _getModeVolume(category);
   _bgAudio.play().catch(() => {
@@ -6196,7 +6213,7 @@ function buildLeaderboard() {
   ];
   const all=[...fakeUsers,{name:S.username||'You',xp:S.xp,icon:'⭐',isMe:true}];
   all.sort((a,b)=>b.xp-a.xp);
-  const list=document.getElementById('lb-list'); list.innerHTML='';
+  const list=document.getElementById('leaderboard-list'); list.innerHTML='';
   all.forEach((u,i)=>{
     const row=document.createElement('div');
     row.className='lb-row'+(u.isMe?' lb-me':'');
