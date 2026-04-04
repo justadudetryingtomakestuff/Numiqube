@@ -1,0 +1,82 @@
+.leaderboard {
+  min-height: 100vh;
+  padding: 20px 16px;
+}
+
+.lb-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.lb-title {
+  font-size: 1.4rem;
+  font-weight: 900;
+}
+
+.lb-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+.lb-row {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: transform 0.2s;
+}
+
+.lb-row:hover {
+  transform: translateX(4px);
+}
+
+.lb-row.top-three {
+  border-color: rgba(255, 209, 102, 0.3);
+  background: rgba(255, 209, 102, 0.04);
+}
+
+.lb-rank {
+  font-family: 'Space Mono', monospace;
+  font-size: 1.1rem;
+  font-weight: 700;
+  width: 36px;
+  text-align: center;
+}
+
+.lb-avatar {
+  font-size: 1.6rem;
+  width: 40px;
+  text-align: center;
+}
+
+.lb-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lb-info strong {
+  font-size: 0.95rem;
+  font-weight: 900;
+}
+
+.lb-info span {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.lb-xp {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--a2);
+}

@@ -1,0 +1,40 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+
+
+:root{
+  --bg:#0f0e17;--bg2:#13121f;--card:#1a1830;--card2:#201e38;--card3:#252340;
+  --accent:#ff6b35;--a2:#ffd166;--a3:#06d6a0;--a4:#118ab2;--a5:#c77dff;--a6:#f72585;
+  --text:#fffffe;--muted:#a7a9be;--border:#ffffff0f;
+  --correct:#06d6a0;--wrong:#ef476f;
+  --shadow:0 8px 32px rgba(0,0,0,0.4);
+}
+.light-mode{
+  --bg:#f7f3ee;--bg2:#efe9e0;--card:#ffffff;--card2:#f5efe8;--card3:#ece4d9;
+  --text:#1a1830;--muted:#7a6e62;--border:#0000000f;
+  --shadow:0 8px 32px rgba(0,0,0,0.08);
+}
+
+/* Prevent music player from overlapping content */
+.home, .dashboard, .study, .leaderboard, 
+.friends, .profile, .settings, .duel {
+  padding-bottom: 80px;
+}
+
+@media (max-width: 480px) {
+  .home, .dashboard, .study, .leaderboard,
+  .friends, .profile, .settings, .duel {
+    padding-bottom: 100px;
+  }
+}
