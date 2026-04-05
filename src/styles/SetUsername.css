@@ -150,4 +150,10 @@
   .su-card {
     padding: 24px 18px;
   }
+
+  .su-changes {
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-align: center;
+}
 }

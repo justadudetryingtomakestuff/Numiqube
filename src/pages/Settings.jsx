@@ -29,7 +29,26 @@ function Settings() {
           <div>
             <div className="setting-label">Email</div>
             <div className="setting-sub">{user?.email ?? 'Not set'}</div>
+          
+          <div className="setting-row">
+  <div>
+    <div className="setting-label">Username</div>
+    <div className="setting-sub">
+      {profile?.username ?? 'Not set'} · {(() => {
+        const year = new Date().getFullYear()
+        const changes = profile?.usernameChangeYear === year ? (profile?.usernameChanges ?? 0) : 0
+        return `${3 - changes} changes remaining this year`
+      })()}
+    </div>
+  </div>
+  <button className="btn-secondary" onClick={() => navigate('/set-username')}>
+    Change
+  </button>
+</div>
+          
           </div>
+
+          
         </div>
 
         {/* Preferences */}

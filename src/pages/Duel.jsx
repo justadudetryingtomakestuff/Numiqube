@@ -350,7 +350,7 @@ if (others.length > 0) {
   }
 
   // Playing screen
-const q = shuffleOptions(questions[current])
+const q = questions[current]
   return (
     <div className="duel">
       <div className="container">

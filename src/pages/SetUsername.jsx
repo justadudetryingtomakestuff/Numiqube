@@ -60,18 +60,44 @@ function SetUsername() {
   }
 
   async function handleSave() {
-    if (!isValid || taken) return
-    setSaving(true)
-    await updateProfile({ username, name: username })
-    navigate('/dashboard')
+  if (!isValid || taken) return
+  setSaving(true)
+  const now = new Date()
+  const currentYear = now.getFullYear()
+  const lastChangeYear = profile?.usernameChangeYear ?? 0
+  const changes = lastChangeYear === currentYear ? (profile?.usernameChanges ?? 0) : 0
+
+  if (changes >= 3) {
+    alert('You have used all 3 username changes for this year!')
+    setSaving(false)
+    return
   }
+
+  await updateProfile({
+    username,
+    name: username,
+    usernameChanges: changes + 1,
+    usernameChangeYear: currentYear
+  })
+  navigate('/dashboard')
+}
 
   const requirements = [
     { label: '3-20 characters', met: username.length >= 3 && username.length <= 20 },
     { label: 'Letters and numbers only', met: username.length > 0 && /^[a-zA-Z0-9]+$/.test(username) },
     { label: 'No inappropriate words', met: username.length > 0 && !hasBadWord },
     { label: 'Username available', met: username.length >= 3 && !taken && !checking },
+
+    <p className="su-changes">
+  {(() => {
+    const year = new Date().getFullYear()
+    const changes = profile?.usernameChangeYear === year ? (profile?.usernameChanges ?? 0) : 0
+    return `${changes}/3 username changes used this year`
+  })()}
+</p>
   ]
+
+  
 
   return (
     <div className="set-username">

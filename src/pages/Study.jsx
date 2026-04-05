@@ -4,6 +4,7 @@ import { useAuth } from '../hooks/useAuth'
 import { useProfile } from '../hooks/useProfile'
 import { useSound } from '../hooks/useSound'
 import '../styles/Study.css'
+import MathText from '../components/MathText'
 
 const allQuestions = [
   // ─── ALGEBRA EASY ───
@@ -241,7 +242,14 @@ function Study() {
     if (selectedTopic !== 'All') filtered = filtered.filter(q => q.topic === selectedTopic)
     if (selectedDifficulty !== 'All') filtered = filtered.filter(q => q.difficulty === selectedDifficulty)
     if (filtered.length === 0) return
-    setQuestions(shuffle(filtered).slice(0, 10))
+setQuestions(shuffle(filtered).slice(0, 10).map(q => {
+  const options = [...q.options]
+  for (let i = options.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [options[i], options[j]] = [options[j], options[i]]
+  }
+  return { ...q, options }
+}))
     setStarted(true)
     setCurrent(0)
     setSelected(null)
@@ -353,7 +361,7 @@ function Study() {
     )
   }
 
-const q = shuffleOptions(questions[current])
+const q = questions[current]
   return (
     <div className="study">
       <div className="study-container">
@@ -365,12 +373,12 @@ const q = shuffleOptions(questions[current])
         <div className="progress-wrap">
           <div className="progress-bar" style={{ width: `${(current / questions.length) * 100}%` }}></div>
         </div>
-        <p className="q-counter">Question {current + 1} of {questions.length}</p>
+   <p className="q-counter">Question {current + 1}</p>
 
         <div className="question-card">
           <div className={`diff-tag d-${q.difficulty}`}>{q.difficulty}</div>
           <div className="topic-badge">{q.topic}</div>
-          <p className="question-text">{q.question}</p>
+       <p className="question-text"><MathText text={q.question} /></p>
 
           <div className="options-grid">
             {q.options.map((option, i) => (
@@ -382,7 +390,7 @@ const q = shuffleOptions(questions[current])
                 `}
                 onClick={() => handleAnswer(option)}
               >
-                {option}
+           <MathText text={option} />
               </button>
             ))}
           </div>
