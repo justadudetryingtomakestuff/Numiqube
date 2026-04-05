@@ -10,6 +10,10 @@ import Profile from './pages/Profile'
 import Friends from './pages/Friends'
 import MusicPlayer from './components/MusicPlayer'
 import { useMusic } from './hooks/useMusic'
+import CasualQueue from './pages/CasualQueue'
+import RankedQueue from './pages/RankedQueue'
+import SetUsername from './pages/SetUsername'
+
 
 function AppInner() {
   const location = useLocation()
@@ -20,14 +24,18 @@ function AppInner() {
   } = useMusic()
 
   useEffect(() => {
-    if (location.pathname === '/study') {
-      playMode('study')
-    } else if (location.pathname === '/duel') {
-      playMode('duel')
-    } else if (location.pathname !== '/') {
-      playMode('general')
-    }
-  }, [location.pathname])
+  if (location.pathname === '/study') {
+    playMode('study')
+  } else if (
+    location.pathname === '/duel' ||
+    location.pathname === '/casual' ||
+    location.pathname === '/ranked'
+  ) {
+    playMode('duel')
+  } else if (location.pathname !== '/') {
+    playMode('general')
+  }
+}, [location.pathname])
 
   return (
     <>
@@ -40,6 +48,9 @@ function AppInner() {
         <Route path="/settings" element={<Settings />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/friends" element={<Friends />} />
+        <Route path="/casual" element={<CasualQueue />} />
+        <Route path="/set-username" element={<SetUsername />} />
+<Route path="/ranked" element={<RankedQueue />} />
       </Routes>
       <MusicPlayer
         isPlaying={isPlaying}

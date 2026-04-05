@@ -32,7 +32,7 @@ function Dashboard() {
         {/* Welcome */}
         {user && (
           <div className="welcome-banner">
-            <span>👋 Welcome back, <strong>{user.displayName}</strong>!</span>
+            <span>👋 Welcome back, <strong>{profile?.username ?? user.displayName}</strong>!</span>
           </div>
         )}
 

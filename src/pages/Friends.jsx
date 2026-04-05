@@ -59,7 +59,7 @@ function Friends() {
     const reqRef = doc(db, 'users', toUser.id, 'friendRequests', user.uid)
     await setDoc(reqRef, {
       from: user.uid,
-      name: user.displayName,
+      name: profile?.username ?? user.displayName,
       avatar: user.photoURL ?? '',
       status: 'pending'
     })
@@ -74,7 +74,7 @@ function Friends() {
       uid: req.from
     })
     await setDoc(doc(db, 'users', req.from, 'friends', user.uid), {
-      name: user.displayName,
+      name: profile?.username ?? user.displayName,
       avatar: user.photoURL ?? '',
       uid: user.uid
     })

@@ -29,7 +29,7 @@ function Profile() {
               : <span>🧊</span>
             }
           </div>
-          <h2 className="profile-name">{user?.displayName ?? 'Numiqube Player'}</h2>
+          <h2 className="profile-name">{profile?.username ?? user?.displayName ?? 'Numiqube Player'}</h2>
           <p className="profile-email">{user?.email}</p>
           <div className="profile-rank">{profile?.rank ?? 'Beginner'}</div>
         </div>
