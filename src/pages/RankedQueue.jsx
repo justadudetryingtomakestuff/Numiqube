@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { useProfile } from '../hooks/useProfile'
 import { db } from '../firebase/config'
-import { doc, setDoc, onSnapshot, deleteDoc, collection, query, getDocs } from 'firebase/firestore'
+import { doc, setDoc, onSnapshot, deleteDoc, collection, query, where, runTransaction, getDocs } from "firebase/firestore";
 import { getRank, getNextRank, getRankProgress, RANKS } from '../ranks'
 import '../styles/Queue.css'
 import { useState, useEffect, useRef } from 'react'
-import { doc, setDoc, onSnapshot, deleteDoc, collection, query, where, runTransaction } from 'firebase/firestore'
+
 
 const TOPICS = ['Algebra', 'Geometry', 'Arithmetic', 'Statistics', 'Calculus']
 
