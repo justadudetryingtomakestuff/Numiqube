@@ -6,6 +6,7 @@ import { db } from '../firebase/config'
 import { doc, setDoc, onSnapshot, deleteDoc, collection, query, where } from 'firebase/firestore'
 import { getRank } from '../ranks'
 import '../styles/Queue.css'
+import { doc, setDoc, onSnapshot, deleteDoc, collection, query, where, runTransaction } from 'firebase/firestore'
 
 const TOPICS = ['Algebra', 'Geometry', 'Arithmetic', 'Statistics', 'Calculus']
 
@@ -81,37 +82,50 @@ function CasualQueue() {
         .filter(p => p.uid !== user.uid)
         .filter(p => p.topics?.some(t => selectedTopics.includes(t)))
 
-      if (others.length > 0) {
-        cleanup()
-        const found = others[0]
+     if (others.length > 0) {
+  cleanup()
+  const found = others[0]
 
-        await deleteDoc(doc(db, 'matchmaking', user.uid)).catch(() => {})
-        await deleteDoc(doc(db, 'matchmaking', found.uid)).catch(() => {})
+  try {
+    const myRef = doc(db, 'matchmaking', user.uid)
+    const theirRef = doc(db, 'matchmaking', found.uid)
 
-        const sharedTopics = found.topics.filter(t => selectedTopics.includes(t))
-        const topic = sharedTopics[Math.floor(Math.random() * sharedTopics.length)]
-        const id = [user.uid, found.uid].sort().join('_')
-
-        await setDoc(doc(db, 'duels', id), {
-          players: {
-            [user.uid]: { name: profile?.username ?? user.displayName, score: 0 },
-            [found.uid]: { name: found.name, score: 0 }
-          },
-          status: 'active',
-          mode: 'casual',
-          topic,
-          startedAt: new Date().toISOString()
-        })
-
-        navigate('/duel', {
-          state: {
-            opponent: { uid: found.uid, name: found.name },
-            duelId: id,
-            topic,
-            mode: 'casual'
-          }
-        })
+    await runTransaction(db, async (transaction) => {
+      const theirDoc = await transaction.get(theirRef)
+      if (!theirDoc.exists()) {
+        throw new Error('opponent already matched')
       }
+      transaction.delete(myRef)
+      transaction.delete(theirRef)
+    })
+
+    const sharedTopics = found.topics.filter(t => selectedTopics.includes(t))
+    const topic = sharedTopics[Math.floor(Math.random() * sharedTopics.length)]
+    const id = [user.uid, found.uid].sort().join('_')
+
+    await setDoc(doc(db, 'duels', id), {
+      players: {
+        [user.uid]: { name: user.displayName, score: 0 },
+        [found.uid]: { name: found.name, score: 0 }
+      },
+      status: 'active',
+      mode: 'casual',
+      topic,
+      startedAt: new Date().toISOString()
+    })
+
+    navigate('/duel', {
+      state: {
+        opponent: { uid: found.uid, name: found.name },
+        duelId: id,
+        topic,
+        mode: 'casual'
+      }
+    })
+  } catch (err) {
+    console.log('Match already claimed, waiting...')
+  }
+}
     })
 
     // Cancel after 60 seconds if no match found

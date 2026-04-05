@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Home from './pages/Home'
 import Study from './pages/Study'
 import Dashboard from './pages/Dashboard'
@@ -14,8 +14,8 @@ import CasualQueue from './pages/CasualQueue'
 import RankedQueue from './pages/RankedQueue'
 import SetUsername from './pages/SetUsername'
 
-
 function AppInner() {
+  const [musicStarted, setMusicStarted] = useState(false)
   const location = useLocation()
   const {
     playMode, toggleMusic, isPlaying,
@@ -24,21 +24,28 @@ function AppInner() {
   } = useMusic()
 
   useEffect(() => {
-  if (location.pathname === '/study') {
-    playMode('study')
-  } else if (
-    location.pathname === '/duel' ||
-    location.pathname === '/casual' ||
-    location.pathname === '/ranked'
-  ) {
-    playMode('duel')
-  } else if (location.pathname !== '/') {
-    playMode('general')
+    if (!musicStarted) return
+    if (location.pathname === '/study') {
+      playMode('study')
+    } else if (
+      location.pathname === '/duel' ||
+      location.pathname === '/casual' ||
+      location.pathname === '/ranked'
+    ) {
+      playMode('duel')
+    } else if (location.pathname !== '/') {
+      playMode('general')
+    }
+  }, [location.pathname, musicStarted])
+
+  function handleFirstTap() {
+    if (!musicStarted) {
+      setMusicStarted(true)
+    }
   }
-}, [location.pathname])
 
   return (
-    <>
+    <div onClick={handleFirstTap}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/study" element={<Study />} />
@@ -49,8 +56,8 @@ function AppInner() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/friends" element={<Friends />} />
         <Route path="/casual" element={<CasualQueue />} />
+        <Route path="/ranked" element={<RankedQueue />} />
         <Route path="/set-username" element={<SetUsername />} />
-<Route path="/ranked" element={<RankedQueue />} />
       </Routes>
       <MusicPlayer
         isPlaying={isPlaying}
@@ -61,7 +68,7 @@ function AppInner() {
         onMusicVolume={changeMusicVolume}
         onSfxVolume={changeSfxVolume}
       />
-    </>
+    </div>
   )
 }
 
