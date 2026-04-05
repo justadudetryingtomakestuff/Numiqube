@@ -30,6 +30,15 @@ const questions = [
   { question: 'What is P(heads) when flipping a coin?', options: ['1/4', '1/3', '1/2', '2/3'], answer: '1/2' },
 ]
 
+function shuffleOptions(question) {
+  const options = [...question.options]
+  for (let i = options.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [options[i], options[j]] = [options[j], options[i]]
+  }
+  return { ...question, options }
+}
+
 function Duel() {
   const navigate = useNavigate()
   const location = useLocation()
@@ -341,7 +350,7 @@ if (others.length > 0) {
   }
 
   // Playing screen
-  const q = questions[current]
+const q = shuffleOptions(questions[current])
   return (
     <div className="duel">
       <div className="container">
