@@ -233,7 +233,7 @@ function Study() {
   const [current, setCurrent] = useState(0)
   const [selected, setSelected] = useState(null)
   const [score, setScore] = useState(0)
-  const [finished, setFinished] = useState(false)
+
   const [xpGained, setXpGained] = useState(0)
   const [started, setStarted] = useState(false)
 
@@ -255,7 +255,7 @@ setQuestions(shuffle(filtered).slice(0, 10).map(q => {
     setSelected(null)
     setScore(0)
     setXpGained(0)
-    setFinished(false)
+
   }
 
   async function handleAnswer(option) {
@@ -275,16 +275,20 @@ setQuestions(shuffle(filtered).slice(0, 10).map(q => {
     }
   }
 
-  function handleNext() {
-    if (current + 1 >= questions.length) {
-      recordStudyDay({ xp: xpGained, solved: score, studyTime: questions.length })
-      setFinished(true)
-    } else {
-      setCurrent(c => c + 1)
-      setSelected(null)
-    }
+ function handleNext() {
+  if (current + 1 >= questions.length) {
+    // Loop back to start with reshuffled questions
+    setQuestions(prev => {
+      const reshuffled = [...prev].sort(() => Math.random() - 0.5)
+      return reshuffled
+    })
+    setCurrent(0)
+    setSelected(null)
+  } else {
+    setCurrent(c => c + 1)
+    setSelected(null)
   }
-
+}
   // Topic/difficulty selector screen
   if (!started) {
     return (
@@ -340,26 +344,7 @@ setQuestions(shuffle(filtered).slice(0, 10).map(q => {
     )
   }
 
-  // Finished screen
-  if (finished) {
-    return (
-      <div className="study">
-        <div className="result-card">
-          <span className="result-icon">🎉</span>
-          <h2>Session Complete!</h2>
-          <p className="result-score">{score}/{questions.length} correct</p>
-          <p className="result-xp">+{xpGained} XP earned!</p>
-          <button className="btn-primary" onClick={startSession}>Play Again</button>
-          <button className="btn-secondary" onClick={() => { setStarted(false) }}>
-            Change Topic
-          </button>
-          <button className="btn-secondary" onClick={() => navigate('/dashboard')}>
-            Dashboard
-          </button>
-        </div>
-      </div>
-    )
-  }
+  
 
 const q = questions[current]
   return (
@@ -370,9 +355,7 @@ const q = questions[current]
           <div className="study-score">⚡ {xpGained} XP</div>
         </div>
 
-        <div className="progress-wrap">
-          <div className="progress-bar" style={{ width: `${(current / questions.length) * 100}%` }}></div>
-        </div>
+      
    <p className="q-counter">Question {current + 1}</p>
 
         <div className="question-card">

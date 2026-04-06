@@ -16,14 +16,16 @@ export function useProfile(user) {
     async function loadProfile() {
       const ref = doc(db, 'users', user.uid)
       const snap = await getDoc(ref)
-
-   if (snap.exists()) {
+if (snap.exists()) {
   const data = snap.data()
   setProfile(data)
   if (!data.username) {
-    window.location.href = '/set-username'
+    setTimeout(() => {
+      window.location.href = '/set-username'
+    }, 500)
   }
-} else {
+}
+else {
         const newProfile = {
           name: user.displayName,
           avatar: user.photoURL,
